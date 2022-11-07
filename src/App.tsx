@@ -1,26 +1,38 @@
+import Box from '@mui/material/Box';
+import { Theme } from '@mui/material/styles';
+import { makeStyles, createStyles } from '@mui/styles';
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
+import TopAppBar from './components/app-shell/app-bar/AppBar';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: 'flex',
+      transition: theme.transitions.easing.easeIn,
+    },
+    headerMixin: {
+      ...theme.mixins.toolbar,
+    },
+  })
+);
+
+function App(props: AppProps) {
+  const { children } = props;
+  const classes = useStyles();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Box className={classes.root} data-testid="app-shell-wrapper">
+      <main data-testid="app-main-wrapper">
+        <div data-testid="app-header-mixin" className={classes.headerMixin} />
+        <TopAppBar />
+        <div>{children}</div>
+      </main>
+    </Box>
   );
+}
+
+interface AppProps {
+  children: JSX.Element;
 }
 
 export default App;
