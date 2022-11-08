@@ -19,7 +19,7 @@ export default function AppRouter(): JSX.Element {
 
   return (
     <StyledEngineProvider injectFirst>
-      <MuiThemeProvider theme={getTheme('dark')}>
+      <MuiThemeProvider theme={getTheme('light')}>
         <CssBaseline />
         <App>
           <div className={'route'}>

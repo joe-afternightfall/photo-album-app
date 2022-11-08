@@ -38,10 +38,10 @@ const createDarkTheme = (): Theme => {
     palette: {
       mode: 'dark',
       primary: {
-        main: '#03DAC6',
+        main: '#2196f3',
       },
       secondary: {
-        main: '#BC8AF5',
+        main: '#651fff',
       },
       colors: {
         active: {
@@ -66,13 +66,12 @@ const createLightTheme = (): Theme => {
     palette: {
       mode: 'light',
       primary: {
-        main: '#10b8a0',
-        dark: '#22524c',
-        contrastText: '#202124',
+        main: '#2196f3',
+        // dark: '#22524c',
+        // contrastText: '#202124',
       },
       secondary: {
-        main: '#600ae5',
-        dark: '#3807ad',
+        main: '#651fff',
       },
       colors: {
         active: {
