@@ -6,15 +6,18 @@ import '@fontsource/montserrat'; // Defaults to weight 400.
 
 import AppRouter from './AppRouter';
 import { store, history } from './configs/redux/store';
+import { AuthProvider } from './firebase/auth/AuthProvider';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <AppRouter />
-      </ConnectedRouter>
-    </Provider>
+    <AuthProvider>
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
+          <AppRouter store={store} />
+        </ConnectedRouter>
+      </Provider>
+    </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
