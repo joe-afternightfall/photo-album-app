@@ -1,7 +1,7 @@
 import { LOCATION_CHANGE } from 'connected-react-router';
 
 import { adminEmails } from '../configs/app-settings/admin-emails';
-import { AlbumVO } from '../configs/interfaces';
+import { AlbumVO, ImageVO } from '../configs/interfaces';
 import { ActionTypes, ApplicationActions } from '../creators/actions';
 import { AppSnackbarProps } from '../creators/app-snackbar';
 
@@ -34,6 +34,12 @@ export default {
       case ActionTypes.TOGGLE_APP_LOADER:
         newState.displayAppLoader = action.display;
         break;
+      case ActionTypes.SELECT_ALBUM_TO_VIEW:
+        newState.selectedAlbumToView = action.album;
+        break;
+      case ActionTypes.LOAD_IMAGES:
+        newState.images = action.images;
+        break;
     }
 
     return newState;
@@ -49,4 +55,6 @@ export interface ApplicationState {
   displayAppSnackbar: boolean;
   displayAppLoader: boolean;
   snackbarProps: AppSnackbarProps;
+  selectedAlbumToView?: AlbumVO;
+  images: ImageVO[];
 }
