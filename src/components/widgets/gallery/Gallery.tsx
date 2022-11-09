@@ -7,6 +7,9 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import { Options } from '@splidejs/splide';
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
+
+import { ImageVO } from '../../../configs/interfaces';
+
 import '@splidejs/react-splide/css/sea-green';
 import '@splidejs/react-splide/css/core';
 
@@ -26,6 +29,7 @@ const useStyles = makeStyles(() =>
 
 export default function Gallery(props: GalleryProps): JSX.Element {
   const classes = useStyles();
+  const { images } = props;
 
   const mainOptions: Options = {
     type: 'fade',
@@ -53,19 +57,6 @@ export default function Gallery(props: GalleryProps): JSX.Element {
     isNavigation: true,
   };
 
-  const images = [
-    '0001.JPG',
-    '0002.JPG',
-    '0003.JPG',
-    '0004.JPG',
-    '0005.JPG',
-    '0006.JPG',
-    '0007.JPG',
-    '0008.JPG',
-    '0009.JPG',
-    '0010.JPG',
-  ];
-
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const mainRef = useRef<Splide>(null);
   const thumbsRef = useRef<Splide>(null);
@@ -75,7 +66,6 @@ export default function Gallery(props: GalleryProps): JSX.Element {
       mainRef.current.sync(thumbsRef.current.splide);
     }
   }, [mainRef.current, selectedImageIndex]);
-
   const handleThumbs = (id: number) => {
     if (mainRef.current) {
       mainRef.current.go(id);
@@ -95,8 +85,12 @@ export default function Gallery(props: GalleryProps): JSX.Element {
             ref={mainRef}
           >
             {images.map((image) => (
-              <SplideSlide key={image}>
-                <img src={image} alt="Image 1" style={{ height: '100%' }} />
+              <SplideSlide key={image.id}>
+                <img
+                  src={image.downloadURL}
+                  alt="Image 1"
+                  style={{ height: '100%' }}
+                />
               </SplideSlide>
             ))}
           </Splide>
@@ -108,14 +102,14 @@ export default function Gallery(props: GalleryProps): JSX.Element {
           >
             {images.map((image, index) => (
               <SplideSlide
-                key={image}
+                key={image.id}
                 onClick={() => {
                   handleThumbs(index);
                 }}
               >
                 <img
-                  src={image}
-                  alt={image}
+                  src={image.downloadURL}
+                  alt={image.nickname}
                   className={clsx(classes.thumbnail, {
                     // [classes.active]: selectedImageIndex === index,
                   })}
@@ -130,5 +124,5 @@ export default function Gallery(props: GalleryProps): JSX.Element {
 }
 
 interface GalleryProps {
-  DELETE_ME?: string;
+  images: ImageVO[];
 }
