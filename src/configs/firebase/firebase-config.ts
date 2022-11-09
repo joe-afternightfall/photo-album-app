@@ -3,14 +3,14 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAmtjslIAv7wSCrqaW1-bYFksWgZzD-Fe0',
-  authDomain: 'yarbro-photo-album-app.firebaseapp.com',
-  databaseURL: 'https://yarbro-photo-album-app-default-rtdb.firebaseio.com',
-  projectId: 'yarbro-photo-album-app',
-  storageBucket: 'yarbro-photo-album-app.appspot.com',
-  messagingSenderId: '994381391210',
-  appId: '1:994381391210:web:d81c27145394528720b113',
-  measurementId: 'G-PDN7054MMF',
+  apiKey: 'AIzaSyBM3-aEnkxjG278mH6A4TyhzDfiyfhAiDY',
+  authDomain: 'yarbro-photo-album.firebaseapp.com',
+  databaseURL: 'https://yarbro-photo-album-default-rtdb.firebaseio.com',
+  projectId: 'yarbro-photo-album',
+  storageBucket: 'yarbro-photo-album.appspot.com',
+  messagingSenderId: '984232887444',
+  appId: '1:984232887444:web:ba095afcfb9859aa4e6081',
+  measurementId: 'G-SP6Z58C6H7',
 };
 
 // Initialize Firebase
