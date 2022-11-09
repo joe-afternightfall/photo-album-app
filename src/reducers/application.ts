@@ -1,6 +1,5 @@
 import { LOCATION_CHANGE } from 'connected-react-router';
 
-import { adminEmails } from '../configs/app-settings/admin-emails';
 import { AlbumVO, ImageVO } from '../configs/interfaces';
 import { ActionTypes, ApplicationActions } from '../creators/actions';
 import { AppSnackbarProps } from '../creators/app-snackbar';
@@ -18,7 +17,7 @@ export default {
         break;
       }
       case ActionTypes.LOGGED_IN_USER: {
-        newState.userIsAdmin = adminEmails.includes(action.email);
+        newState.userIsAdmin = false;
         break;
       }
       case ActionTypes.LOAD_ALBUMS:
