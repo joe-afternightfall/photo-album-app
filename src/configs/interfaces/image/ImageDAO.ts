@@ -4,5 +4,7 @@ export interface ImageDAO {
   tagIds: string[];
   imageId: string;
   albumId: string;
-  updatedAt: string;
+  hideFromGeneralViewing: boolean;
+  created: string;
+  updated: string;
 }
