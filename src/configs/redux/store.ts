@@ -26,8 +26,10 @@ export const createStore = (history: History): Store => {
     applicationState: {
       userIsAdmin: false,
       currentLocation: '',
+      displayAppSnackbar: false,
       albums: [],
-      /*snackbarProps: {
+      displayAppLoader: false,
+      snackbarProps: {
         message: '',
         severity: 'success',
         position: {
@@ -35,8 +37,8 @@ export const createStore = (history: History): Store => {
           horizontal: 'right',
         },
       },
-      displayAppLoader: true,
-      displaySkeletonApp: true,*/
+      // displayAppLoader: true,
+      // displaySkeletonApp: true,
       // appData: {
       //   users: [],
       //   images: [],
