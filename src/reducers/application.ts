@@ -1,5 +1,6 @@
 import { LOCATION_CHANGE } from 'connected-react-router';
 
+import { adminEmails } from '../configs/app-settings/admin-emails';
 import { AlbumVO } from '../configs/interfaces';
 import { ActionTypes, ApplicationActions } from '../creators/actions';
 
@@ -13,6 +14,10 @@ export default {
     switch (action.type) {
       case LOCATION_CHANGE: {
         newState.currentLocation = action.payload.location.pathname;
+        break;
+      }
+      case ActionTypes.LOGGED_IN_USER: {
+        newState.userIsAdmin = adminEmails.includes(action.email);
         break;
       }
       case ActionTypes.LOAD_ALBUMS:
@@ -29,4 +34,5 @@ export interface ApplicationState {
   // loggedInUser: UserDto | undefined;
   currentLocation: string;
   albums: AlbumVO[];
+  userIsAdmin: boolean;
 }
