@@ -24,7 +24,9 @@ export const createStore = (history: History): Store => {
 
   return createStoreFunc(allReducers, {
     applicationState: {
+      userIsAdmin: false,
       currentLocation: '',
+      albums: [],
       /*snackbarProps: {
         message: '',
         severity: 'success',
