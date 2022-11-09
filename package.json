@@ -78,7 +78,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "fixlint": "eslint './src/**/*.{ts,tsx}' --fix",
+    "lint": "eslint './src/**/*.{ts,tsx}'"
   },
   "eslintConfig": {
     "extends": [
