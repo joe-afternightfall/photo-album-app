@@ -13,6 +13,7 @@ import {
   displayErrorSnackbar,
   displaySuccessSnackbar,
 } from '../creators/app-snackbar';
+import { generateTimestamp } from '../utils/timestamp-generator';
 
 export const getAllAlbums = async (): Promise<AlbumVO[]> => {
   return await firebase
@@ -28,7 +29,8 @@ export const getAllAlbums = async (): Promise<AlbumVO[]> => {
             id: snap[key].id,
             title: snap[key].title,
             subtitle: snap[key].subtitle,
-            imageId: snap[key].imageId,
+            coverImageId: snap[key].coverImageId,
+            images: snap[key].images,
             created: snap[key].created,
             updated: snap[key].updated,
           };
@@ -56,13 +58,14 @@ export const saveNewAlbum =
     const ref = firebase.database().ref(FIREBASE_ALBUMS_ROUTE);
     const newRef = ref.push();
 
-    const timestamp = new Date().toLocaleString(); // ex from firebase: 11/8/2022, 9:15:09 PM
+    const timestamp = generateTimestamp();
 
     const newAlbum: AlbumDAO = {
       id: uuidv4(),
       title: info.title,
       subtitle: info.subtitle,
-      imageId: '',
+      coverImageId: '',
+      images: [],
       created: timestamp,
       updated: timestamp,
     };

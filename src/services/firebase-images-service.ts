@@ -1,45 +1,33 @@
-// import firebase from 'firebase/app';
-import 'firebase/storage';
-import firebase from 'firebase/compat';
-import { Dispatch } from 'redux';
-import { ThunkAction } from 'redux-thunk';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/database';
 
-import { State } from '../configs/redux/store';
-import { ApplicationActions } from '../creators/actions';
-import { displayAppLoader } from '../creators/app-loader';
-import {
-  displayErrorSnackbar,
-  displaySuccessSnackbar,
-} from '../creators/app-snackbar';
+import { FIREBASE_IMAGES_ROUTE } from '../configs/firebase/firebase-routes';
+import { ImageVO } from '../configs/interfaces';
 
-import FirebaseStorageError = firebase.storage.FirebaseStorageError;
-
-export const uploadImageFiles =
-  (
-    albumId: string,
-    files: File[]
-  ): ThunkAction<void, State, void, ApplicationActions> =>
-  async (dispatch: Dispatch, getState: () => State): Promise<void> => {
-    dispatch(displayAppLoader());
-
-    const folderName = albumId;
-    const errors: FirebaseStorageError[] = [];
-
-    files.map(async (file) => {
-      return await firebase
-        .storage()
-        .ref(`images/${albumId}/${file.name}`)
-        .put(file)
-        .catch((error: FirebaseStorageError) => errors.push(error));
+export const getAllImages = async (): Promise<ImageVO[]> => {
+  return await firebase
+    .database()
+    .ref(FIREBASE_IMAGES_ROUTE)
+    .once('value')
+    .then((snapshot) => {
+      const snap = snapshot.val();
+      if (snap) {
+        return Object.keys(snap).map((key: string): ImageVO => {
+          return {
+            firebaseId: key,
+            id: snap[key].id,
+            nickname: snap[key].nickname,
+            fileName: snap[key].fileName,
+            tagIds: snap[key].tagIds,
+            downloadURL: snap[key].downloadURL,
+            albumId: snap[key].albumId,
+            hideFromGeneralViewing: snap[key].hideFromGeneralViewing,
+            created: snap[key].created,
+            updated: snap[key].updated,
+          };
+        });
+      } else {
+        return [];
+      }
     });
-
-    if (errors.length > 0) {
-      dispatch(displayErrorSnackbar(`Error saving file ${errors[0].name}.`));
-    } else {
-      dispatch(
-        displaySuccessSnackbar(`Successfully saved images for ${folderName}.`)
-      );
-    }
-  };
-
-// https://firebasestorage.googleapis.com/v0/b/(project id).appspot.com/o/(storage path)?alt=media
+};
