@@ -29,6 +29,7 @@ export const createStore = (history: History): Store => {
       displayAppSnackbar: false,
       albums: [],
       displayAppLoader: false,
+      images: [],
       snackbarProps: {
         message: '',
         severity: 'success',

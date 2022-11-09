@@ -1,11 +1,12 @@
 import { LocationChangeAction } from 'connected-react-router';
 
-import { LoadAlbumsAction } from './albums';
+import { LoadAlbumsAction, SelectAlbumToViewAction } from './albums';
 import { ToggleAppLoaderAction } from './app-loader';
 import {
   DisplayAppSnackbarAction,
   HideAppSnackbarAction,
 } from './app-snackbar';
+import { LoadImagesAction } from './images';
 import { LoggedInUserAction } from './user';
 
 export enum ActionTypes {
@@ -13,10 +14,11 @@ export enum ActionTypes {
   TOGGLE_APP_SIDE_DRAWER = 'TOGGLE_APP_SIDE_DRAWER',
   UPDATE_APP_THEME = 'UPDATE_APP_THEME',
   LOAD_ALBUMS = 'LOAD_ALBUMS',
-  SAVE_NEW_ALBUM = 'SAVE_NEW_ALBUM',
+  SELECT_ALBUM_TO_VIEW = 'SELECT_ALBUM_TO_VIEW',
   DISPLAY_APP_SNACKBAR = 'DISPLAY_APP_SNACKBAR',
   HIDE_APP_SNACKBAR = 'HIDE_APP_SNACKBAR',
   TOGGLE_APP_LOADER = 'TOGGLE_APP_LOADER',
+  LOAD_IMAGES = 'LOAD_IMAGES',
 }
 
 export type ApplicationActions =
@@ -25,4 +27,6 @@ export type ApplicationActions =
   | LoggedInUserAction
   | DisplayAppSnackbarAction
   | HideAppSnackbarAction
-  | ToggleAppLoaderAction;
+  | ToggleAppLoaderAction
+  | SelectAlbumToViewAction
+  | LoadImagesAction;

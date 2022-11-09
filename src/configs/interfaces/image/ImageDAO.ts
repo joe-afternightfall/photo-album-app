@@ -1,8 +1,9 @@
 export interface ImageDAO {
   id: string;
-  title: string;
+  nickname: string;
+  fileName: string;
   tagIds: string[];
-  imageId: string;
+  downloadURL: string;
   albumId: string;
   hideFromGeneralViewing: boolean;
   created: string;
