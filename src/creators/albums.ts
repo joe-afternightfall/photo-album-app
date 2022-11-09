@@ -12,3 +12,15 @@ export const loadAlbums = (albums: AlbumVO[]): LoadAlbumsAction => {
     albums,
   };
 };
+
+export interface SelectAlbumToViewAction {
+  type: ActionTypes.SELECT_ALBUM_TO_VIEW;
+  album: AlbumVO;
+}
+
+export const selectAlbumToView = (album: AlbumVO): SelectAlbumToViewAction => {
+  return {
+    type: ActionTypes.SELECT_ALBUM_TO_VIEW,
+    album,
+  };
+};

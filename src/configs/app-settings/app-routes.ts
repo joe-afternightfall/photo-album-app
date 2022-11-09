@@ -5,9 +5,11 @@ import { StyledComponentProps } from '@mui/styles';
 import { ComponentType } from 'react';
 
 import DashboardScreen from '../../components/top-level-components/DashboardScreen';
+import SelectedAlbumScreen from '../../components/top-level-components/SelectedAlbumScreen';
 
 export const AppPaths = {
   dashboard: '/',
+  selectedAlbum: '/selected-album',
 };
 
 export interface PageInfoProps {
@@ -42,6 +44,15 @@ export const appRoutes: AppRouterInfoMap = {
     icon: DashboardIcon,
     adminOnly: false,
     routerComponent: DashboardScreen,
+    breadCrumbs: [],
+  },
+  SELECTED_ALBUM: {
+    id: 'selected-album-screen',
+    path: AppPaths.selectedAlbum,
+    title: 'Album',
+    icon: DashboardIcon,
+    adminOnly: false,
+    routerComponent: SelectedAlbumScreen,
     breadCrumbs: [],
   },
 };
