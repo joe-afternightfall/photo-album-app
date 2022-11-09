@@ -4,12 +4,26 @@ import { makeStyles, createStyles } from '@mui/styles';
 import React from 'react';
 
 import TopAppBar from './components/app-shell/app-bar/AppBar';
+import AppLoader from './components/app-shell/app-loader/AppLoader';
+import AppSnackbar from './components/app-shell/app-snackbar/AppSnackbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: 'flex',
+      // display: 'flex',
       transition: theme.transitions.easing.easeIn,
+      [theme.breakpoints.down('sm')]: {
+        paddingLeft: '8px',
+        paddingRight: '8px',
+      },
+      [theme.breakpoints.up('sm')]: {
+        paddingLeft: '16px',
+        paddingRight: '16px',
+      },
+      [theme.breakpoints.up('lg')]: {
+        paddingLeft: '24px',
+        paddingRight: '24px',
+      },
     },
     headerMixin: {
       ...theme.mixins.toolbar,
@@ -25,6 +39,8 @@ function App(props: AppProps) {
       <main data-testid="app-main-wrapper">
         <div data-testid="app-header-mixin" className={classes.headerMixin} />
         <TopAppBar />
+        <AppSnackbar />
+        <AppLoader />
         <div>{children}</div>
       </main>
     </Box>
