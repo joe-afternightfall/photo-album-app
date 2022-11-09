@@ -1,17 +1,13 @@
-import { Card, CardContent, CardHeader } from '@mui/material';
-import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 import { makeStyles, createStyles } from '@mui/styles';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import { Options } from '@splidejs/splide';
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
-// Default theme
-// import '@splidejs/react-splide/css';
 import '@splidejs/react-splide/css/sea-green';
-// import '@splidejs/react-splide/css/skyblue';
-
-// or only core styles
 import '@splidejs/react-splide/css/core';
 
 const useStyles = makeStyles(() =>
