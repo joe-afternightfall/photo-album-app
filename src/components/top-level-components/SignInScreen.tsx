@@ -36,7 +36,6 @@ export default function SignInScreen(): JSX.Element {
           email,
           password
         );
-        console.log('userCredential: ' + JSON.stringify(userCredential));
       }
     } catch (e) {
       const error = e as FirebaseError;
