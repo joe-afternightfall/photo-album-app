@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { AlbumVO, ImageVO } from '../../configs/interfaces';
 import { State } from '../../configs/redux/store';
 import GalleryView from '../widgets/gallery/Gallery';
-import ListView from '../widgets/list-view/ListView';
+import ListView from '../widgets/views/list-view/ListView';
 import UploadDialog from './selected-album-screen/components/UploadDialog';
 
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
