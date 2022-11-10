@@ -16,7 +16,7 @@ import { AlbumVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
 import { selectAlbumToView } from '../../../../creators/albums';
 import { openAlbumInfoDialog } from '../../../../creators/dialogs/album-info';
-import BasicMenu from './toss';
+import AlbumActionMenu from './AlbumActionMenu';
 
 const AllAlbumsView = (props: AllAlbumsViewProps): JSX.Element => {
   const { albums, selectAlbumHandler, openDialogHandler } = props;
@@ -38,7 +38,7 @@ const AllAlbumsView = (props: AllAlbumsViewProps): JSX.Element => {
             <CardHeader
               title={album.title}
               subheader={album.subtitle}
-              action={<BasicMenu />}
+              action={<AlbumActionMenu album={album} />}
             />
             <CardActionArea
               onClick={() => {

@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
+import { AlbumVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../creators/actions';
 import { closeAlbumInfoDialog } from '../../../../creators/dialogs/album-info';
@@ -23,32 +24,37 @@ import AlbumImageRadioGroup from './components/AlbumImageRadioGroup';
 import AlbumTextField from './components/AlbumTextField';
 
 interface NewAlbumDialogState {
-  displayImageDropzone: boolean;
   title: string;
   subtitle: string;
+  displayImageDropzone: boolean;
   image: File[];
 }
 
 const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
-  const { open, saveHandler, closeDialogHandler } = props;
-  const [localState, setLocalState] = useState<NewAlbumDialogState>({
-    title: '',
-    subtitle: '',
-    displayImageDropzone: false,
-    image: [],
-  });
+  const { open, album, saveHandler, closeDialogHandler } = props;
+
+  const isEditing = Boolean(album);
+
+  const buildDefaultState = (album?: AlbumVO): NewAlbumDialogState => {
+    return {
+      title: album ? album.title : '',
+      subtitle: album ? album.subtitle : '',
+      displayImageDropzone: false,
+      image: [],
+    };
+  };
+
+  const [localState, setLocalState] = useState<NewAlbumDialogState>(
+    buildDefaultState(album)
+  );
 
   useEffect(() => {
     if (!open) {
       setTimeout(() => {
-        setLocalState({
-          ...localState,
-          title: '',
-          subtitle: '',
-          displayImageDropzone: false,
-          image: [],
-        });
+        setLocalState(buildDefaultState());
       }, 300);
+    } else {
+      setLocalState(buildDefaultState(album));
     }
   }, [open]);
 
@@ -68,7 +74,8 @@ const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
 
   return (
     <Dialog open={open} onClose={closeDialogHandler}>
-      <DialogTitle>{'Create New Album'}</DialogTitle>
+      <DialogTitle>{isEditing ? 'Edit Album' : 'Create New Album'}</DialogTitle>
+
       <DialogContent>
         <Grid container spacing={2}>
           <Grid item xs={12} container spacing={2} alignItems="center">
@@ -138,17 +145,18 @@ const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
             );
           }}
         >
-          {'Save'}
+          {isEditing ? 'Update' : 'Save'}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-type NewAlbumDialogProps = DispatchProps & StateProps;
+type NewAlbumDialogProps = StateProps & DispatchProps;
 
 interface StateProps {
   open: boolean;
+  album?: AlbumVO;
 }
 
 interface DispatchProps {
@@ -159,6 +167,7 @@ interface DispatchProps {
 const mapStateToProps = (state: State): StateProps => {
   return {
     open: state.appDialogState.displayAlbumInfoDialog,
+    album: state.appDialogState.selectedAlbumToEdit,
   };
 };
 
