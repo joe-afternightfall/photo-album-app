@@ -19,8 +19,8 @@ import {
   saveNewAlbum,
 } from '../../../../services/firebase-albums-service';
 import PaperDropzone from '../../../shared/dropzone/DropZone';
-import AlbumImageRadioGroup from './AlbumImageRadioGroup';
-import AlbumTextField from './AlbumTextField';
+import AlbumImageRadioGroup from './components/AlbumImageRadioGroup';
+import AlbumTextField from './components/AlbumTextField';
 
 interface NewAlbumDialogState {
   open: boolean;
@@ -30,7 +30,7 @@ interface NewAlbumDialogState {
   image: File[];
 }
 
-const NewAlbumDialog = (props: NewAlbumDialogProps): JSX.Element => {
+const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
   const { saveHandler } = props;
   const [localState, setLocalState] = useState<NewAlbumDialogState>({
     open: false,
@@ -97,8 +97,9 @@ const NewAlbumDialog = (props: NewAlbumDialogProps): JSX.Element => {
               </Grid>
               <Grid item xs={12} sm={8}>
                 <AlbumTextField
-                  value={localState.title}
                   name="title"
+                  autoFocus
+                  value={localState.title}
                   changeHandler={handleChange}
                 />
               </Grid>
@@ -182,4 +183,4 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
 });
 
-export default connect(null, mapDispatchToProps)(NewAlbumDialog);
+export default connect(null, mapDispatchToProps)(AlbumInfoDialog);

@@ -12,21 +12,26 @@ import { AppPaths } from '../../../../configs/app-settings/app-routes';
 import { AlbumVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
 import { selectAlbumToView } from '../../../../creators/albums';
+import BasicMenu from './toss';
 
 const AllAlbumsView = (props: AllAlbumsViewProps): JSX.Element => {
   const { albums, selectAlbumHandler } = props;
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} alignItems="center" justifyContent="center">
       {albums.map((album) => (
-        <Grid key={album.id} item xs={6} sm={4} md={3}>
+        <Grid key={album.id} item xs={10} sm={4} md={3}>
           <Card sx={{ width: '100%' }}>
+            <CardHeader
+              title={album.title}
+              subheader={album.subtitle}
+              action={<BasicMenu />}
+            />
             <CardActionArea
               onClick={() => {
                 selectAlbumHandler(album);
               }}
             >
-              <CardHeader title={album.title} subheader={album.subtitle} />
               <CardMedia
                 component="img"
                 height="140"

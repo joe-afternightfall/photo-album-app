@@ -5,10 +5,11 @@ import { v4 as uuidv4 } from 'uuid';
 export default function AlbumTextField(
   props: AlbumTextFieldProps
 ): JSX.Element {
-  const { value, name, changeHandler } = props;
+  const { value, name, autoFocus, changeHandler } = props;
 
   return (
     <TextField
+      autoFocus={autoFocus}
       variant="filled"
       fullWidth
       value={value}
@@ -28,6 +29,7 @@ export default function AlbumTextField(
 
 interface AlbumTextFieldProps {
   value: string;
+  autoFocus?: boolean;
   name: 'title' | 'subtitle';
   changeHandler: (field: 'title' | 'subtitle', value: string) => void;
 }

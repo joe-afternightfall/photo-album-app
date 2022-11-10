@@ -1,7 +1,7 @@
 import Grid from '@mui/material/Grid';
 import React from 'react';
 
-import NewAlbumDialog from '../widgets/dialogs/new-album-dialog/NewAlbumDialog';
+import NewAlbumDialog from '../widgets/dialogs/album-info-dialog/AlbumInfoDialog';
 import AllAlbumsView from '../widgets/views/all-albums-view/AllAlbumsView';
 
 export default function DashboardScreen(): JSX.Element {
