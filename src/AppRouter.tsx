@@ -16,6 +16,7 @@ import { getTheme } from './configs/app-settings/theme';
 import { loggedInUser } from './creators/user';
 import { Initializer } from './firebase/Initializer';
 import { AuthContext } from './firebase/auth/AuthContext';
+import { getSignedInUserProfile } from './services/firebase-users-service';
 
 const AppRouter = (props: AppRouterProps): JSX.Element => {
   const { store, updateLoggedInUserHandler } = props;
@@ -25,7 +26,7 @@ const AppRouter = (props: AppRouterProps): JSX.Element => {
     if (user) {
       const initializer = new Initializer(store);
       initializer.initializeFirebase();
-      user.email && updateLoggedInUserHandler(user.email);
+      user.email && updateLoggedInUserHandler();
     }
   }, [user]);
 
@@ -70,12 +71,13 @@ interface PassedInProps {
 }
 
 interface DispatchProps {
-  updateLoggedInUserHandler: (email: string) => void;
+  updateLoggedInUserHandler: () => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-  updateLoggedInUserHandler: (email: string) => {
-    dispatch(loggedInUser(email));
+  updateLoggedInUserHandler: async () => {
+    const userProfile = await getSignedInUserProfile();
+    dispatch(loggedInUser(userProfile));
   },
 });
 

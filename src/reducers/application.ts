@@ -1,6 +1,7 @@
 import { LOCATION_CHANGE } from 'connected-react-router';
 
 import { AlbumVO, ImageVO } from '../configs/interfaces';
+import { UserVO } from '../configs/interfaces/user/UserVO';
 import { ActionTypes, ApplicationActions } from '../creators/actions';
 import { AppSnackbarProps } from '../creators/app-snackbar';
 
@@ -18,6 +19,7 @@ export default {
       }
       case ActionTypes.LOGGED_IN_USER: {
         newState.userIsAdmin = false;
+        newState.signedInUser = action.user;
         break;
       }
       case ActionTypes.LOAD_ALBUMS:
@@ -56,4 +58,5 @@ export interface ApplicationState {
   snackbarProps: AppSnackbarProps;
   selectedAlbumToView?: AlbumVO;
   images: ImageVO[];
+  signedInUser?: UserVO;
 }

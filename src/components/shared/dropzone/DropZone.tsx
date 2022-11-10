@@ -1,5 +1,5 @@
-import { DropzoneArea } from 'material-ui-dropzone';
 import React from 'react';
+import { DropzoneArea } from 'react-mui-dropzone';
 
 export default function PaperDropzone(props: PaperDropzoneProps): JSX.Element {
   const { dropzoneHandler, filesLimit } = props;
@@ -8,9 +8,10 @@ export default function PaperDropzone(props: PaperDropzoneProps): JSX.Element {
       onChange={dropzoneHandler}
       showFileNames
       dropzoneText={'Drag and Drop file'}
-      showAlerts={true}
+      showAlerts={false}
       filesLimit={filesLimit ? filesLimit : 50}
       showPreviewsInDropzone
+      maxFileSize={1000000000}
     />
   );
 }
