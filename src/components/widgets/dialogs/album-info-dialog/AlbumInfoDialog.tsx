@@ -2,8 +2,6 @@ import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import React, { useEffect, useState } from 'react';
@@ -19,6 +17,7 @@ import {
   NewAlbumInfo,
   saveNewAlbum,
 } from '../../../../services/firebase-albums-service';
+import BaseDialog from '../../../shared/dialog/BaseDialog';
 import PaperDropzone from '../../../shared/dropzone/DropZone';
 import AlbumImageRadioGroup from './components/AlbumImageRadioGroup';
 import AlbumTextField from './components/AlbumTextField';
@@ -74,80 +73,89 @@ const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
 
   return (
     <Dialog open={open} onClose={closeDialogHandler}>
-      <DialogTitle>{isEditing ? 'Edit Album' : 'Create New Album'}</DialogTitle>
-
-      <DialogContent>
-        <Grid container spacing={2}>
-          <Grid item xs={12} container spacing={2} alignItems="center">
-            <Grid item xs={12} sm={4}>
-              <Typography>{'Title: '}</Typography>
+      <BaseDialog
+        open={open}
+        data-testid="album-info-dialog"
+        title={isEditing ? 'Edit Album' : 'Create New Album'}
+        dialogContent={
+          <Grid container spacing={2}>
+            <Grid item xs={12} container spacing={2} alignItems="center">
+              <Grid item xs={12} sm={4}>
+                <Typography>{'Title: '}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <AlbumTextField
+                  name="title"
+                  autoFocus
+                  value={localState.title}
+                  changeHandler={handleChange}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={8}>
-              <AlbumTextField
-                name="title"
-                autoFocus
-                value={localState.title}
-                changeHandler={handleChange}
-              />
+            <Grid item xs={12} container spacing={2} alignItems="center">
+              <Grid item xs={12} sm={4}>
+                <Typography>{'Subtitle: '}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <AlbumTextField
+                  value={localState.subtitle}
+                  name="subtitle"
+                  changeHandler={handleChange}
+                />
+              </Grid>
+            </Grid>
+            <Grid item xs={12} container spacing={2} alignItems="center">
+              <Grid item xs={12} sm={4} />
+              <Grid item xs={12} sm={8}>
+                <AlbumImageRadioGroup
+                  changeHandler={(display: boolean) => {
+                    setLocalState({
+                      ...localState,
+                      displayImageDropzone: display,
+                    });
+                  }}
+                  displayImageDropzone={localState.displayImageDropzone}
+                />
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Collapse
+                in={localState.displayImageDropzone}
+                timeout={'auto'}
+                unmountOnExit
+              >
+                <PaperDropzone
+                  dropzoneHandler={handleDropzone}
+                  filesLimit={1}
+                />
+              </Collapse>
             </Grid>
           </Grid>
-          <Grid item xs={12} container spacing={2} alignItems="center">
-            <Grid item xs={12} sm={4}>
-              <Typography>{'Subtitle: '}</Typography>
-            </Grid>
-            <Grid item xs={12} sm={8}>
-              <AlbumTextField
-                value={localState.subtitle}
-                name="subtitle"
-                changeHandler={handleChange}
-              />
-            </Grid>
-          </Grid>
-          <Grid item xs={12} container spacing={2} alignItems="center">
-            <Grid item xs={12} sm={4} />
-            <Grid item xs={12} sm={8}>
-              <AlbumImageRadioGroup
-                changeHandler={(display: boolean) => {
-                  setLocalState({
-                    ...localState,
-                    displayImageDropzone: display,
-                  });
-                }}
-                displayImageDropzone={localState.displayImageDropzone}
-              />
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <Collapse
-              in={localState.displayImageDropzone}
-              timeout={'auto'}
-              unmountOnExit
+        }
+        closeDialogHandler={closeDialogHandler}
+        dialogActions={
+          <DialogActions>
+            <Button onClick={closeDialogHandler}>{'Cancel'}</Button>
+            <Button
+              disabled={localState.title === ''}
+              onClick={() => {
+                saveHandler(
+                  {
+                    title: localState.title,
+                    subtitle: localState.subtitle,
+                    image: localState.image.length
+                      ? localState.image[0]
+                      : undefined,
+                  },
+                  closeDialogHandler
+                );
+              }}
             >
-              <PaperDropzone dropzoneHandler={handleDropzone} filesLimit={1} />
-            </Collapse>
-          </Grid>
-        </Grid>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={closeDialogHandler}>{'Cancel'}</Button>
-        <Button
-          disabled={localState.title === ''}
-          onClick={() => {
-            saveHandler(
-              {
-                title: localState.title,
-                subtitle: localState.subtitle,
-                image: localState.image.length
-                  ? localState.image[0]
-                  : undefined,
-              },
-              closeDialogHandler
-            );
-          }}
-        >
-          {isEditing ? 'Update' : 'Save'}
-        </Button>
-      </DialogActions>
+              {isEditing ? 'Update' : 'Save'}
+            </Button>
+          </DialogActions>
+        }
+      />
     </Dialog>
   );
 };
