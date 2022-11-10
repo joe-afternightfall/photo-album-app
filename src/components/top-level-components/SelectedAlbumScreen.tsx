@@ -4,10 +4,8 @@ import Grid from '@mui/material/Grid';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
-import { makeStyles, createStyles } from '@mui/styles';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 import { AlbumVO, ImageVO } from '../../configs/interfaces';
 import { State } from '../../configs/redux/store';
@@ -15,10 +13,7 @@ import GalleryView from '../widgets/gallery/Gallery';
 import ListView from '../widgets/list-view/ListView';
 import UploadDialog from './selected-album-screen/components/UploadDialog';
 
-const useStyles = makeStyles(() => createStyles({}));
-
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
-  const classes = useStyles();
   const { images, selectedAlbum } = props;
 
   const [view, setView] = React.useState<string | null>('list-view');
@@ -70,28 +65,16 @@ const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
   );
 };
 
-type SelectedAlbumScreenProps = PassedInProps & StateProps & DispatchProps;
-
-interface PassedInProps {
-  DELETE_ME?: string;
-}
+type SelectedAlbumScreenProps = StateProps;
 
 interface StateProps {
   selectedAlbum?: AlbumVO;
   images: ImageVO[];
 }
 
-interface DispatchProps {
-  DELETE_ME?: string;
-}
-
 const mapStateToProps = (state: State): StateProps => {
   const selectedAlbum = state.applicationState.selectedAlbumToView;
   const albumImages: ImageVO[] = [];
-  console.log(
-    'state.applicationState.images: ' +
-      JSON.stringify(state.applicationState.images)
-  );
   if (selectedAlbum) {
     state.applicationState.images.forEach((image) => {
       if (image.albumId === selectedAlbum.id) {
@@ -106,9 +89,4 @@ const mapStateToProps = (state: State): StateProps => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SelectedAlbumScreen);
+export default connect(mapStateToProps)(SelectedAlbumScreen);
