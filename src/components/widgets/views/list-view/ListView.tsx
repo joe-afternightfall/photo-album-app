@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles';
 import { createStyles, makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 
-import { ImageVO } from '../../../configs/interfaces';
+import { ImageVO } from '../../../../configs/interfaces';
 import ImageToolbar from './components/ImageToolbar';
 
 const useStyles = makeStyles(() =>

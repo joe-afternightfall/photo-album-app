@@ -10,14 +10,15 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { AlbumVO } from '../../../../configs/interfaces';
-import { UserVO } from '../../../../configs/interfaces/user/UserVO';
-import { State } from '../../../../configs/redux/store';
-import { ApplicationActions } from '../../../../creators/actions';
+import { AlbumVO } from '../../../../../configs/interfaces';
+import { UserVO } from '../../../../../configs/interfaces/user/UserVO';
+import { State } from '../../../../../configs/redux/store';
+import { ApplicationActions } from '../../../../../creators/actions';
 import {
   removeImageFromUsersFavoriteList,
   tagImageAsFavorite,
-} from '../../../../services/firebase-users-service';
+} from '../../../../../services/firebase-users-service';
+import SettingsMenu from './SettingsMenu';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -56,6 +57,9 @@ const ImageToolbar = (props: ImageToolbarProps): JSX.Element => {
             <IconButton className={classes.iconButton}>
               <DownloadIcon />
             </IconButton>
+          </Grid>
+          <Grid item>
+            <SettingsMenu />
           </Grid>
         </Grid>
       }
