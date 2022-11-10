@@ -7,7 +7,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { makeStyles, createStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -23,8 +22,6 @@ import PaperDropzone from '../../../shared/dropzone/DropZone';
 import AlbumImageRadioGroup from './AlbumImageRadioGroup';
 import AlbumTextField from './AlbumTextField';
 
-const useStyles = makeStyles(() => createStyles({}));
-
 interface NewAlbumDialogState {
   open: boolean;
   displayImageDropzone: boolean;
@@ -34,7 +31,6 @@ interface NewAlbumDialogState {
 }
 
 const NewAlbumDialog = (props: NewAlbumDialogProps): JSX.Element => {
-  const classes = useStyles();
   const { saveHandler } = props;
   const [localState, setLocalState] = useState<NewAlbumDialogState>({
     open: false,
@@ -172,23 +168,11 @@ const NewAlbumDialog = (props: NewAlbumDialogProps): JSX.Element => {
   );
 };
 
-type NewAlbumDialogProps = PassedInProps & StateProps & DispatchProps;
-
-interface PassedInProps {
-  DELETE_ME?: string;
-}
-
-interface StateProps {
-  DELETE_ME?: string;
-}
+type NewAlbumDialogProps = DispatchProps;
 
 interface DispatchProps {
   saveHandler: (info: NewAlbumInfo, cb: () => void) => void;
 }
-
-const mapStateToProps = (state: State): StateProps => {
-  return {};
-};
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   saveHandler: (info: NewAlbumInfo, cb: () => void) => {
@@ -198,4 +182,4 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewAlbumDialog);
+export default connect(null, mapDispatchToProps)(NewAlbumDialog);

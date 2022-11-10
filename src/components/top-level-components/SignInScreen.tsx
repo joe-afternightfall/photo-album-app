@@ -32,10 +32,7 @@ export default function SignInScreen(): JSX.Element {
   const signIn = async () => {
     try {
       if (email !== '' && password !== '') {
-        const userCredential = await auth.signInWithEmailAndPassword(
-          email,
-          password
-        );
+        await auth.signInWithEmailAndPassword(email, password);
       }
     } catch (e) {
       const error = e as FirebaseError;

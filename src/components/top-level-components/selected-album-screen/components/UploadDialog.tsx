@@ -70,11 +70,7 @@ const UploadDialog = (props: UploadDialogProps): JSX.Element => {
   );
 };
 
-type UploadDialogProps = PassedInProps & StateProps & DispatchProps;
-
-interface PassedInProps {
-  DELETE_ME?: string;
-}
+type UploadDialogProps = StateProps & DispatchProps;
 
 interface StateProps {
   selectedAlbum?: AlbumVO;

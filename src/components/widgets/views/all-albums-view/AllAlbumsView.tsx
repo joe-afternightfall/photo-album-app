@@ -42,11 +42,7 @@ const AllAlbumsView = (props: AllAlbumsViewProps): JSX.Element => {
   );
 };
 
-type AllAlbumsViewProps = PassedInProps & StateProps & DispatchProps;
-
-interface PassedInProps {
-  DELETE_ME?: string;
-}
+type AllAlbumsViewProps = StateProps & DispatchProps;
 
 interface StateProps {
   albums: AlbumVO[];
