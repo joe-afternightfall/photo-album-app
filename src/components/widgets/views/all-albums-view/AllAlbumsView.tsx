@@ -1,7 +1,10 @@
-import { CardActionArea, CardMedia } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import { routerActions } from 'connected-react-router';
 import React from 'react';
@@ -12,13 +15,23 @@ import { AppPaths } from '../../../../configs/app-settings/app-routes';
 import { AlbumVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
 import { selectAlbumToView } from '../../../../creators/albums';
+import { openAlbumInfoDialog } from '../../../../creators/dialogs/album-info';
 import BasicMenu from './toss';
 
 const AllAlbumsView = (props: AllAlbumsViewProps): JSX.Element => {
-  const { albums, selectAlbumHandler } = props;
+  const { albums, selectAlbumHandler, openDialogHandler } = props;
 
   return (
     <Grid container spacing={2} alignItems="center" justifyContent="center">
+      <Grid item xs={12} container justifyContent="flex-end" sx={{ mt: 2 }}>
+        <Button
+          onClick={openDialogHandler}
+          startIcon={<AddIcon />}
+          variant="outlined"
+        >
+          {'New Album'}
+        </Button>
+      </Grid>
       {albums.map((album) => (
         <Grid key={album.id} item xs={10} sm={4} md={3}>
           <Card sx={{ width: '100%' }}>
@@ -55,6 +68,7 @@ interface StateProps {
 
 interface DispatchProps {
   selectAlbumHandler: (album: AlbumVO) => void;
+  openDialogHandler: () => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -67,6 +81,9 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   selectAlbumHandler: (album: AlbumVO) => {
     dispatch(selectAlbumToView(album));
     dispatch(routerActions.push(AppPaths.selectedAlbum));
+  },
+  openDialogHandler: () => {
+    dispatch(openAlbumInfoDialog());
   },
 });
 

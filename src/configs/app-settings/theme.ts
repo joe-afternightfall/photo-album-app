@@ -1,4 +1,5 @@
 import { createTheme, Palette, Theme, ThemeOptions } from '@mui/material';
+import blue from '@mui/material/colors/blue';
 
 interface CustomPalette extends Palette {
   colors: {
@@ -38,10 +39,10 @@ const createDarkTheme = (): Theme => {
     palette: {
       mode: 'dark',
       primary: {
-        main: '#2196f3',
+        main: blue[200],
       },
       secondary: {
-        main: '#651fff',
+        main: '#b683f3',
       },
       colors: {
         active: {

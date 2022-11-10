@@ -10,6 +10,7 @@ import {
 import thunkMiddleware from 'redux-thunk';
 
 import application, { ApplicationState } from '../../reducers/application';
+import dialogs, { AppDialogState } from '../../reducers/dialogs';
 
 export const createStore = (history: History): Store => {
   const createStoreFunc = applyMiddleware(
@@ -20,6 +21,7 @@ export const createStore = (history: History): Store => {
       router: connectRouter(history),
       routing: routerReducer,
       applicationState: application.reducer,
+      appDialogState: dialogs.reducer,
     });
 
   return createStoreFunc(allReducers, {
@@ -47,11 +49,15 @@ export const createStore = (history: History): Store => {
       // loggedInUser: undefined,
       // userHasAdminPrivileges: false,
     } as ApplicationState,
-  });
+    appDialogState: {
+      displayAlbumInfoDialog: false,
+    } as AppDialogState,
+  } as State);
 };
 
 export interface State {
   applicationState: ApplicationState;
+  appDialogState: AppDialogState;
 }
 
 export const history = createHashHistory();

@@ -1,4 +1,3 @@
-import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
 import Dialog from '@mui/material/Dialog';
@@ -14,6 +13,7 @@ import { ThunkDispatch } from 'redux-thunk';
 
 import { State } from '../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../creators/actions';
+import { closeAlbumInfoDialog } from '../../../../creators/dialogs/album-info';
 import {
   NewAlbumInfo,
   saveNewAlbum,
@@ -23,7 +23,6 @@ import AlbumImageRadioGroup from './components/AlbumImageRadioGroup';
 import AlbumTextField from './components/AlbumTextField';
 
 interface NewAlbumDialogState {
-  open: boolean;
   displayImageDropzone: boolean;
   title: string;
   subtitle: string;
@@ -31,9 +30,8 @@ interface NewAlbumDialogState {
 }
 
 const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
-  const { saveHandler } = props;
+  const { open, saveHandler, closeDialogHandler } = props;
   const [localState, setLocalState] = useState<NewAlbumDialogState>({
-    open: false,
     title: '',
     subtitle: '',
     displayImageDropzone: false,
@@ -41,7 +39,7 @@ const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
   });
 
   useEffect(() => {
-    if (!localState.open) {
+    if (!open) {
       setTimeout(() => {
         setLocalState({
           ...localState,
@@ -52,26 +50,12 @@ const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
         });
       }, 300);
     }
-  }, [localState.open]);
+  }, [open]);
 
   const handleChange = (field: 'title' | 'subtitle', value: string) => {
     setLocalState({
       ...localState,
       [field]: value,
-    });
-  };
-
-  const openDialog = () => {
-    setLocalState({
-      ...localState,
-      open: true,
-    });
-  };
-
-  const closeDialog = () => {
-    setLocalState({
-      ...localState,
-      open: false,
     });
   };
 
@@ -83,97 +67,100 @@ const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
   };
 
   return (
-    <>
-      <Button onClick={openDialog} startIcon={<AddIcon />} variant="contained">
-        {'New Album'}
-      </Button>
-      <Dialog open={localState.open} onClose={closeDialog}>
-        <DialogTitle>{'Create New Album'}</DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2}>
-            <Grid item xs={12} container spacing={2} alignItems="center">
-              <Grid item xs={12} sm={4}>
-                <Typography>{'Title: '}</Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <AlbumTextField
-                  name="title"
-                  autoFocus
-                  value={localState.title}
-                  changeHandler={handleChange}
-                />
-              </Grid>
+    <Dialog open={open} onClose={closeDialogHandler}>
+      <DialogTitle>{'Create New Album'}</DialogTitle>
+      <DialogContent>
+        <Grid container spacing={2}>
+          <Grid item xs={12} container spacing={2} alignItems="center">
+            <Grid item xs={12} sm={4}>
+              <Typography>{'Title: '}</Typography>
             </Grid>
-            <Grid item xs={12} container spacing={2} alignItems="center">
-              <Grid item xs={12} sm={4}>
-                <Typography>{'Subtitle: '}</Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <AlbumTextField
-                  value={localState.subtitle}
-                  name="subtitle"
-                  changeHandler={handleChange}
-                />
-              </Grid>
-            </Grid>
-            <Grid item xs={12} container spacing={2} alignItems="center">
-              <Grid item xs={12} sm={4} />
-              <Grid item xs={12} sm={8}>
-                <AlbumImageRadioGroup
-                  changeHandler={(display: boolean) => {
-                    setLocalState({
-                      ...localState,
-                      displayImageDropzone: display,
-                    });
-                  }}
-                  displayImageDropzone={localState.displayImageDropzone}
-                />
-              </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <Collapse
-                in={localState.displayImageDropzone}
-                timeout={'auto'}
-                unmountOnExit
-              >
-                <PaperDropzone
-                  dropzoneHandler={handleDropzone}
-                  filesLimit={1}
-                />
-              </Collapse>
+            <Grid item xs={12} sm={8}>
+              <AlbumTextField
+                name="title"
+                autoFocus
+                value={localState.title}
+                changeHandler={handleChange}
+              />
             </Grid>
           </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDialog}>{'Cancel'}</Button>
-          <Button
-            disabled={localState.title === ''}
-            onClick={() => {
-              saveHandler(
-                {
-                  title: localState.title,
-                  subtitle: localState.subtitle,
-                  image: localState.image.length
-                    ? localState.image[0]
-                    : undefined,
-                },
-                closeDialog
-              );
-            }}
-          >
-            {'Save'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+          <Grid item xs={12} container spacing={2} alignItems="center">
+            <Grid item xs={12} sm={4}>
+              <Typography>{'Subtitle: '}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={8}>
+              <AlbumTextField
+                value={localState.subtitle}
+                name="subtitle"
+                changeHandler={handleChange}
+              />
+            </Grid>
+          </Grid>
+          <Grid item xs={12} container spacing={2} alignItems="center">
+            <Grid item xs={12} sm={4} />
+            <Grid item xs={12} sm={8}>
+              <AlbumImageRadioGroup
+                changeHandler={(display: boolean) => {
+                  setLocalState({
+                    ...localState,
+                    displayImageDropzone: display,
+                  });
+                }}
+                displayImageDropzone={localState.displayImageDropzone}
+              />
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <Collapse
+              in={localState.displayImageDropzone}
+              timeout={'auto'}
+              unmountOnExit
+            >
+              <PaperDropzone dropzoneHandler={handleDropzone} filesLimit={1} />
+            </Collapse>
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={closeDialogHandler}>{'Cancel'}</Button>
+        <Button
+          disabled={localState.title === ''}
+          onClick={() => {
+            saveHandler(
+              {
+                title: localState.title,
+                subtitle: localState.subtitle,
+                image: localState.image.length
+                  ? localState.image[0]
+                  : undefined,
+              },
+              closeDialogHandler
+            );
+          }}
+        >
+          {'Save'}
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
-type NewAlbumDialogProps = DispatchProps;
+type NewAlbumDialogProps = DispatchProps & StateProps;
+
+interface StateProps {
+  open: boolean;
+}
 
 interface DispatchProps {
   saveHandler: (info: NewAlbumInfo, cb: () => void) => void;
+  closeDialogHandler: () => void;
 }
+
+const mapStateToProps = (state: State): StateProps => {
+  return {
+    open: state.appDialogState.displayAlbumInfoDialog,
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   saveHandler: (info: NewAlbumInfo, cb: () => void) => {
@@ -181,6 +168,9 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
       saveNewAlbum(info, cb)
     );
   },
+  closeDialogHandler: () => {
+    dispatch(closeAlbumInfoDialog());
+  },
 });
 
-export default connect(null, mapDispatchToProps)(AlbumInfoDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(AlbumInfoDialog);

@@ -6,6 +6,7 @@ import {
   DisplayAppSnackbarAction,
   HideAppSnackbarAction,
 } from './app-snackbar';
+import { ToggleAlbumInfoDialogAction } from './dialogs/album-info';
 import { LoadImagesAction } from './images';
 import { LoggedInUserAction } from './user';
 
@@ -19,6 +20,9 @@ export enum ActionTypes {
   HIDE_APP_SNACKBAR = 'HIDE_APP_SNACKBAR',
   TOGGLE_APP_LOADER = 'TOGGLE_APP_LOADER',
   LOAD_IMAGES = 'LOAD_IMAGES',
+
+  // App Dialog Actions
+  TOGGLE_ALBUM_INFO_DIALOG = 'TOGGLE_ALBUM_INFO_DIALOG',
 }
 
 export type ApplicationActions =
@@ -29,4 +33,5 @@ export type ApplicationActions =
   | HideAppSnackbarAction
   | ToggleAppLoaderAction
   | SelectAlbumToViewAction
-  | LoadImagesAction;
+  | LoadImagesAction
+  | ToggleAlbumInfoDialogAction;
