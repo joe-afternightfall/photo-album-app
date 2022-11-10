@@ -9,11 +9,6 @@ import { FIREBASE_IMAGES_ROUTE } from '../configs/firebase/firebase-routes';
 import { ImageDAO, ImageVO } from '../configs/interfaces';
 import { State } from '../configs/redux/store';
 import { ApplicationActions } from '../creators/actions';
-import { displayAppLoader } from '../creators/app-loader';
-import {
-  displayErrorSnackbar,
-  displaySuccessSnackbar,
-} from '../creators/app-snackbar';
 import { generateTimestamp } from '../utils/timestamp-generator';
 
 // import FirebaseStorageError = firebase.storage.FirebaseStorageError;
@@ -25,8 +20,6 @@ export const uploadImageFiles =
     callback?: () => void
   ): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch, getState: () => State): Promise<void> => {
-    dispatch(displayAppLoader());
-
     const folderName = albumId;
     // const errors = [];
 
@@ -66,6 +59,8 @@ export const uploadImageFiles =
         }
       });
     });
+
+    callback && callback();
 
     // if (errors.length > 0) {
     //   dispatch(displayErrorSnackbar(`Error saving images ${errors[0].name}.`));
