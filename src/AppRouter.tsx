@@ -32,7 +32,7 @@ const AppRouter = (props: AppRouterProps): JSX.Element => {
 
   return (
     <StyledEngineProvider injectFirst>
-      <MuiThemeProvider theme={getTheme('light')}>
+      <MuiThemeProvider theme={getTheme('dark')}>
         <CssBaseline />
         {user ? (
           <App>
