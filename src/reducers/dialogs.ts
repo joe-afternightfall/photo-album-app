@@ -1,6 +1,5 @@
 import { AlbumVO } from '../configs/interfaces';
 import { ActionTypes, ApplicationActions } from '../creators/actions';
-import { closeDeleteImageDialog } from '../creators/dialogs/delete-image';
 
 export default {
   reducer: (

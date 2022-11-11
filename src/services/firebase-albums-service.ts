@@ -86,10 +86,7 @@ export const saveNewAlbum =
   };
 
 export const updateAlbum =
-  (
-    info: NewAlbumInfo,
-    successCallback?: () => void
-  ): ThunkAction<void, State, void, ApplicationActions> =>
+  (): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch): Promise<void> => {
     dispatch(displayAppLoader());
   };
