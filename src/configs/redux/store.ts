@@ -51,6 +51,11 @@ export const createStore = (history: History): Store => {
     } as ApplicationState,
     appDialogState: {
       displayAlbumInfoDialog: false,
+      deleteImageDialog: {
+        display: false,
+        imageId: '',
+        imageFirebaseId: '',
+      },
     } as AppDialogState,
   } as State);
 };

@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { AlbumVO } from '../../../../../configs/interfaces';
+import { AlbumVO, ImageVO } from '../../../../../configs/interfaces';
 import { UserVO } from '../../../../../configs/interfaces/user/UserVO';
 import { State } from '../../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../../creators/actions';
@@ -30,11 +30,11 @@ const useStyles = makeStyles(() =>
 
 const ImageToolbar = (props: ImageToolbarProps): JSX.Element => {
   const classes = useStyles();
-  const { imageId, favoriteImageIds, toggleFavHandler } = props;
+  const { image, favoriteImageIds, selectedAlbum, toggleFavHandler } = props;
   const [isFav, setIsFav] = useState(false);
 
   useEffect(() => {
-    const foundIndex = favoriteImageIds.indexOf(imageId);
+    const foundIndex = favoriteImageIds.indexOf(image.id);
     setIsFav(foundIndex !== -1);
   }, [favoriteImageIds]);
 
@@ -59,7 +59,12 @@ const ImageToolbar = (props: ImageToolbarProps): JSX.Element => {
             </IconButton>
           </Grid>
           <Grid item>
-            <SettingsMenu />
+            {selectedAlbum && (
+              <SettingsMenu
+                image={image}
+                albumFirebaseId={selectedAlbum.firebaseId}
+              />
+            )}
           </Grid>
         </Grid>
       }
@@ -70,7 +75,7 @@ const ImageToolbar = (props: ImageToolbarProps): JSX.Element => {
 type ImageToolbarProps = PassedInProps & StateProps & DispatchProps;
 
 interface PassedInProps {
-  imageId: string;
+  image: ImageVO;
 }
 
 interface StateProps {
@@ -99,8 +104,8 @@ const mapDispatchToProps = (
   toggleFavHandler: (isFav: boolean) => {
     (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
       isFav
-        ? removeImageFromUsersFavoriteList(ownProps.imageId)
-        : tagImageAsFavorite(ownProps.imageId)
+        ? removeImageFromUsersFavoriteList(ownProps.image.id)
+        : tagImageAsFavorite(ownProps.image.id)
     );
   },
 });

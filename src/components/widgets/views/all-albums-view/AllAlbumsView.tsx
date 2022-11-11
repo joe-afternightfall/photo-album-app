@@ -47,11 +47,10 @@ const AllAlbumsView = (props: AllAlbumsViewProps): JSX.Element => {
             >
               <CardMedia
                 component="img"
-                height="140"
-                image="/0001.JPG"
-                alt="green iguana"
+                height="200"
+                image={album.coverImageDownloadURL}
+                alt={album.title}
               />
-              <CardContent />
             </CardActionArea>
           </Card>
         </Grid>

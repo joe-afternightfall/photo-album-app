@@ -42,7 +42,7 @@ const createDarkTheme = (): Theme => {
         main: blue[200],
       },
       secondary: {
-        main: '#b683f3',
+        main: '#BB86FC',
       },
       colors: {
         active: {

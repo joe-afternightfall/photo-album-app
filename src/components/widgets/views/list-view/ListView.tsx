@@ -56,11 +56,11 @@ export default function ListView(props: ListViewProps): JSX.Element {
               {isMd ? (
                 <Fade in={displayToolBar === image.id}>
                   <div>
-                    <ImageToolbar imageId={image.id} />
+                    <ImageToolbar image={image} />
                   </div>
                 </Fade>
               ) : (
-                <ImageToolbar imageId={image.id} />
+                <ImageToolbar image={image} />
               )}
             </ImageListItem>
           );

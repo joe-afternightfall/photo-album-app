@@ -7,6 +7,7 @@ import TopAppBar from './components/app-shell/app-bar/AppBar';
 import AppLoader from './components/app-shell/app-loader/AppLoader';
 import AppSnackbar from './components/app-shell/app-snackbar/AppSnackbar';
 import AlbumInfoDialog from './components/widgets/dialogs/album-info-dialog/AlbumInfoDialog';
+import DeleteImageDialog from './components/widgets/dialogs/delete-image-dialog/DeleteImageDialog';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,6 +41,7 @@ function App(props: AppProps) {
       <main data-testid="app-main-wrapper">
         <div data-testid="app-header-mixin" className={classes.headerMixin} />
         <AlbumInfoDialog />
+        <DeleteImageDialog />
         <TopAppBar />
         <AppSnackbar />
         <AppLoader />

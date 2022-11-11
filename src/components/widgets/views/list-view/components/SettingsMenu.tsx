@@ -9,17 +9,19 @@ import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
-import { makeStyles, createStyles } from '@mui/styles';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 
+import { ImageVO } from '../../../../../configs/interfaces';
 import { State } from '../../../../../configs/redux/store';
-
-const useStyles = makeStyles(() => createStyles({}));
+import { ApplicationActions } from '../../../../../creators/actions';
+import { openDeleteImageDialog } from '../../../../../creators/dialogs/delete-image';
+import { updateAlbumCoverImage } from '../../../../../services/firebase-albums-service';
 
 const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
-  const classes = useStyles();
+  const { updateCoverImageHandler, openDeleteDialogHandler } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -34,15 +36,31 @@ const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
       <IconButton onClick={handleClick}>
         <SettingsIcon />
       </IconButton>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        transformOrigin={{ horizontal: 'left', vertical: 'center' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'center' }}
+      >
         <MenuList>
-          <MenuItem>
+          <MenuItem
+            onClick={() => {
+              updateCoverImageHandler();
+              handleClose();
+            }}
+          >
             <ListItemIcon>
               <CollectionsIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>{'Make Album Cover'}</ListItemText>
           </MenuItem>
-          <MenuItem>
+          <MenuItem
+            onClick={() => {
+              openDeleteDialogHandler();
+              handleClose();
+            }}
+          >
             <ListItemIcon>
               <DeleteIcon fontSize="small" />
             </ListItemIcon>
@@ -66,24 +84,49 @@ const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
   );
 };
 
-type SettingsMenuProps = PassedInProps & StateProps & DispatchProps;
+type SettingsMenuProps = PassedInProps & DispatchProps;
 
 interface PassedInProps {
-  DELETE_ME?: string;
+  albumFirebaseId: string;
+  image: ImageVO;
 }
 
 interface StateProps {
-  DELETE_ME?: string;
+  imageFirebaseId: string;
 }
 
 interface DispatchProps {
-  DELETE_ME?: string;
+  updateCoverImageHandler: () => void;
+  openDeleteDialogHandler: () => void;
 }
 
-const mapStateToProps = (state: State): StateProps => {
-  return {};
+const mapStateToProps = (state: State, ownProps: PassedInProps): StateProps => {
+  const foundImage = state.applicationState.images.find(
+    (image) => image.id === ownProps.image.id
+  );
+
+  return {
+    imageFirebaseId: foundImage ? foundImage.firebaseId : '',
+  };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
+const mapDispatchToProps = (
+  dispatch: Dispatch,
+  ownProps: PassedInProps
+): DispatchProps => ({
+  updateCoverImageHandler: () => {
+    (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+      updateAlbumCoverImage(
+        ownProps.albumFirebaseId,
+        ownProps.image.downloadURL
+      )
+    );
+  },
+  openDeleteDialogHandler: () => {
+    dispatch(
+      openDeleteImageDialog(ownProps.image.firebaseId, ownProps.image.id)
+    );
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsMenu);
