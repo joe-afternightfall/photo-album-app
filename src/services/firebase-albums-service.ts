@@ -29,7 +29,7 @@ export const getAllAlbums = async (): Promise<AlbumVO[]> => {
             id: snap[key].id,
             title: snap[key].title,
             subtitle: snap[key].subtitle,
-            coverImageId: snap[key].coverImageId,
+            coverImageDownloadURL: snap[key].coverImageDownloadURL,
             images: snap[key].images,
             created: snap[key].created,
             updated: snap[key].updated,
@@ -64,7 +64,7 @@ export const saveNewAlbum =
       id: uuidv4(),
       title: info.title,
       subtitle: info.subtitle,
-      coverImageId: '',
+      coverImageDownloadURL: '',
       images: [],
       created: timestamp,
       updated: timestamp,
@@ -83,4 +83,39 @@ export const saveNewAlbum =
         }, 1500);
       }
     });
+  };
+
+export const updateAlbum =
+  (
+    info: NewAlbumInfo,
+    successCallback?: () => void
+  ): ThunkAction<void, State, void, ApplicationActions> =>
+  async (dispatch: Dispatch): Promise<void> => {
+    dispatch(displayAppLoader());
+  };
+
+export const updateAlbumCoverImage =
+  (
+    firebaseId: string,
+    coverImageDownloadURL: string
+  ): ThunkAction<void, State, void, ApplicationActions> =>
+  async (dispatch: Dispatch): Promise<void> => {
+    return await firebase
+      .database()
+      .ref(FIREBASE_ALBUMS_ROUTE)
+      .child(firebaseId)
+      .update(
+        {
+          coverImageDownloadURL,
+        },
+        (error: Error | null) => {
+          if (error) {
+            dispatch(displayErrorSnackbar('Failed to update album cover'));
+          } else {
+            dispatch(
+              displaySuccessSnackbar('Successfully updated album cover')
+            );
+          }
+        }
+      );
   };
