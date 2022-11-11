@@ -144,3 +144,23 @@ export const updateAlbumCoverImage =
         }
       );
   };
+
+export const deleteAlbum =
+  (
+    firebaseId: string,
+    callback?: () => void
+  ): ThunkAction<void, State, void, ApplicationActions> =>
+  async (dispatch: Dispatch): Promise<void> => {
+    return await firebase
+      .database()
+      .ref(FIREBASE_ALBUMS_ROUTE)
+      .child(firebaseId)
+      .remove((error: Error | null) => {
+        if (error) {
+          dispatch(displayErrorSnackbar('Error while deleting album'));
+        } else {
+          dispatch(displaySuccessSnackbar('Successfully deleted album'));
+          callback && callback();
+        }
+      });
+  };

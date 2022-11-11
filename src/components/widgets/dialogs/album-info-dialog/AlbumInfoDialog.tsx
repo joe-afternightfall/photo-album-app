@@ -186,8 +186,8 @@ interface DispatchProps {
 
 const mapStateToProps = (state: State): StateProps => {
   return {
-    open: state.appDialogState.displayAlbumInfoDialog,
-    album: state.appDialogState.selectedAlbumToEdit,
+    open: state.appDialogState.albumInfoDialog.display,
+    album: state.appDialogState.albumInfoDialog.selectedAlbumToEdit,
   };
 };
 

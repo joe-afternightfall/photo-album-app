@@ -6,7 +6,10 @@ import {
   DisplayAppSnackbarAction,
   HideAppSnackbarAction,
 } from './app-snackbar';
-import { ToggleAlbumInfoDialogAction } from './dialogs/album-info';
+import {
+  ToggleAlbumInfoDialogAction,
+  ToggleDeleteAlbumDialog,
+} from './dialogs/album-info';
 import { ToggleDeleteImageDialogAction } from './dialogs/delete-image';
 import { LoadImagesAction } from './images';
 import { LoggedInUserAction } from './user';
@@ -25,6 +28,7 @@ export enum ActionTypes {
   // App Dialog Actions
   TOGGLE_ALBUM_INFO_DIALOG = 'TOGGLE_ALBUM_INFO_DIALOG',
   TOGGLE_DELETE_IMAGE_DIALOG = 'TOGGLE_DELETE_IMAGE_DIALOG',
+  TOGGLE_DELETE_ALBUM_DIALOG = 'TOGGLE_DELETE_ALBUM_DIALOG',
 }
 
 export type ApplicationActions =
@@ -37,4 +41,5 @@ export type ApplicationActions =
   | SelectAlbumToViewAction
   | LoadImagesAction
   | ToggleAlbumInfoDialogAction
-  | ToggleDeleteImageDialogAction;
+  | ToggleDeleteImageDialogAction
+  | ToggleDeleteAlbumDialog;

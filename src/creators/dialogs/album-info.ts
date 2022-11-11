@@ -24,3 +24,27 @@ export const closeAlbumInfoDialog = (): ToggleAlbumInfoDialogAction => {
     album: undefined,
   };
 };
+
+export interface ToggleDeleteAlbumDialog {
+  type: ActionTypes.TOGGLE_DELETE_ALBUM_DIALOG;
+  open: boolean;
+  album?: AlbumVO;
+}
+
+export const openDeleteAlbumDialog = (
+  album: AlbumVO
+): ToggleDeleteAlbumDialog => {
+  return {
+    type: ActionTypes.TOGGLE_DELETE_ALBUM_DIALOG,
+    open: true,
+    album,
+  };
+};
+
+export const closeDeleteAlbumDialog = (): ToggleDeleteAlbumDialog => {
+  return {
+    type: ActionTypes.TOGGLE_DELETE_ALBUM_DIALOG,
+    open: false,
+    album: undefined,
+  };
+};

@@ -19,6 +19,7 @@ const DeleteImageDialog = (props: DeleteImageDialogProps): JSX.Element => {
   return (
     <BaseDialog
       open={open}
+      maxWidth="xs"
       data-testid="delete-image-dialog"
       title="Delete Image"
       dialogContent={<Typography>{'Delete Image?'}</Typography>}

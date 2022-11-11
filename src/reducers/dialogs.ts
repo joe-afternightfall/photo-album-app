@@ -10,8 +10,16 @@ export default {
 
     switch (action.type) {
       case ActionTypes.TOGGLE_ALBUM_INFO_DIALOG:
-        newState.displayAlbumInfoDialog = action.open;
-        newState.selectedAlbumToEdit = action.album;
+        newState.albumInfoDialog = {
+          display: action.open,
+          selectedAlbumToEdit: action.album,
+        };
+        break;
+      case ActionTypes.TOGGLE_DELETE_ALBUM_DIALOG:
+        newState.deleteAlbumDialog = {
+          display: action.open,
+          album: action.album,
+        };
         break;
       case ActionTypes.TOGGLE_DELETE_IMAGE_DIALOG:
         newState.deleteImageDialog = {
@@ -27,8 +35,14 @@ export default {
 };
 
 export interface AppDialogState {
-  displayAlbumInfoDialog: boolean;
-  selectedAlbumToEdit?: AlbumVO;
+  albumInfoDialog: {
+    display: boolean;
+    selectedAlbumToEdit?: AlbumVO;
+  };
+  deleteAlbumDialog: {
+    display: boolean;
+    album?: AlbumVO;
+  };
   deleteImageDialog: {
     display: boolean;
     imageId: string;

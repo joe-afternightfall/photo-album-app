@@ -9,10 +9,13 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { AlbumVO } from '../../../../configs/interfaces';
-import { openAlbumInfoDialog } from '../../../../creators/dialogs/album-info';
+import {
+  openAlbumInfoDialog,
+  openDeleteAlbumDialog,
+} from '../../../../creators/dialogs/album-info';
 
 const AlbumActionMenu = (props: AlbumActionMenuProps): JSX.Element => {
-  const { openDialogHandler } = props;
+  const { openDialogHandler, openDeleteDialogHandler } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -47,7 +50,12 @@ const AlbumActionMenu = (props: AlbumActionMenuProps): JSX.Element => {
           <EditIcon sx={{ mr: 2 }} />
           {'Edit'}
         </MenuItem>
-        <MenuItem onClick={closeMenu}>
+        <MenuItem
+          onClick={() => {
+            openDeleteDialogHandler();
+            closeMenu();
+          }}
+        >
           <DeleteIcon sx={{ mr: 2 }} />
           {'Delete'}
         </MenuItem>
@@ -64,6 +72,7 @@ interface PassedInProps {
 
 interface DispatchProps {
   openDialogHandler: () => void;
+  openDeleteDialogHandler: () => void;
 }
 
 const mapDispatchToProps = (
@@ -72,6 +81,9 @@ const mapDispatchToProps = (
 ): DispatchProps => ({
   openDialogHandler: () => {
     dispatch(openAlbumInfoDialog(ownProps.album));
+  },
+  openDeleteDialogHandler: () => {
+    dispatch(openDeleteAlbumDialog(ownProps.album));
   },
 });
 

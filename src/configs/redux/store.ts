@@ -50,11 +50,17 @@ export const createStore = (history: History): Store => {
       // userHasAdminPrivileges: false,
     } as ApplicationState,
     appDialogState: {
-      displayAlbumInfoDialog: false,
+      albumInfoDialog: {
+        display: false,
+        selectedAlbumToEdit: undefined,
+      },
       deleteImageDialog: {
         display: false,
         imageId: '',
         imageFirebaseId: '',
+      },
+      deleteAlbumDialog: {
+        display: false,
       },
     } as AppDialogState,
   } as State);
