@@ -15,6 +15,7 @@ import { closeAlbumInfoDialog } from '../../../../creators/dialogs/album-info';
 import {
   NewAlbumInfo,
   saveNewAlbum,
+  updateAlbumTitleAndSubtitle,
 } from '../../../../services/firebase-albums-service';
 import BaseDialog from '../../../shared/dialog/BaseDialog';
 import PaperDropzone from '../../../shared/dropzone/DropZone';
@@ -29,7 +30,7 @@ interface NewAlbumDialogState {
 }
 
 const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
-  const { open, album, saveHandler, closeDialogHandler } = props;
+  const { open, album, saveHandler, updateHandler, closeDialogHandler } = props;
 
   const isEditing = Boolean(album);
 
@@ -68,6 +69,28 @@ const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
       ...localState,
       image: files,
     });
+  };
+
+  const handleConfirmClick = () => {
+    if (isEditing) {
+      if (album) {
+        updateHandler(
+          album.firebaseId,
+          localState.title,
+          localState.subtitle,
+          closeDialogHandler
+        );
+      }
+    } else {
+      saveHandler(
+        {
+          title: localState.title,
+          subtitle: localState.subtitle,
+          image: localState.image.length ? localState.image[0] : undefined,
+        },
+        closeDialogHandler
+      );
+    }
   };
 
   return (
@@ -133,18 +156,7 @@ const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
           <Button onClick={closeDialogHandler}>{'Cancel'}</Button>
           <Button
             disabled={localState.title === ''}
-            onClick={() => {
-              saveHandler(
-                {
-                  title: localState.title,
-                  subtitle: localState.subtitle,
-                  image: localState.image.length
-                    ? localState.image[0]
-                    : undefined,
-                },
-                closeDialogHandler
-              );
-            }}
+            onClick={handleConfirmClick}
           >
             {isEditing ? 'Update' : 'Save'}
           </Button>
@@ -164,6 +176,12 @@ interface StateProps {
 interface DispatchProps {
   saveHandler: (info: NewAlbumInfo, cb: () => void) => void;
   closeDialogHandler: () => void;
+  updateHandler: (
+    firebaseId: string,
+    title: string,
+    subtitle: string,
+    cb: () => void
+  ) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -177,6 +195,16 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   saveHandler: (info: NewAlbumInfo, cb: () => void) => {
     (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
       saveNewAlbum(info, cb)
+    );
+  },
+  updateHandler: (
+    firebaseId: string,
+    title: string,
+    subtitle: string,
+    cb: () => void
+  ) => {
+    (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+      updateAlbumTitleAndSubtitle(firebaseId, title, subtitle, cb)
     );
   },
   closeDialogHandler: () => {

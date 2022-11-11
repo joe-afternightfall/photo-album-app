@@ -85,10 +85,37 @@ export const saveNewAlbum =
     });
   };
 
-export const updateAlbum =
-  (): ThunkAction<void, State, void, ApplicationActions> =>
+export const updateAlbumTitleAndSubtitle =
+  (
+    firebaseId: string,
+    title: string,
+    subtitle: string,
+    successCallback?: () => void
+  ): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch): Promise<void> => {
     dispatch(displayAppLoader());
+    return await firebase
+      .database()
+      .ref(FIREBASE_ALBUMS_ROUTE)
+      .child(firebaseId)
+      .update(
+        {
+          title: title,
+          subtitle: subtitle,
+          updated: generateTimestamp(),
+        },
+        (error: Error | null) => {
+          if (error) {
+            dispatch(displayErrorSnackbar('Error updating album info'));
+          } else {
+            dispatch(displaySuccessSnackbar('Updated album info'));
+            successCallback && successCallback();
+            setTimeout(() => {
+              dispatch(hideAppLoader());
+            }, 1000);
+          }
+        }
+      );
   };
 
 export const updateAlbumCoverImage =
@@ -104,6 +131,7 @@ export const updateAlbumCoverImage =
       .update(
         {
           coverImageDownloadURL,
+          updated: generateTimestamp(),
         },
         (error: Error | null) => {
           if (error) {

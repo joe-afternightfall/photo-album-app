@@ -116,6 +116,7 @@ const updateFavoritesList =
         .update(
           {
             favoriteImageIds: imageIds,
+            updated: generateTimestamp(),
           },
           async (error: Error | null) => {
             if (error) {

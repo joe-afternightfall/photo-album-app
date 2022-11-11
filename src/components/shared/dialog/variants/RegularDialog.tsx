@@ -15,10 +15,17 @@ export default function RegularDialog(props: BaseDialogProps): JSX.Element {
     icon,
     dialogContent,
     maxWidth,
+    closeDialogHandler,
   } = props;
 
   return (
-    <Dialog open={open} maxWidth={maxWidth} fullWidth data-testid={testId}>
+    <Dialog
+      open={open}
+      maxWidth={maxWidth}
+      fullWidth
+      data-testid={testId}
+      onClose={closeDialogHandler}
+    >
       <DialogTitle>
         <Grid container alignItems="center" spacing={2}>
           <Grid item>{icon}</Grid>
