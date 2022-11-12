@@ -4,8 +4,9 @@ import Grid from '@mui/material/Grid';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import SwipeableViews from 'react-swipeable-views';
 
 import { AlbumVO, ImageVO } from '../../configs/interfaces';
 import { State } from '../../configs/redux/store';
@@ -16,13 +17,17 @@ import UploadDialog from './selected-album-screen/components/UploadDialog';
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
   const { images, selectedAlbum } = props;
 
-  const [view, setView] = React.useState<string | null>('list-view');
+  const [index, setIndex] = useState(0);
 
   const handleToggle = (
     event: React.MouseEvent<HTMLElement>,
     newView: string | null
   ) => {
-    setView(newView);
+    setIndex(Number(newView));
+  };
+
+  const handleChangeIndex = (index: number) => {
+    setIndex(index);
   };
 
   return (
@@ -42,11 +47,15 @@ const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
         <Grid item>
           <Grid container alignItems="center">
             <Grid item>
-              <ToggleButtonGroup value={view} exclusive onChange={handleToggle}>
-                <ToggleButton value="list-view">
+              <ToggleButtonGroup
+                value={String(index)}
+                exclusive
+                onChange={handleToggle}
+              >
+                <ToggleButton value="0">
                   <ViewQuiltIcon />
                 </ToggleButton>
-                <ToggleButton value="gallery-view">
+                <ToggleButton value="1">
                   <PanoramaIcon />
                 </ToggleButton>
               </ToggleButtonGroup>
@@ -57,9 +66,16 @@ const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
           </Grid>
         </Grid>
       </Grid>
+
       <Grid item xs={12}>
-        {view === 'list-view' && <ListView images={images} />}
-        {view === 'gallery-view' && <GalleryView images={images} />}
+        <SwipeableViews index={index} onChangeIndex={handleChangeIndex}>
+          <div>
+            <ListView images={images} />
+          </div>
+          <div>
+            <GalleryView images={images} />
+          </div>
+        </SwipeableViews>
       </Grid>
     </Grid>
   );

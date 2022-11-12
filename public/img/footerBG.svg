@@ -1,0 +1,21 @@
+
+<svg width="1700px" height="245px" viewBox="0 0 1700 245" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#6DD4FE" offset="0%"></stop>
+            <stop stop-color="#3BAAFC" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#EEEEEE" offset="0%"></stop>
+            <stop stop-color="#D8D8D8" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Welcome" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Edit-Client" transform="translate(0.000000, -882.000000)">
+            <g id="Group-2" transform="translate(-45.000000, 882.000000)">
+                <polygon id="Path-2" fill="url(#linearGradient-1)" opacity="0.750744048" points="45 236.858619 432.998089 128.106695 677.021841 236.858619 1029.25273 2.62965892e-14 1159.63734 245 1614.72231 27.5854328 1746.34165 128.106695 1749 245 45 245"></polygon>
+                <polygon id="Path-3" fill="url(#linearGradient-2)" points="0 226.014956 152.324892 175.64828 604.165367 302 793.515091 123 1186.64275 302 1508.32686 175.64828 1976.70515 259.513619 1986 302 0 302"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

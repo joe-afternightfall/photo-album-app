@@ -2,7 +2,7 @@ import CollectionsIcon from '@mui/icons-material/Collections';
 import CopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
-import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsIcon from '@mui/icons-material/SettingsOutlined';
 import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -33,7 +33,10 @@ const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
 
   return (
     <div>
-      <IconButton onClick={handleClick}>
+      <IconButton
+        onClick={handleClick}
+        sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+      >
         <SettingsIcon />
       </IconButton>
       <Menu
@@ -66,13 +69,13 @@ const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
             </ListItemIcon>
             <ListItemText>{'Delete photo'}</ListItemText>
           </MenuItem>
-          <MenuItem>
+          <MenuItem disabled>
             <ListItemIcon>
               <DownloadIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>{'Download photo'}</ListItemText>
           </MenuItem>
-          <MenuItem>
+          <MenuItem disabled>
             <ListItemIcon>
               <CopyIcon fontSize="small" />
             </ListItemIcon>
