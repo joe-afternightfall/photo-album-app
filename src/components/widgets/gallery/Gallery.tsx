@@ -81,7 +81,7 @@ export default function Gallery(props: GalleryProps): JSX.Element {
           <Splide
             aria-label="My Favorite Images"
             options={mainOptions}
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: 'center', width: '100%' }}
             ref={mainRef}
           >
             {images.map((image) => (
