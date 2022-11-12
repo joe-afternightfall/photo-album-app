@@ -74,9 +74,9 @@ export default function Gallery(props: GalleryProps): JSX.Element {
   };
 
   return (
-    <Card sx={{ mt: 3, width: '95vw', margin: 'auto' }}>
+    <Card sx={{ mt: 3, width: '95vw', margin: 'auto', mb: 4 }}>
       <CardHeader title="Album" />
-      <CardContent sx={{ pt: 0 }}>
+      <CardContent sx={{ pt: 0, textAlign: 'center' }}>
         <Grid container item xs={12}>
           <Splide
             aria-label="My Favorite Images"

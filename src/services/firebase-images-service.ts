@@ -21,7 +21,7 @@ export const getAllImages = async (): Promise<ImageVO[]> => {
             tagIds: snap[key].tagIds,
             downloadURL: snap[key].downloadURL,
             albumId: snap[key].albumId,
-            hideFromGeneralViewing: snap[key].hideFromGeneralViewing,
+            accessType: snap[key].accessType,
             created: snap[key].created,
             updated: snap[key].updated,
           };

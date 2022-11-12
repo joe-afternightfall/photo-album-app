@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { FIREBASE_IMAGES_ROUTE } from '../configs/firebase/firebase-routes';
 import { ImageDAO } from '../configs/interfaces';
+import { ACCESS_TYPE } from '../configs/interfaces/image/ImageDAO';
 import { State } from '../configs/redux/store';
 import { ApplicationActions } from '../creators/actions';
 import {
@@ -38,7 +39,7 @@ export const uploadImageFiles =
         tagIds: [],
         downloadURL: downloadURL,
         albumId: albumId,
-        hideFromGeneralViewing: false,
+        accessType: ACCESS_TYPE.NOT_DEFINED,
         created: timestamp,
         updated: timestamp,
       };
