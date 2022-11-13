@@ -54,3 +54,5 @@ interface AppProps {
 }
 
 export default App;
+
+// todo: how to implement pagination for downloading a bunch of photos from firebase storage

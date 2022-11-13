@@ -1,3 +1,9 @@
+export enum ACCESS_TYPE {
+  NOT_DEFINED = '-1',
+  PRIVATE = '0',
+  PUBLIC = '1',
+}
+
 export interface ImageDAO {
   id: string;
   nickname: string;
@@ -5,7 +11,7 @@ export interface ImageDAO {
   tagIds: string[];
   downloadURL: string;
   albumId: string;
-  hideFromGeneralViewing: boolean;
+  accessType: ACCESS_TYPE;
   created: string;
   updated: string;
 }
