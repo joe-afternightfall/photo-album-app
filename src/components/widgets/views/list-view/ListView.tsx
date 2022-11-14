@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 
 import { ImageVO } from '../../../../configs/interfaces';
 import ImageToolbar from './components/ImageToolbar';
+import SelectedImageDialog from './components/SelectedImageDialog';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -28,11 +29,26 @@ export default function ListView(props: ListViewProps): JSX.Element {
   const isXs = useMediaQuery(theme.breakpoints.down(700));
   const isMd = useMediaQuery(theme.breakpoints.up('md'));
   const [displayToolBar, setDisplayToolbar] = useState('');
+  const [displayFullImage, setDisplayFullImage] = useState({
+    open: false,
+    image: <div />,
+  });
 
   return (
     <Box>
       <ImageList variant="masonry" cols={isXs ? 2 : 4} gap={8}>
-        {images.map((image) => {
+        {images.map((image, index) => {
+          const imageToDisplay = (
+            <img
+              src={image.downloadURL}
+              alt={image.fileName}
+              loading="lazy"
+              style={{
+                objectFit: 'contain',
+                overflow: 'hidden',
+              }}
+            />
+          );
           return (
             <ImageListItem
               onMouseOver={() => {
@@ -43,15 +59,14 @@ export default function ListView(props: ListViewProps): JSX.Element {
               }}
               key={image.id}
               className={classes.imageListItem}
+              onClick={() => {
+                setDisplayFullImage({
+                  open: true,
+                  image: imageToDisplay,
+                });
+              }}
             >
-              <img
-                src={image.downloadURL}
-                alt={image.fileName}
-                loading="lazy"
-                style={{
-                  objectFit: 'contain',
-                }}
-              />
+              {imageToDisplay}
 
               {isMd ? (
                 <Fade in={displayToolBar === image.id}>
@@ -66,6 +81,17 @@ export default function ListView(props: ListViewProps): JSX.Element {
           );
         })}
       </ImageList>
+
+      <SelectedImageDialog
+        open={displayFullImage.open}
+        image={displayFullImage.image}
+        closeHandler={() => {
+          setDisplayFullImage({
+            open: false,
+            image: <div />,
+          });
+        }}
+      />
     </Box>
   );
 }

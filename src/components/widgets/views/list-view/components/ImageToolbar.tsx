@@ -46,7 +46,8 @@ const ImageToolbar = (props: ImageToolbarProps): JSX.Element => {
           <Grid item>
             <IconButton
               className={classes.iconButton}
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 toggleFavHandler(isFav);
               }}
             >
