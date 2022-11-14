@@ -4,15 +4,18 @@ import Grid from '@mui/material/Grid';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
+import * as ramda from 'ramda';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import SwipeableViews from 'react-swipeable-views';
 
 import { AlbumVO, ImageVO } from '../../configs/interfaces';
+import { ACCESS_TYPE } from '../../configs/interfaces/image/ImageDAO';
 import { State } from '../../configs/redux/store';
 import UploadImageDialog from '../widgets/dialogs/upload-image-dialog/UploadImageDialog';
 import GalleryView from '../widgets/views/gallery-view/GalleryView';
 import ListView from '../widgets/views/list-view/ListView';
+import ImageAccessTypeSelectMenu from './selected-album-screen/components/ImageAccessTypeSelectMenu';
 
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
   const { images, selectedAlbum } = props;
@@ -46,6 +49,9 @@ const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
         </Grid>
         <Grid item>
           <Grid container alignItems="center">
+            <Grid item>
+              <ImageAccessTypeSelectMenu />
+            </Grid>
             <Grid item>
               <ToggleButtonGroup
                 value={String(index)}
@@ -90,13 +96,40 @@ interface StateProps {
 
 const mapStateToProps = (state: State): StateProps => {
   const selectedAlbum = state.applicationState.selectedAlbumToView;
-  const albumImages: ImageVO[] = [];
+  const accessType = state.applicationState.filterImagesForAccessType;
+  let albumImages: ImageVO[] = [];
+
   if (selectedAlbum) {
     state.applicationState.images.forEach((image) => {
       if (image.albumId === selectedAlbum.id) {
         albumImages.push(image);
       }
     });
+    switch (accessType) {
+      case ACCESS_TYPE.UNDEFINED: {
+        const clonedImages = ramda.clone(albumImages);
+        albumImages = clonedImages.filter(
+          (image) => image.accessType === ACCESS_TYPE.UNDEFINED
+        );
+        break;
+      }
+      case ACCESS_TYPE.PUBLIC: {
+        const clonedImages = ramda.clone(albumImages);
+        albumImages = clonedImages.filter(
+          (image) => image.accessType === ACCESS_TYPE.PUBLIC
+        );
+        break;
+      }
+      case ACCESS_TYPE.PRIVATE: {
+        const clonedImages = ramda.clone(albumImages);
+        albumImages = clonedImages.filter(
+          (image) => image.accessType === ACCESS_TYPE.PRIVATE
+        );
+        break;
+      }
+      default:
+        break;
+    }
   }
 
   return {

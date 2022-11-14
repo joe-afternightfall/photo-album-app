@@ -11,6 +11,7 @@ import thunkMiddleware from 'redux-thunk';
 
 import application, { ApplicationState } from '../../reducers/application';
 import dialogs, { AppDialogState } from '../../reducers/dialogs';
+import { ACCESS_TYPE } from '../interfaces/image/ImageDAO';
 
 export const createStore = (history: History): Store => {
   const createStoreFunc = applyMiddleware(
@@ -40,6 +41,7 @@ export const createStore = (history: History): Store => {
           horizontal: 'right',
         },
       },
+      filterImagesForAccessType: ACCESS_TYPE.ALL,
       // displayAppLoader: true,
       // displaySkeletonApp: true,
       // appData: {

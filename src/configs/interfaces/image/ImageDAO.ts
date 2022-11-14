@@ -1,7 +1,8 @@
 export enum ACCESS_TYPE {
-  NOT_DEFINED = '-1',
+  UNDEFINED = '-1',
   PRIVATE = '0',
   PUBLIC = '1',
+  ALL = '2',
 }
 
 export interface ImageDAO {

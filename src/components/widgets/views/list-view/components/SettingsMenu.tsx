@@ -3,7 +3,9 @@ import CopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
 import SettingsIcon from '@mui/icons-material/SettingsOutlined';
+import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
@@ -19,9 +21,10 @@ import { State } from '../../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../../creators/actions';
 import { openDeleteImageDialog } from '../../../../../creators/dialogs/delete-image';
 import { updateAlbumCoverImage } from '../../../../../services/firebase-albums-service';
+import AccessTypeRadioGroup from './AccessTypeRadioGroup';
 
 const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
-  const { updateCoverImageHandler, openDeleteDialogHandler } = props;
+  const { image, updateCoverImageHandler, openDeleteDialogHandler } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -44,6 +47,9 @@ const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
         transformOrigin={{ horizontal: 'left', vertical: 'center' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'center' }}
       >
@@ -84,6 +90,10 @@ const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
             </ListItemIcon>
             <ListItemText>{'Copy Photo'}</ListItemText>
           </MenuItem>
+          <Divider sx={{ my: 0.5 }} />
+          <ListItem sx={{ width: '100%' }}>
+            <AccessTypeRadioGroup image={image} />
+          </ListItem>
         </MenuList>
       </Menu>
     </div>

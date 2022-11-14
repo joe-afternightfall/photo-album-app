@@ -69,7 +69,7 @@ export const uploadImageFiles =
         tagIds: [],
         downloadURL: downloadURL,
         albumId: albumId,
-        accessType: ACCESS_TYPE.NOT_DEFINED,
+        accessType: ACCESS_TYPE.UNDEFINED,
         created: timestamp,
         updated: timestamp,
       };
@@ -121,7 +121,7 @@ export const deleteImage =
 export const toggleImageAccessType =
   (
     imageFirebaseId: string,
-    isPrivate: boolean
+    accessType: ACCESS_TYPE
   ): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch): Promise<void> => {
     return await firebase
@@ -130,7 +130,7 @@ export const toggleImageAccessType =
       .child(imageFirebaseId)
       .update(
         {
-          accessType: isPrivate ? ACCESS_TYPE.PRIVATE : ACCESS_TYPE.PUBLIC,
+          accessType,
         },
         (error: Error | null) => {
           if (error) {

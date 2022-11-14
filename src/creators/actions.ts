@@ -11,7 +11,7 @@ import {
   ToggleDeleteAlbumDialog,
 } from './dialogs/album-info';
 import { ToggleDeleteImageDialogAction } from './dialogs/delete-image';
-import { LoadImagesAction } from './images';
+import { FilterImagesByAccessTypeAction, LoadImagesAction } from './images';
 import { LoggedInUserAction } from './user';
 
 export enum ActionTypes {
@@ -24,6 +24,7 @@ export enum ActionTypes {
   HIDE_APP_SNACKBAR = 'HIDE_APP_SNACKBAR',
   TOGGLE_APP_LOADER = 'TOGGLE_APP_LOADER',
   LOAD_IMAGES = 'LOAD_IMAGES',
+  FILTER_IMAGES_BY_ACCESS_TYPE = 'FILTER_IMAGES_BY_ACCESS_TYPE',
 
   // App Dialog Actions
   TOGGLE_ALBUM_INFO_DIALOG = 'TOGGLE_ALBUM_INFO_DIALOG',
@@ -42,4 +43,5 @@ export type ApplicationActions =
   | LoadImagesAction
   | ToggleAlbumInfoDialogAction
   | ToggleDeleteImageDialogAction
-  | ToggleDeleteAlbumDialog;
+  | ToggleDeleteAlbumDialog
+  | FilterImagesByAccessTypeAction;

@@ -1,6 +1,8 @@
 import { LOCATION_CHANGE } from 'connected-react-router';
+import * as ramda from 'ramda';
 
 import { AlbumVO, ImageVO } from '../configs/interfaces';
+import { ACCESS_TYPE } from '../configs/interfaces/image/ImageDAO';
 import { UserVO } from '../configs/interfaces/user/UserVO';
 import { ActionTypes, ApplicationActions } from '../creators/actions';
 import { AppSnackbarProps } from '../creators/app-snackbar';
@@ -41,6 +43,9 @@ export default {
       case ActionTypes.LOAD_IMAGES:
         newState.images = action.images;
         break;
+      case ActionTypes.FILTER_IMAGES_BY_ACCESS_TYPE:
+        newState.filterImagesForAccessType = action.accessType;
+        break;
     }
 
     return newState;
@@ -59,4 +64,5 @@ export interface ApplicationState {
   selectedAlbumToView?: AlbumVO;
   images: ImageVO[];
   signedInUser?: UserVO;
+  filterImagesForAccessType: ACCESS_TYPE;
 }
