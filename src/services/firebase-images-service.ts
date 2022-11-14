@@ -117,3 +117,27 @@ export const deleteImage =
         }
       });
   };
+
+export const toggleImageAccessType =
+  (
+    imageFirebaseId: string,
+    isPrivate: boolean
+  ): ThunkAction<void, State, void, ApplicationActions> =>
+  async (dispatch: Dispatch): Promise<void> => {
+    return await firebase
+      .database()
+      .ref(FIREBASE_IMAGES_ROUTE)
+      .child(imageFirebaseId)
+      .update(
+        {
+          accessType: isPrivate ? ACCESS_TYPE.PRIVATE : ACCESS_TYPE.PUBLIC,
+        },
+        (error: Error | null) => {
+          if (error) {
+            dispatch(displayErrorSnackbar('Failed to update access type'));
+          } else {
+            dispatch(displaySuccessSnackbar('Updated access type'));
+          }
+        }
+      );
+  };

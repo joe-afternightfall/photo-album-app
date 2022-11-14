@@ -1,19 +1,24 @@
 import DownloadIcon from '@mui/icons-material/Download';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-import { makeStyles, createStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import Switch from '@mui/material/Switch';
+import { createStyles, makeStyles } from '@mui/styles';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
 import { AlbumVO, ImageVO } from '../../../../../configs/interfaces';
+import { ACCESS_TYPE } from '../../../../../configs/interfaces/image/ImageDAO';
 import { UserVO } from '../../../../../configs/interfaces/user/UserVO';
 import { State } from '../../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../../creators/actions';
+import { toggleImageAccessType } from '../../../../../services/firebase-images-service';
 import {
   removeImageFromUsersFavoriteList,
   tagImageAsFavorite,
@@ -30,7 +35,13 @@ const useStyles = makeStyles(() =>
 
 const ImageToolbar = (props: ImageToolbarProps): JSX.Element => {
   const classes = useStyles();
-  const { image, favoriteImageIds, selectedAlbum, toggleFavHandler } = props;
+  const {
+    image,
+    favoriteImageIds,
+    selectedAlbum,
+    toggleFavHandler,
+    toggleAccessTypeHandler,
+  } = props;
   const [isFav, setIsFav] = useState(false);
 
   useEffect(() => {
@@ -38,11 +49,30 @@ const ImageToolbar = (props: ImageToolbarProps): JSX.Element => {
     setIsFav(foundIndex !== -1);
   }, [favoriteImageIds]);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    toggleAccessTypeHandler(e.target.checked);
+  };
+
   return (
     <ImageListItemBar
       sx={{ p: 0 }}
       actionIcon={
         <Grid container justifyContent="center">
+          <Grid item>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={image.accessType === ACCESS_TYPE.PRIVATE}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onChange={handleChange}
+                />
+              }
+              label="Private"
+            />
+          </Grid>
           <Grid item>
             <IconButton
               className={classes.iconButton}
@@ -87,6 +117,7 @@ interface StateProps {
 
 interface DispatchProps {
   toggleFavHandler: (isFav: boolean) => void;
+  toggleAccessTypeHandler: (isPrivate: boolean) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -107,6 +138,11 @@ const mapDispatchToProps = (
       isFav
         ? removeImageFromUsersFavoriteList(ownProps.image.id)
         : tagImageAsFavorite(ownProps.image.id)
+    );
+  },
+  toggleAccessTypeHandler: (isPrivate: boolean) => {
+    (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+      toggleImageAccessType(ownProps.image.firebaseId, isPrivate)
     );
   },
 });
