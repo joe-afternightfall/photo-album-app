@@ -25,6 +25,7 @@ const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -48,7 +49,8 @@ const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
       >
         <MenuList>
           <MenuItem
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               updateCoverImageHandler();
               handleClose();
             }}
@@ -59,7 +61,8 @@ const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
             <ListItemText>{'Make Album Cover'}</ListItemText>
           </MenuItem>
           <MenuItem
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               openDeleteDialogHandler();
               handleClose();
             }}
