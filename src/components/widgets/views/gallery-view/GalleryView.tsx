@@ -8,7 +8,7 @@ import { Options } from '@splidejs/splide';
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { ImageVO } from '../../../configs/interfaces';
+import { ImageVO } from '../../../../configs/interfaces';
 
 import '@splidejs/react-splide/css/sea-green';
 import '@splidejs/react-splide/css/core';
@@ -27,7 +27,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export default function Gallery(props: GalleryProps): JSX.Element {
+export default function GalleryView(props: Props): JSX.Element {
   const classes = useStyles();
   const { images } = props;
 
@@ -123,6 +123,6 @@ export default function Gallery(props: GalleryProps): JSX.Element {
   );
 }
 
-interface GalleryProps {
+interface Props {
   images: ImageVO[];
 }

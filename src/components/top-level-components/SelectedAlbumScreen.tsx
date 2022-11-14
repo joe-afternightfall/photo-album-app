@@ -11,7 +11,7 @@ import SwipeableViews from 'react-swipeable-views';
 import { AlbumVO, ImageVO } from '../../configs/interfaces';
 import { State } from '../../configs/redux/store';
 import UploadImageDialog from '../widgets/dialogs/upload-image-dialog/UploadImageDialog';
-import GalleryView from '../widgets/gallery/Gallery';
+import GalleryView from '../widgets/views/gallery-view/GalleryView';
 import ListView from '../widgets/views/list-view/ListView';
 
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
