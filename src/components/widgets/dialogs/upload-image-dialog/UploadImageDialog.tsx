@@ -16,7 +16,7 @@ import { ApplicationActions } from '../../../../creators/actions';
 import { uploadImageFiles } from '../../../../services/firebase-images-service';
 import PaperDropzone from '../../../shared/dropzone/DropZone';
 
-const UploadDialog = (props: UploadDialogProps): JSX.Element => {
+const UploadImageDialog = (props: Props): JSX.Element => {
   const { selectedAlbum, saveHandler } = props;
   const [open, setOpen] = useState(false);
   const [images, setImages] = useState<File[]>([]);
@@ -70,7 +70,7 @@ const UploadDialog = (props: UploadDialogProps): JSX.Element => {
   );
 };
 
-type UploadDialogProps = StateProps & DispatchProps;
+type Props = StateProps & DispatchProps;
 
 interface StateProps {
   selectedAlbum?: AlbumVO;
@@ -94,4 +94,4 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UploadDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(UploadImageDialog);

@@ -10,9 +10,9 @@ import SwipeableViews from 'react-swipeable-views';
 
 import { AlbumVO, ImageVO } from '../../configs/interfaces';
 import { State } from '../../configs/redux/store';
+import UploadImageDialog from '../widgets/dialogs/upload-image-dialog/UploadImageDialog';
 import GalleryView from '../widgets/gallery/Gallery';
 import ListView from '../widgets/views/list-view/ListView';
-import UploadDialog from './selected-album-screen/components/UploadDialog';
 
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
   const { images, selectedAlbum } = props;
@@ -61,7 +61,7 @@ const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
               </ToggleButtonGroup>
             </Grid>
             <Grid item>
-              <UploadDialog />
+              <UploadImageDialog />
             </Grid>
           </Grid>
         </Grid>
