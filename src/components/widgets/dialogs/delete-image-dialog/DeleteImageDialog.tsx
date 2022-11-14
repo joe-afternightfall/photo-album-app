@@ -9,7 +9,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { State } from '../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../creators/actions';
 import { closeDeleteImageDialog } from '../../../../creators/dialogs/delete-image';
-import { deleteImage } from '../../../../services/firebase-upload-service';
+import { deleteImage } from '../../../../services/firebase-images-service';
 import BaseDialog from '../../../shared/dialog/BaseDialog';
 
 const DeleteImageDialog = (props: DeleteImageDialogProps): JSX.Element => {
