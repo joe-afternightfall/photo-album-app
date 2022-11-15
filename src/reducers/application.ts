@@ -1,5 +1,4 @@
 import { LOCATION_CHANGE } from 'connected-react-router';
-import * as ramda from 'ramda';
 
 import { AlbumVO, ImageVO } from '../configs/interfaces';
 import { ACCESS_TYPE } from '../configs/interfaces/image/ImageDAO';

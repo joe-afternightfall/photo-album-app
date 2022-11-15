@@ -37,7 +37,7 @@ export default function ListView(props: ListViewProps): JSX.Element {
   return (
     <Box>
       <ImageList variant="masonry" cols={isXs ? 2 : 4} gap={8}>
-        {images.map((image, index) => {
+        {images.map((image) => {
           const imageToDisplay = (
             <img
               src={image.downloadURL}
