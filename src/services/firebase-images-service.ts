@@ -8,6 +8,7 @@ import { ImageDAO, ImageVO } from '../configs/interfaces';
 import { ACCESS_TYPE } from '../configs/interfaces/image/ImageDAO';
 import { State } from '../configs/redux/store';
 import { ApplicationActions } from '../creators/actions';
+import { displayAppLoader, hideAppLoader } from '../creators/app-loader';
 import {
   displayErrorSnackbar,
   displaySuccessSnackbar,
@@ -51,42 +52,62 @@ export const uploadImageFiles =
     files: File[],
     callback?: () => void
   ): ThunkAction<void, State, void, ApplicationActions> =>
-  async (): Promise<void> => {
-    files.map(async (file) => {
-      // const storageRef = firebase.storage().ref(`images/${uuidv4()}/${index}`);
-      const imageId = uuidv4();
-      const storageRef = firebase.storage().ref(`images/${imageId}`);
+  async (dispatch: Dispatch): Promise<void> => {
+    dispatch(displayAppLoader());
+    const errors: string[] = [];
+    const totalFiles = files.length;
 
-      await storageRef.put(file);
+    await Promise.all(
+      files.map(async (file) => {
+        // const storageRef = firebase.storage().ref(`images/${uuidv4()}/${index}`);
+        const imageId = uuidv4();
+        const storageRef = firebase.storage().ref(`images/${imageId}`);
 
-      const downloadURL = await storageRef.getDownloadURL();
-      const timestamp = generateTimestamp();
+        await storageRef.put(file);
+        // await storageRef.put(file).on('state_change', (snapshot) => {
+        //   console.log(snapshot.bytesTransferred);
+        // });
 
-      const imageInfo: ImageDAO = {
-        id: imageId,
-        nickname: '',
-        fileName: file.name,
-        tagIds: [],
-        downloadURL: downloadURL,
-        albumId: albumId,
-        accessType: ACCESS_TYPE.UNDEFINED,
-        created: timestamp,
-        updated: timestamp,
-      };
+        const downloadURL = await storageRef.getDownloadURL();
+        const timestamp = generateTimestamp();
 
-      const ref = firebase.database().ref(FIREBASE_IMAGES_ROUTE);
-      const newRef = ref.push();
+        const imageInfo: ImageDAO = {
+          id: imageId,
+          nickname: '',
+          fileName: file.name,
+          tagIds: [],
+          downloadURL: downloadURL,
+          albumId: albumId,
+          accessType: ACCESS_TYPE.UNDEFINED,
+          created: timestamp,
+          updated: timestamp,
+        };
 
-      return await newRef.set(imageInfo, (e: Error | null) => {
-        if (e) {
-          console.error('e: ' + JSON.stringify(e));
-        } else {
-          console.log('success');
-        }
-      });
-    });
+        const ref = firebase.database().ref(FIREBASE_IMAGES_ROUTE);
+        const newRef = ref.push();
+
+        return await newRef.set(imageInfo, (e: Error | null) => {
+          if (e) {
+            console.error('e: ' + JSON.stringify(e));
+            errors.push(imageInfo.fileName);
+          }
+        });
+      })
+    );
 
     callback && callback();
+    dispatch(hideAppLoader());
+    if (errors.length === 0) {
+      dispatch(
+        displaySuccessSnackbar(
+          `Successfully saved ${totalFiles > 1 ? 'images.' : 'image.'}`
+        )
+      );
+    } else if (errors.length === 1) {
+      dispatch(displayErrorSnackbar(`Error saving ${errors[0]}`));
+    } else if (errors.length > 1) {
+      dispatch(displayErrorSnackbar('Error saving images.'));
+    }
   };
 
 export const deleteImage =
@@ -95,6 +116,7 @@ export const deleteImage =
     imageId: string
   ): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch): Promise<void> => {
+    dispatch(displayAppLoader());
     return await firebase
       .database()
       .ref(FIREBASE_IMAGES_ROUTE)
@@ -110,9 +132,12 @@ export const deleteImage =
             .delete()
             .then(() => {
               dispatch(displaySuccessSnackbar('Deleted image.'));
+              dispatch(hideAppLoader());
             })
             .catch((e) => {
               console.error('delete image error: ' + JSON.stringify(e));
+              dispatch(displayErrorSnackbar('Error deleting image.'));
+              dispatch(hideAppLoader());
             });
         }
       });

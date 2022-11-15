@@ -1,4 +1,3 @@
-import { FirebaseError } from '@firebase/util';
 import { useMediaQuery } from '@mui/material';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -39,7 +38,7 @@ export default function SignInScreen(): JSX.Element {
         await auth.signInWithEmailAndPassword(email, password);
       }
     } catch (e) {
-      const error = e as FirebaseError;
+      const error = e as unknown as { code: string };
       console.error('firebase-error: ' + JSON.stringify(error));
       if (error.code === 'auth/user-not-found') {
         setEmailError(true);
@@ -60,7 +59,7 @@ export default function SignInScreen(): JSX.Element {
   const canAttemptSignIn = email !== '' && password !== '';
 
   return (
-    <Grid container xs={12} alignItems="center" justifyContent="center">
+    <Grid container alignItems="center" justifyContent="center">
       <Grid
         item
         xs={10}

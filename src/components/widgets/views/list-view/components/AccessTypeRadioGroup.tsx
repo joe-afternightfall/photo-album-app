@@ -18,28 +18,37 @@ import { toggleImageAccessType } from '../../../../../services/firebase-images-s
 const AccessTypeRadioGroup = (props: Props): JSX.Element => {
   const { image, toggleAccessTypeHandler } = props;
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
     toggleAccessTypeHandler(
       (event.target as HTMLInputElement).value as unknown as ACCESS_TYPE
     );
   };
 
+  const handleMenuChange = (accessType: ACCESS_TYPE) => {
+    toggleAccessTypeHandler(accessType);
+  };
+
   return (
     <FormControl sx={{ width: '100%' }}>
-      <FormLabel id="demo-controlled-radio-buttons-group">
+      <FormLabel id="access-type-radio-buttons-group">
         {'Access Type'}
       </FormLabel>
       <RadioGroup
-        aria-labelledby="demo-controlled-radio-buttons-group"
-        name="controlled-radio-buttons-group"
+        row
+        aria-labelledby="access-type-radio-buttons-group"
+        name="image-access-type-radio-buttons-group"
         value={image.accessType}
-        onChange={handleChange}
+        onChange={handleRadioChange}
         onClick={(e) => {
           e.stopPropagation();
         }}
       >
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleMenuChange(ACCESS_TYPE.PUBLIC);
+          }}
+        >
           <FormControlLabel
             value={ACCESS_TYPE.PUBLIC}
             control={
@@ -48,7 +57,11 @@ const AccessTypeRadioGroup = (props: Props): JSX.Element => {
             label="Public"
           />
         </MenuItem>
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleMenuChange(ACCESS_TYPE.PRIVATE);
+          }}
+        >
           <FormControlLabel
             value={ACCESS_TYPE.PRIVATE}
             control={
