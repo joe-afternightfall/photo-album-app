@@ -6,8 +6,8 @@ import { makeStyles, createStyles } from '@mui/styles';
 import React, { useState } from 'react';
 
 import { ImageVO } from '../../../../../../configs/interfaces';
-import ImageToolbar from '../ImageToolbar';
 import SkeletonImage from './SkeletonImage';
+import ImageToolbar from './toolbar/ImageToolbar';
 
 const useStyles = makeStyles(() =>
   createStyles({
