@@ -24,3 +24,10 @@ export const zipImages = async (folderName: string, images: ImageVO[]) => {
     });
   }
 };
+
+export const downloadImage = async (image: ImageVO) => {
+  const storage = getStorage();
+
+  const blob = await getBlob(ref(storage, image.downloadURL));
+  saveAs(blob, image.fileName);
+};
