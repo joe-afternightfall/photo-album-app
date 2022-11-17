@@ -4,8 +4,8 @@ import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { StyledComponentProps } from '@mui/styles';
 import { ComponentType } from 'react';
 
-import DashboardScreen from '../../components/top-level-components/DashboardScreen';
-import SelectedAlbumScreen from '../../components/top-level-components/SelectedAlbumScreen';
+import DashboardScreen from '../../components/top-level-components/dashboard-screen/DashboardScreen';
+import SelectedAlbumScreen from '../../components/top-level-components/selected-album-screen/SelectedAlbumScreen';
 
 export const AppPaths = {
   dashboard: '/',

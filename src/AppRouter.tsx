@@ -10,7 +10,7 @@ import { Store } from 'redux';
 import { Dispatch } from 'redux';
 
 import App from './App';
-import SignInScreen from './components/top-level-components/SignInScreen';
+import SignInScreen from './components/top-level-components/sign-in-screen/SignInScreen';
 import { appRoutes } from './configs/app-settings/app-routes';
 import { getTheme } from './configs/app-settings/theme';
 import { loggedInUser } from './creators/user';
