@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import { useTheme } from '@mui/material/styles';
 import React, { ChangeEvent, useState } from 'react';
 
-import { auth } from '../../configs/firebase/firebase-config';
+import { auth } from '../../../configs/firebase/firebase-config';
 
 export default function SignInScreen(): JSX.Element {
   const [email, setEmail] = useState('');

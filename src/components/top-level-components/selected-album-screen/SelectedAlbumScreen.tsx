@@ -9,13 +9,13 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import SwipeableViews from 'react-swipeable-views';
 
-import { AlbumVO, ImageVO } from '../../configs/interfaces';
-import { ACCESS_TYPE } from '../../configs/interfaces/image/ImageDAO';
-import { State } from '../../configs/redux/store';
-import UploadImageDialog from '../widgets/dialogs/upload-image-dialog/UploadImageDialog';
-import GalleryView from '../widgets/views/gallery-view/GalleryView';
-import ListView from '../widgets/views/list-view/ListView';
-import ImageAccessTypeSelectMenu from './selected-album-screen/components/ImageAccessTypeSelectMenu';
+import { AlbumVO, ImageVO } from '../../../configs/interfaces';
+import { ACCESS_TYPE } from '../../../configs/interfaces/image/ImageDAO';
+import { State } from '../../../configs/redux/store';
+import UploadImageDialog from '../../widgets/dialogs/upload-image-dialog/UploadImageDialog';
+import GalleryView from '../../widgets/views/gallery-view/GalleryView';
+import ListView from '../../widgets/views/list-view/ListView';
+import ImageAccessTypeSelectMenu from './components/ImageAccessTypeSelectMenu';
 
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
   const { images, selectedAlbum } = props;
