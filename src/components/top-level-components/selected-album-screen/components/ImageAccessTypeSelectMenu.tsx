@@ -10,9 +10,7 @@ import { ACCESS_TYPE } from '../../../../configs/interfaces/image/ImageDAO';
 import { State } from '../../../../configs/redux/store';
 import { filterImagesByAccessType } from '../../../../creators/images';
 
-const ImageAccessTypeSelectMenu = (
-  props: ImageAccessTypeSelectMenuProps
-): JSX.Element => {
+const ImageAccessTypeSelectMenu = (props: Props): JSX.Element => {
   const { accessType, changeHandler } = props;
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -30,9 +28,6 @@ const ImageAccessTypeSelectMenu = (
         value={accessType}
         onChange={handleChange}
       >
-        {/*<MenuItem value="">*/}
-        {/*  <em>None</em>*/}
-        {/*</MenuItem>*/}
         <MenuItem value={ACCESS_TYPE.ALL}>{'All'}</MenuItem>
         <MenuItem value={ACCESS_TYPE.UNDEFINED}>{'Undefined'}</MenuItem>
         <MenuItem value={ACCESS_TYPE.PUBLIC}>{'Public'}</MenuItem>
@@ -42,13 +37,7 @@ const ImageAccessTypeSelectMenu = (
   );
 };
 
-type ImageAccessTypeSelectMenuProps = PassedInProps &
-  StateProps &
-  DispatchProps;
-
-interface PassedInProps {
-  DELETE_ME?: string;
-}
+type Props = StateProps & DispatchProps;
 
 interface StateProps {
   accessType: ACCESS_TYPE;
