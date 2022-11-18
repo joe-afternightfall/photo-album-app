@@ -16,7 +16,7 @@ import {
   NewAlbumInfo,
   saveNewAlbum,
   updateAlbumTitleAndSubtitle,
-} from '../../../../services/firebase-albums-service';
+} from '../../../../firebase/services/firebase-albums-service';
 import BaseDialog from '../../../shared/dialog/BaseDialog';
 import PaperDropzone from '../../../shared/dropzone/DropZone';
 import AlbumImageRadioGroup from './components/AlbumImageRadioGroup';

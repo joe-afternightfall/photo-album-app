@@ -13,7 +13,7 @@ import { ImageVO } from '../../../../../../../configs/interfaces';
 import { ACCESS_TYPE } from '../../../../../../../configs/interfaces/image/ImageDAO';
 import { State } from '../../../../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../../../../creators/actions';
-import { toggleImageAccessType } from '../../../../../../../services/firebase-images-service';
+import { toggleImageAccessType } from '../../../../../../../firebase/services/firebase-images-service';
 
 const AccessTypeRadioGroup = (props: Props): JSX.Element => {
   const { image, toggleAccessTypeHandler } = props;
