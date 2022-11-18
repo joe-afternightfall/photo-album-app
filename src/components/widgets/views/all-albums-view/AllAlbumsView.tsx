@@ -32,7 +32,7 @@ const AllAlbumsView = (props: AllAlbumsViewProps): JSX.Element => {
         </Button>
       </Grid>
       {albums.map((album) => (
-        <Grid key={album.id} item xs={10} sm={6} md={3}>
+        <Grid key={album.id} item xs={10} sm={6} md={4} lg={3}>
           <Card sx={{ width: '100%' }}>
             <CardHeader
               title={album.title}
