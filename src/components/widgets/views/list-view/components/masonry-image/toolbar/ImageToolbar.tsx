@@ -1,6 +1,6 @@
 import DownloadIcon from '@mui/icons-material/Download';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import StarBorderIcon from '@mui/icons-material/StarBorderRounded';
+import StarIcon from '@mui/icons-material/StarRounded';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
@@ -18,7 +18,8 @@ import { ApplicationActions } from '../../../../../../../creators/actions';
 import {
   removeImageFromUsersFavoriteList,
   tagImageAsFavorite,
-} from '../../../../../../../services/firebase-users-service';
+} from '../../../../../../../firebase/services/firebase-users-service';
+import { downloadImage } from '../../../../../../../utils/save-images';
 import SettingsMenu from '../settings-menu/SettingsMenu';
 
 const useStyles = makeStyles(() =>
@@ -52,11 +53,17 @@ const ImageToolbar = (props: ImageToolbarProps): JSX.Element => {
                 toggleFavHandler(isFav);
               }}
             >
-              {isFav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+              {isFav ? <StarIcon /> : <StarBorderIcon />}
             </IconButton>
           </Grid>
           <Grid item>
-            <IconButton className={classes.iconButton}>
+            <IconButton
+              className={classes.iconButton}
+              onClick={async (e) => {
+                e.stopPropagation();
+                await downloadImage(image);
+              }}
+            >
               <DownloadIcon />
             </IconButton>
           </Grid>
