@@ -5,8 +5,8 @@ import { useTheme } from '@mui/material/styles';
 import React, { useState } from 'react';
 
 import { ImageVO } from '../../../../configs/interfaces';
-import SelectedImageDialog from './components/SelectedImageDialog';
-import Image from './components/masonry-list/Image';
+import Image from './components/masonry-image/Image';
+import SelectedImageDialog from './components/selected-image-dialog/SelectedImageDialog';
 
 export default function ListView(props: ListViewProps): JSX.Element {
   const theme = useTheme();
