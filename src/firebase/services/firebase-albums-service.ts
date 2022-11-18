@@ -4,16 +4,16 @@ import { ThunkAction } from 'redux-thunk';
 import { v4 as uuidv4 } from 'uuid';
 import 'firebase/compat/database';
 
-import { FIREBASE_ALBUMS_ROUTE } from '../configs/firebase/firebase-routes';
-import { AlbumDAO, AlbumVO } from '../configs/interfaces';
-import { State } from '../configs/redux/store';
-import { ApplicationActions } from '../creators/actions';
-import { displayAppLoader, hideAppLoader } from '../creators/app-loader';
+import { FIREBASE_ALBUMS_ROUTE } from '../../configs/firebase/firebase-routes';
+import { AlbumDAO, AlbumVO } from '../../configs/interfaces';
+import { State } from '../../configs/redux/store';
+import { ApplicationActions } from '../../creators/actions';
+import { displayAppLoader, hideAppLoader } from '../../creators/app-loader';
 import {
   displayErrorSnackbar,
   displaySuccessSnackbar,
-} from '../creators/app-snackbar';
-import { generateTimestamp } from '../utils/timestamp-generator';
+} from '../../creators/app-snackbar';
+import { generateTimestamp } from '../../utils/timestamp-generator';
 
 export const getAllAlbums = async (): Promise<AlbumVO[]> => {
   return await firebase

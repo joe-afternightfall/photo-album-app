@@ -4,14 +4,14 @@ import { Dispatch } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { v4 as uuidv4 } from 'uuid';
 
-import { auth } from '../configs/firebase/firebase-config';
-import { FIREBASE_USERS_ROUTE } from '../configs/firebase/firebase-routes';
-import { UserDAO } from '../configs/interfaces/user/UserDAO';
-import { UserVO } from '../configs/interfaces/user/UserVO';
-import { State } from '../configs/redux/store';
-import { ApplicationActions } from '../creators/actions';
-import { loggedInUser } from '../creators/user';
-import { generateTimestamp } from '../utils/timestamp-generator';
+import { auth } from '../../configs/firebase/firebase-config';
+import { FIREBASE_USERS_ROUTE } from '../../configs/firebase/firebase-routes';
+import { UserDAO } from '../../configs/interfaces/user/UserDAO';
+import { UserVO } from '../../configs/interfaces/user/UserVO';
+import { State } from '../../configs/redux/store';
+import { ApplicationActions } from '../../creators/actions';
+import { loggedInUser } from '../../creators/user';
+import { generateTimestamp } from '../../utils/timestamp-generator';
 
 export const getSignedInUserProfile = async (): Promise<UserVO | undefined> => {
   if (auth.currentUser) {

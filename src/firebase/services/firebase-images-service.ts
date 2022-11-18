@@ -3,17 +3,17 @@ import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { v4 as uuidv4 } from 'uuid';
 
-import { FIREBASE_IMAGES_ROUTE } from '../configs/firebase/firebase-routes';
-import { ImageDAO, ImageVO } from '../configs/interfaces';
-import { ACCESS_TYPE } from '../configs/interfaces/image/ImageDAO';
-import { State } from '../configs/redux/store';
-import { ApplicationActions } from '../creators/actions';
-import { displayAppLoader, hideAppLoader } from '../creators/app-loader';
+import { FIREBASE_IMAGES_ROUTE } from '../../configs/firebase/firebase-routes';
+import { ImageDAO, ImageVO } from '../../configs/interfaces';
+import { ACCESS_TYPE } from '../../configs/interfaces/image/ImageDAO';
+import { State } from '../../configs/redux/store';
+import { ApplicationActions } from '../../creators/actions';
+import { displayAppLoader, hideAppLoader } from '../../creators/app-loader';
 import {
   displayErrorSnackbar,
   displaySuccessSnackbar,
-} from '../creators/app-snackbar';
-import { generateTimestamp } from '../utils/timestamp-generator';
+} from '../../creators/app-snackbar';
+import { generateTimestamp } from '../../utils/timestamp-generator';
 
 import 'firebase/compat/database';
 import 'firebase/compat/storage';
