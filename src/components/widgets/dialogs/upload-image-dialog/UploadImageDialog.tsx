@@ -13,7 +13,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AlbumVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../creators/actions';
-import { uploadImageFiles } from '../../../../services/firebase-images-service';
+import { uploadImageFiles } from '../../../../firebase/services/firebase-images-service';
 import PaperDropzone from '../../../shared/dropzone/DropZone';
 
 const UploadImageDialog = (props: Props): JSX.Element => {

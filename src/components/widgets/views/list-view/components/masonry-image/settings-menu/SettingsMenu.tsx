@@ -20,7 +20,7 @@ import { ImageVO } from '../../../../../../../configs/interfaces';
 import { State } from '../../../../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../../../../creators/actions';
 import { openDeleteImageDialog } from '../../../../../../../creators/dialogs/delete-image';
-import { updateAlbumCoverImage } from '../../../../../../../services/firebase-albums-service';
+import { updateAlbumCoverImage } from '../../../../../../../firebase/services/firebase-albums-service';
 import AccessTypeRadioGroup from './AccessTypeRadioGroup';
 
 const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {

@@ -7,8 +7,8 @@ import {
 } from '../configs/firebase/firebase-routes';
 import { loadAlbums } from '../creators/albums';
 import { loadImages } from '../creators/images';
-import { getAllAlbums } from '../services/firebase-albums-service';
-import { getAllImages } from '../services/firebase-images-service';
+import { getAllAlbums } from './services/firebase-albums-service';
+import { getAllImages } from './services/firebase-images-service';
 
 export class Initializer {
   store: Store;
