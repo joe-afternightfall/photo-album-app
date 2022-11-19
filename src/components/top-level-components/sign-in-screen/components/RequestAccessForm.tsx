@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { State } from '../../../../configs/redux/store';
+import { submitRequest } from '../../../../firebase/services/request-access';
 
 const useStyles = makeStyles(() => createStyles({}));
 
@@ -42,7 +43,13 @@ const RequestAccessForm = (props: RequestAccessFormProps): JSX.Element => {
         />
       </Grid>
       <Grid item>
-        <Button sx={{ minWidth: '186px' }} disabled={!canAttemptSubmit}>
+        <Button
+          sx={{ minWidth: '186px' }}
+          disabled={!canAttemptSubmit}
+          onClick={async () => {
+            await submitRequest(name, email);
+          }}
+        >
           {'Submit'}
         </Button>
       </Grid>
