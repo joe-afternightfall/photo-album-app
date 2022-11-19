@@ -4,11 +4,14 @@ import { Store } from 'redux';
 import {
   FIREBASE_ALBUMS_ROUTE,
   FIREBASE_IMAGES_ROUTE,
+  FIREBASE_REQUEST_ACCESS_ROUTE,
 } from '../configs/firebase/firebase-routes';
 import { loadAlbums } from '../creators/albums';
 import { loadImages } from '../creators/images';
+import { loadNewUserRequests } from '../creators/new-user-requests';
 import { getAllAlbums } from './services/firebase-albums-service';
 import { getAllImages } from './services/firebase-images-service';
+import { getAllNewUserRequests } from './services/request-access';
 
 export class Initializer {
   store: Store;
@@ -31,6 +34,13 @@ export class Initializer {
         updateMethod: async () => {
           const images = await getAllImages();
           this.store.dispatch(loadImages(images));
+        },
+      },
+      {
+        ref: firebase.database().ref(FIREBASE_REQUEST_ACCESS_ROUTE),
+        updateMethod: async () => {
+          const requests = await getAllNewUserRequests();
+          this.store.dispatch(loadNewUserRequests(requests));
         },
       },
     ];
