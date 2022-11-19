@@ -12,6 +12,7 @@ import {
 } from './dialogs/album-info';
 import { ToggleDeleteImageDialogAction } from './dialogs/delete-image';
 import { FilterImagesByAccessTypeAction, LoadImagesAction } from './images';
+import { LoadNewUserRequestsAction } from './new-user-requests';
 import { LoggedInUserAction } from './user';
 
 export enum ActionTypes {
@@ -25,6 +26,7 @@ export enum ActionTypes {
   TOGGLE_APP_LOADER = 'TOGGLE_APP_LOADER',
   LOAD_IMAGES = 'LOAD_IMAGES',
   FILTER_IMAGES_BY_ACCESS_TYPE = 'FILTER_IMAGES_BY_ACCESS_TYPE',
+  LOAD_NEW_USER_REQUESTS = 'LOAD_NEW_USER_REQUESTS',
 
   // App Dialog Actions
   TOGGLE_ALBUM_INFO_DIALOG = 'TOGGLE_ALBUM_INFO_DIALOG',
@@ -44,4 +46,5 @@ export type ApplicationActions =
   | ToggleAlbumInfoDialogAction
   | ToggleDeleteImageDialogAction
   | ToggleDeleteAlbumDialog
-  | FilterImagesByAccessTypeAction;
+  | FilterImagesByAccessTypeAction
+  | LoadNewUserRequestsAction;

@@ -1,6 +1,7 @@
 import { LOCATION_CHANGE } from 'connected-react-router';
 
 import { AlbumVO, ImageVO } from '../configs/interfaces';
+import { AccessRequestVO } from '../configs/interfaces/access-request/AccessRequestVO';
 import { ACCESS_TYPE } from '../configs/interfaces/image/ImageDAO';
 import { UserVO } from '../configs/interfaces/user/UserVO';
 import { ActionTypes, ApplicationActions } from '../creators/actions';
@@ -45,6 +46,9 @@ export default {
       case ActionTypes.FILTER_IMAGES_BY_ACCESS_TYPE:
         newState.filterImagesForAccessType = action.accessType;
         break;
+      case ActionTypes.LOAD_NEW_USER_REQUESTS:
+        newState.newUserRequests = action.requests;
+        break;
     }
 
     return newState;
@@ -54,6 +58,7 @@ export default {
 export interface ApplicationState {
   // activePage: PageInfoProps | undefined;
   // loggedInUser: UserDto | undefined;
+  newUserRequests: AccessRequestVO[];
   currentLocation: string;
   albums: AlbumVO[];
   userIsAdmin: boolean;
