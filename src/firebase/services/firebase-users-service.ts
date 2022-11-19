@@ -26,6 +26,7 @@ export const getSignedInUserProfile = async (): Promise<UserVO | undefined> => {
             return {
               firebaseId: key,
               id: snap[key].id,
+              isAdmin: snap[key].isAdmin,
               username: snap[key].username,
               email: snap[key].email,
               favoriteImageIds: snap[key].favoriteImageIds ?? [],
@@ -55,6 +56,7 @@ export const saveNewUser = async (): Promise<UserVO> => {
   const newUser: UserDAO = {
     id: uuidv4(),
     username: '',
+    isAdmin: false,
     email:
       auth.currentUser && auth.currentUser.email ? auth.currentUser.email : '',
     favoriteImageIds: [],
