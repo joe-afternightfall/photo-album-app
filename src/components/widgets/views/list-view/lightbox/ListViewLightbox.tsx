@@ -1,7 +1,8 @@
+import StarBorderIcon from '@mui/icons-material/StarBorderRounded';
 import StarIcon from '@mui/icons-material/StarRounded';
 import Grid from '@mui/material/Grid';
 import { makeStyles, createStyles } from '@mui/styles';
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import Lightbox from 'yet-another-react-lightbox';
@@ -15,28 +16,38 @@ import { State } from '../../../../../configs/redux/store';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import 'yet-another-react-lightbox/styles.css';
 
-const useStyles = makeStyles(() => createStyles({}));
+const useStyles = makeStyles(() =>
+  createStyles({
+    star: {
+      height: '100%',
+      width: '32px',
+      color: 'rgba(255, 255, 255, 0.8)',
+    },
+  })
+);
 
-const getAttributes = (type: string) => {
+const getCurrentImageId = (): string | null | undefined => {
   const foundCurrentSlide = document.getElementsByClassName(
     'yarl__slide_current'
   );
   if (foundCurrentSlide.length) {
-    const srcAttribute =
-      foundCurrentSlide[0].firstElementChild?.getAttribute('src');
-    const altAttribute =
-      foundCurrentSlide[0].firstElementChild?.getAttribute('alt');
-    console.log('******** srcAttribute: ' + JSON.stringify(srcAttribute));
-    console.log(
-      '!!!!!! ALT-ID FOR ' + type + ': ' + JSON.stringify(altAttribute)
-    );
-    // todo: check for favorite image ID here
+    return foundCurrentSlide[0].firstElementChild?.getAttribute('alt');
   }
 };
 
 const ListViewLightbox = (props: ListViewLightboxProps): JSX.Element => {
   const classes = useStyles();
-  const { open, images, closeHandler, selectedIndex } = props;
+  const { open, images, closeHandler, selectedIndex, favoriteImageIds } = props;
+
+  const [isFav, setIsFav] = useState(false);
+
+  const checkForFavoriteImage = () => {
+    const imageId = getCurrentImageId();
+    if (imageId) {
+      const foundIndex = favoriteImageIds.indexOf(imageId);
+      setIsFav(foundIndex !== -1);
+    }
+  };
 
   const iconButton = (
     <Grid
@@ -46,17 +57,23 @@ const ListViewLightbox = (props: ListViewLightboxProps): JSX.Element => {
       justifyContent="center"
     >
       <Grid item sx={{ px: 1 }}>
-        <StarIcon
-          fontSize="medium"
-          onClick={() => {
-            console.log('star clicked');
-          }}
-          sx={{
-            height: '100%',
-            width: '32px',
-            color: 'rgba(255, 255, 255, 0.8)',
-          }}
-        />
+        {isFav ? (
+          <StarIcon
+            fontSize="medium"
+            onClick={() => {
+              console.log('star clicked');
+            }}
+            className={classes.star}
+          />
+        ) : (
+          <StarBorderIcon
+            fontSize="medium"
+            onClick={() => {
+              console.log('star border clicked');
+            }}
+            className={classes.star}
+          />
+        )}
       </Grid>
     </Grid>
   );
@@ -75,8 +92,8 @@ const ListViewLightbox = (props: ListViewLightboxProps): JSX.Element => {
       })}
       plugins={[Fullscreen, Slideshow, Thumbnails]}
       on={{
-        view: () => getAttributes('viewed'),
-        entered: () => getAttributes('entered'),
+        view: () => checkForFavoriteImage(),
+        entered: () => checkForFavoriteImage(),
       }}
     />
   );
@@ -92,7 +109,7 @@ interface PassedInProps {
 }
 
 interface StateProps {
-  DELETE_ME?: string;
+  favoriteImageIds: string[];
 }
 
 interface DispatchProps {
@@ -100,7 +117,10 @@ interface DispatchProps {
 }
 
 const mapStateToProps = (state: State): StateProps => {
-  return {};
+  const signedInUser = state.applicationState.signedInUser;
+  return {
+    favoriteImageIds: signedInUser ? signedInUser.favoriteImageIds : [],
+  };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
