@@ -9,7 +9,7 @@ import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 
 import { ImageVO } from '../../../../configs/interfaces';
-import Image from './components/masonry-image/Image';
+import Image from './masonry-image/Image';
 
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import 'yet-another-react-lightbox/styles.css';
