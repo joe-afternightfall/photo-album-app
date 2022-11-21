@@ -11,15 +11,15 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { AlbumVO, ImageVO } from '../../../../../../../configs/interfaces';
-import { UserVO } from '../../../../../../../configs/interfaces/user/UserVO';
-import { State } from '../../../../../../../configs/redux/store';
-import { ApplicationActions } from '../../../../../../../creators/actions';
+import { AlbumVO, ImageVO } from '../../../../../../configs/interfaces';
+import { UserVO } from '../../../../../../configs/interfaces/user/UserVO';
+import { State } from '../../../../../../configs/redux/store';
+import { ApplicationActions } from '../../../../../../creators/actions';
 import {
   removeImageFromUsersFavoriteList,
   tagImageAsFavorite,
-} from '../../../../../../../firebase/services/firebase-users-service';
-import { downloadImage } from '../../../../../../../utils/save-images';
+} from '../../../../../../firebase/services/firebase-users-service';
+import { downloadImage } from '../../../../../../utils/save-images';
 import SettingsMenu from '../settings-menu/SettingsMenu';
 
 const useStyles = makeStyles(() =>

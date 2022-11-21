@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import { makeStyles, createStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 
-import { ImageVO } from '../../../../../../configs/interfaces';
+import { ImageVO } from '../../../../../configs/interfaces';
 import SkeletonImage from './SkeletonImage';
 import ImageToolbar from './toolbar/ImageToolbar';
 

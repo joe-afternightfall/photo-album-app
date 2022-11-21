@@ -16,11 +16,11 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { ImageVO } from '../../../../../../../configs/interfaces';
-import { State } from '../../../../../../../configs/redux/store';
-import { ApplicationActions } from '../../../../../../../creators/actions';
-import { openDeleteImageDialog } from '../../../../../../../creators/dialogs/delete-image';
-import { updateAlbumCoverImage } from '../../../../../../../firebase/services/firebase-albums-service';
+import { ImageVO } from '../../../../../../configs/interfaces';
+import { State } from '../../../../../../configs/redux/store';
+import { ApplicationActions } from '../../../../../../creators/actions';
+import { openDeleteImageDialog } from '../../../../../../creators/dialogs/delete-image';
+import { updateAlbumCoverImage } from '../../../../../../firebase/services/firebase-albums-service';
 import AccessTypeRadioGroup from './AccessTypeRadioGroup';
 
 const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
