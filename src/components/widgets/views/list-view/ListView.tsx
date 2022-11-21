@@ -3,10 +3,16 @@ import Box from '@mui/material/Box';
 import ImageList from '@mui/material/ImageList';
 import { useTheme } from '@mui/material/styles';
 import React, { useState } from 'react';
+import Lightbox from 'yet-another-react-lightbox';
+import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
+import Slideshow from 'yet-another-react-lightbox/plugins/slideshow';
+import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 
 import { ImageVO } from '../../../../configs/interfaces';
 import Image from './components/masonry-image/Image';
-import SelectedImageDialog from './components/selected-image-dialog/SelectedImageDialog';
+
+import 'yet-another-react-lightbox/plugins/thumbnails.css';
+import 'yet-another-react-lightbox/styles.css';
 
 export default function ListView(props: ListViewProps): JSX.Element {
   const theme = useTheme();
@@ -16,6 +22,7 @@ export default function ListView(props: ListViewProps): JSX.Element {
   const [displayFullImage, setDisplayFullImage] = useState({
     open: false,
     downloadURL: '',
+    index: -1,
   });
 
   return (
@@ -33,15 +40,22 @@ export default function ListView(props: ListViewProps): JSX.Element {
         })}
       </ImageList>
 
-      <SelectedImageDialog
+      <Lightbox
         open={displayFullImage.open}
-        downloadURL={displayFullImage.downloadURL}
-        closeHandler={() => {
+        close={() => {
           setDisplayFullImage({
             open: false,
             downloadURL: '',
+            index: -1,
           });
         }}
+        index={displayFullImage.index}
+        slides={images.map((image) => {
+          return {
+            src: image.downloadURL,
+          };
+        })}
+        plugins={[Fullscreen, Slideshow, Thumbnails]}
       />
     </Box>
   );
