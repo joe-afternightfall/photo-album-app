@@ -1,5 +1,7 @@
+import StarIcon from '@mui/icons-material/StarRounded';
 import { useMediaQuery } from '@mui/material';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import ImageList from '@mui/material/ImageList';
 import { useTheme } from '@mui/material/styles';
 import React, { useState } from 'react';
@@ -25,6 +27,29 @@ export default function ListView(props: ListViewProps): JSX.Element {
     index: -1,
   });
 
+  const iconButton = (
+    <Grid
+      container
+      alignItems="center"
+      direction="column"
+      justifyContent="center"
+    >
+      <Grid item sx={{ px: 1 }}>
+        <StarIcon
+          fontSize="medium"
+          onClick={() => {
+            console.log('star clicked');
+          }}
+          sx={{
+            height: '100%',
+            width: '32px',
+            color: 'rgba(255, 255, 255, 0.8)',
+          }}
+        />
+      </Grid>
+    </Grid>
+  );
+
   return (
     <Box>
       <ImageList variant="masonry" cols={isXs ? 2 : 4} gap={8}>
@@ -41,6 +66,7 @@ export default function ListView(props: ListViewProps): JSX.Element {
       </ImageList>
 
       <Lightbox
+        toolbar={{ buttons: [iconButton, 'close'] }}
         open={displayFullImage.open}
         close={() => {
           setDisplayFullImage({
@@ -53,9 +79,34 @@ export default function ListView(props: ListViewProps): JSX.Element {
         slides={images.map((image) => {
           return {
             src: image.downloadURL,
+            alt: image.id,
           };
         })}
         plugins={[Fullscreen, Slideshow, Thumbnails]}
+        on={{
+          view: () => {
+            const foundCurrentSlide = document.getElementsByClassName(
+              'yarl__slide_current'
+            );
+            if (foundCurrentSlide) {
+              console.log(
+                'foundCurrentSlide length: ' +
+                  JSON.stringify(foundCurrentSlide.length)
+              );
+              const srcAttribute =
+                foundCurrentSlide[0].firstElementChild?.getAttribute('src');
+              const altAttribute =
+                foundCurrentSlide[0].firstElementChild?.getAttribute('alt');
+              console.log(
+                '******** srcAttribute: ' + JSON.stringify(srcAttribute)
+              );
+              console.log(
+                '!!!!!! VIEW_TRIGGERED: ' + JSON.stringify(altAttribute)
+              );
+              // todo: check for favorite image ID here
+            }
+          },
+        }}
       />
     </Box>
   );
