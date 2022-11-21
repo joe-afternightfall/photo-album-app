@@ -3,7 +3,7 @@ import Fade from '@mui/material/Fade';
 import ImageListItem from '@mui/material/ImageListItem';
 import { useTheme } from '@mui/material/styles';
 import { makeStyles, createStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { ImageVO } from '../../../../../configs/interfaces';
 import SkeletonImage from './SkeletonImage';
