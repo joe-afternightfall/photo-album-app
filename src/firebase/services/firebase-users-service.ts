@@ -10,6 +10,7 @@ import { UserDAO } from '../../configs/interfaces/user/UserDAO';
 import { UserVO } from '../../configs/interfaces/user/UserVO';
 import { State } from '../../configs/redux/store';
 import { ApplicationActions } from '../../creators/actions';
+import { displaySuccessSnackbar } from '../../creators/app-snackbar';
 import { loggedInUser } from '../../creators/user';
 import { generateTimestamp } from '../../utils/timestamp-generator';
 
@@ -126,6 +127,7 @@ const updateFavoritesList =
             } else {
               const userProfile = await getSignedInUserProfile();
               dispatch(loggedInUser(userProfile));
+              dispatch(displaySuccessSnackbar('Updated favorites'));
             }
           }
         );
