@@ -14,8 +14,8 @@ import { ACCESS_TYPE } from '../../../configs/interfaces/image/ImageDAO';
 import { State } from '../../../configs/redux/store';
 import { zipImages } from '../../../utils/save-images';
 import UploadImageDialog from '../../widgets/dialogs/upload-image-dialog/UploadImageDialog';
-import ImageAccessTypeSelectMenu from './components/ImageAccessTypeSelectMenu';
 import ListView from '../../widgets/views/list-view/ListView';
+import ImageAccessTypeSelectMenu from './components/ImageAccessTypeSelectMenu';
 
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
   const { albumImages, selectedAlbum, favoriteImages } = props;
