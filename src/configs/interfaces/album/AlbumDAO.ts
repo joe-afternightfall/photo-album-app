@@ -4,6 +4,8 @@ export interface AlbumDAO {
   subtitle: string;
   coverImageDownloadURL: string;
   images: string[];
+  isPrivateAlbum: boolean;
+  imagesShouldBeOrdered: boolean;
   created: string;
   updated: string;
 }

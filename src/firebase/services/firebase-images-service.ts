@@ -121,11 +121,11 @@ export const deleteImage =
       .database()
       .ref(FIREBASE_IMAGES_ROUTE)
       .child(imageFirebaseId)
-      .remove((error: Error | null) => {
+      .remove(async (error: Error | null) => {
         if (error) {
           dispatch(displayErrorSnackbar('Error deleting image'));
         } else {
-          firebase
+          return await firebase
             .storage()
             .ref(`images`)
             .child(imageId)

@@ -1,5 +1,4 @@
 import Button from '@mui/material/Button';
-import Collapse from '@mui/material/Collapse';
 import DialogActions from '@mui/material/DialogActions';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -15,18 +14,19 @@ import { closeAlbumInfoDialog } from '../../../../creators/dialogs/album-info';
 import {
   NewAlbumInfo,
   saveNewAlbum,
-  updateAlbumTitleAndSubtitle,
+  UpdateAlbumInfo,
+  updateAlbumInfo,
 } from '../../../../firebase/services/firebase-albums-service';
 import BaseDialog from '../../../shared/dialog/BaseDialog';
-import PaperDropzone from '../../../shared/dropzone/DropZone';
-import AlbumImageRadioGroup from './components/AlbumImageRadioGroup';
+import AlbumAccessRadioGroup from './components/AlbumAccessRadioGroup';
 import AlbumTextField from './components/AlbumTextField';
+import OrderedAlbumRadioGroup from './components/OrderedAlbumRadioGroup';
 
 interface NewAlbumDialogState {
   title: string;
   subtitle: string;
-  displayImageDropzone: boolean;
-  image: File[];
+  isPrivateAlbum: boolean;
+  imagesShouldBeOrdered: boolean;
 }
 
 const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
@@ -38,8 +38,8 @@ const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
     return {
       title: album ? album.title : '',
       subtitle: album ? album.subtitle : '',
-      displayImageDropzone: false,
-      image: [],
+      isPrivateAlbum: true,
+      imagesShouldBeOrdered: false,
     };
   };
 
@@ -64,10 +64,17 @@ const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
     });
   };
 
-  const handleDropzone = (files: File[]) => {
+  const handleAccessTypeRadioChange = (value: boolean) => {
     setLocalState({
       ...localState,
-      image: files,
+      isPrivateAlbum: value,
+    });
+  };
+
+  const handleIsOrderedRadioChange = (value: boolean) => {
+    setLocalState({
+      ...localState,
+      imagesShouldBeOrdered: value,
     });
   };
 
@@ -75,21 +82,15 @@ const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
     if (isEditing) {
       if (album) {
         updateHandler(
-          album.firebaseId,
-          localState.title,
-          localState.subtitle,
+          {
+            firebaseId: album.firebaseId,
+            ...localState,
+          },
           closeDialogHandler
         );
       }
     } else {
-      saveHandler(
-        {
-          title: localState.title,
-          subtitle: localState.subtitle,
-          image: localState.image.length ? localState.image[0] : undefined,
-        },
-        closeDialogHandler
-      );
+      saveHandler(localState, closeDialogHandler);
     }
   };
 
@@ -97,7 +98,7 @@ const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
     <BaseDialog
       open={open}
       data-testid="album-info-dialog"
-      title={isEditing ? 'Edit Album' : 'Create New Album'}
+      title={isEditing ? 'Edit Album' : 'New Album Info'}
       dialogContent={
         <Grid container spacing={2}>
           <Grid item xs={12} container spacing={2} alignItems="center">
@@ -128,25 +129,20 @@ const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
           <Grid item xs={12} container spacing={2} alignItems="center">
             <Grid item xs={12} sm={4} />
             <Grid item xs={12} sm={8}>
-              <AlbumImageRadioGroup
-                changeHandler={(display: boolean) => {
-                  setLocalState({
-                    ...localState,
-                    displayImageDropzone: display,
-                  });
-                }}
-                displayImageDropzone={localState.displayImageDropzone}
+              <AlbumAccessRadioGroup
+                isPrivateAlbum={localState.isPrivateAlbum}
+                changeHandler={handleAccessTypeRadioChange}
               />
             </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Collapse
-              in={localState.displayImageDropzone}
-              timeout={'auto'}
-              unmountOnExit
-            >
-              <PaperDropzone dropzoneHandler={handleDropzone} filesLimit={1} />
-            </Collapse>
+          <Grid item xs={12} container spacing={2} alignItems="center">
+            <Grid item xs={12} sm={4} />
+            <Grid item xs={12} sm={8}>
+              <OrderedAlbumRadioGroup
+                isOrdered={localState.imagesShouldBeOrdered}
+                changeHandler={handleIsOrderedRadioChange}
+              />
+            </Grid>
           </Grid>
         </Grid>
       }
@@ -176,12 +172,7 @@ interface StateProps {
 interface DispatchProps {
   saveHandler: (info: NewAlbumInfo, cb: () => void) => void;
   closeDialogHandler: () => void;
-  updateHandler: (
-    firebaseId: string,
-    title: string,
-    subtitle: string,
-    cb: () => void
-  ) => void;
+  updateHandler: (info: UpdateAlbumInfo, cb: () => void) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -197,14 +188,9 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
       saveNewAlbum(info, cb)
     );
   },
-  updateHandler: (
-    firebaseId: string,
-    title: string,
-    subtitle: string,
-    cb: () => void
-  ) => {
+  updateHandler: (info: UpdateAlbumInfo, cb: () => void) => {
     (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
-      updateAlbumTitleAndSubtitle(firebaseId, title, subtitle, cb)
+      updateAlbumInfo(info, cb)
     );
   },
   closeDialogHandler: () => {

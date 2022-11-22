@@ -31,6 +31,8 @@ export const getAllAlbums = async (): Promise<AlbumVO[]> => {
             subtitle: snap[key].subtitle,
             coverImageDownloadURL: snap[key].coverImageDownloadURL,
             images: snap[key].images,
+            isPrivateAlbum: snap[key].isPrivateAlbum,
+            imagesShouldBeOrdered: snap[key].imagesShouldBeOrdered,
             created: snap[key].created,
             updated: snap[key].updated,
           };
@@ -44,7 +46,8 @@ export const getAllAlbums = async (): Promise<AlbumVO[]> => {
 export interface NewAlbumInfo {
   title: string;
   subtitle: string;
-  image?: File;
+  isPrivateAlbum: boolean;
+  imagesShouldBeOrdered: boolean;
 }
 
 export const saveNewAlbum =
@@ -66,6 +69,8 @@ export const saveNewAlbum =
       subtitle: info.subtitle,
       coverImageDownloadURL: '',
       images: [],
+      isPrivateAlbum: info.isPrivateAlbum,
+      imagesShouldBeOrdered: info.imagesShouldBeOrdered,
       created: timestamp,
       updated: timestamp,
     };
@@ -85,11 +90,17 @@ export const saveNewAlbum =
     });
   };
 
-export const updateAlbumTitleAndSubtitle =
+export interface UpdateAlbumInfo {
+  firebaseId: string;
+  title: string;
+  subtitle: string;
+  isPrivateAlbum: boolean;
+  imagesShouldBeOrdered: boolean;
+}
+
+export const updateAlbumInfo =
   (
-    firebaseId: string,
-    title: string,
-    subtitle: string,
+    updateInfo: UpdateAlbumInfo,
     successCallback?: () => void
   ): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch): Promise<void> => {
@@ -97,11 +108,13 @@ export const updateAlbumTitleAndSubtitle =
     return await firebase
       .database()
       .ref(FIREBASE_ALBUMS_ROUTE)
-      .child(firebaseId)
+      .child(updateInfo.firebaseId)
       .update(
         {
-          title: title,
-          subtitle: subtitle,
+          title: updateInfo.title,
+          subtitle: updateInfo.subtitle,
+          isPrivateAlbum: updateInfo.isPrivateAlbum,
+          imagesShouldBeOrdered: updateInfo.imagesShouldBeOrdered,
           updated: generateTimestamp(),
         },
         (error: Error | null) => {
