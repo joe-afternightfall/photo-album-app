@@ -28,7 +28,7 @@ export default function RegularDialog(props: BaseDialogProps): JSX.Element {
     >
       <DialogTitle>
         <Grid container alignItems="center" spacing={2}>
-          <Grid item>{icon}</Grid>
+          {icon && <Grid item>{icon}</Grid>}
           <Grid item>
             <Typography variant="h6" data-testid="shared-dialog-title">
               {title}
