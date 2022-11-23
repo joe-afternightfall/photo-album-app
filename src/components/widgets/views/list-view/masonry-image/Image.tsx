@@ -26,7 +26,9 @@ const useStyles = makeStyles(() =>
       },
     },
     multiSelectModeImage: {
-      background: 'red',
+      backgroundColor: '#121212',
+      backgroundImage:
+        'linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))',
       zIndex: 1,
       '&:hover': {
         cursor: 'pointer',
