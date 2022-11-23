@@ -18,6 +18,29 @@ import BottomFullToolbar from './toolbars/BottomFullToolbar';
 
 const useStyles = makeStyles(() =>
   createStyles({
+    // styles to use later
+    innerWordWrapping: {
+      opacity: 1,
+      transition: 'opacity .2s .1s cubic-bezier(.4,0,1,1)',
+      visibility: 'visible',
+    },
+    innerGroupWrapping: {
+      opacity: 1,
+      transition: 'opacity .2s .1s cubic-bezier(.4,0,1,1)',
+      visibility: 'visible',
+    },
+    appbarWrapper: {
+      boxShadow:
+        '0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%)',
+      opacity: 1,
+      transition: 'opacity .1s 0s cubic-bezier(.4,0,1,1)',
+      visibility: 'visible',
+    },
+    toolbarWrapping: {
+      opacity: 1,
+      transition: 'opacity .2s .1s cubic-bezier(.4,0,1,1)',
+      visibility: 'visible',
+    },
     imageListItem: {
       width: '100%',
       border: '1px solid black',
@@ -27,8 +50,14 @@ const useStyles = makeStyles(() =>
     },
     multiSelectModeImage: {
       backgroundColor: '#121212',
+      // backgroundImage:
+      //   'linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))',
+
+      transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+      boxShadow:
+        '0px 6px 6px -3px rgb(0 0 0 / 20%), 0px 10px 14px 1px rgb(0 0 0 / 14%), 0px 4px 18px 3px rgb(0 0 0 / 12%)',
       backgroundImage:
-        'linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))',
+        'linear-gradient(rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.13))',
       zIndex: 1,
       '&:hover': {
         cursor: 'pointer',

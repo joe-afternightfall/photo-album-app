@@ -11,6 +11,9 @@ import thunkMiddleware from 'redux-thunk';
 
 import application, { ApplicationState } from '../../reducers/application';
 import dialogs, { AppDialogState } from '../../reducers/dialogs';
+import selectedAlbum, {
+  SelectedAlbumState,
+} from '../../reducers/selected-album';
 import { ACCESS_TYPE } from '../interfaces/image/ImageDAO';
 
 export const createStore = (history: History): Store => {
@@ -23,6 +26,7 @@ export const createStore = (history: History): Store => {
       routing: routerReducer,
       applicationState: application.reducer,
       appDialogState: dialogs.reducer,
+      selectedAlbumState: selectedAlbum.reducer,
     });
 
   return createStoreFunc(allReducers, {
@@ -42,15 +46,6 @@ export const createStore = (history: History): Store => {
           horizontal: 'right',
         },
       },
-      filterImagesForAccessType: ACCESS_TYPE.ALL,
-      // displayAppLoader: true,
-      // displaySkeletonApp: true,
-      // appData: {
-      //   users: [],
-      //   images: [],
-      // },
-      // loggedInUser: undefined,
-      // userHasAdminPrivileges: false,
     } as ApplicationState,
     appDialogState: {
       albumInfoDialog: {
@@ -66,12 +61,17 @@ export const createStore = (history: History): Store => {
         display: false,
       },
     } as AppDialogState,
+    selectedAlbumState: {
+      currentAlbum: undefined,
+      filterImagesForAccessType: ACCESS_TYPE.ALL,
+    } as SelectedAlbumState,
   } as State);
 };
 
 export interface State {
   applicationState: ApplicationState;
   appDialogState: AppDialogState;
+  selectedAlbumState: SelectedAlbumState;
 }
 
 export const history = createHashHistory();

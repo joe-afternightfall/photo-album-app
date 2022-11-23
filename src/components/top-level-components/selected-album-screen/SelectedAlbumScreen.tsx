@@ -108,8 +108,8 @@ interface StateProps {
 
 const mapStateToProps = (state: State): StateProps => {
   const signedInUser = state.applicationState.signedInUser;
-  const selectedAlbum = state.applicationState.selectedAlbumToView;
-  const accessType = state.applicationState.filterImagesForAccessType;
+  const selectedAlbum = state.selectedAlbumState.currentAlbum;
+  const accessType = state.selectedAlbumState.filterImagesForAccessType;
   let albumImages: ImageVO[] = [];
 
   if (selectedAlbum) {

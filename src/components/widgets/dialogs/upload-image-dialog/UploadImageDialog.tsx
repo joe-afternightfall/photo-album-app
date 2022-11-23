@@ -82,7 +82,7 @@ interface DispatchProps {
 
 const mapStateToProps = (state: State): StateProps => {
   return {
-    selectedAlbum: state.applicationState.selectedAlbumToView,
+    selectedAlbum: state.selectedAlbumState.currentAlbum,
   };
 };
 

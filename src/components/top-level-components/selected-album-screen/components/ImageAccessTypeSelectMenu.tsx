@@ -49,7 +49,7 @@ interface DispatchProps {
 
 const mapStateToProps = (state: State): StateProps => {
   return {
-    accessType: state.applicationState.filterImagesForAccessType,
+    accessType: state.selectedAlbumState.filterImagesForAccessType,
   };
 };
 
