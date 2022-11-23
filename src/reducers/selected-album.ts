@@ -42,6 +42,7 @@ export default {
       }
       case ActionTypes.CLEAR_MULTI_SELECT_IDS:
         newState.selectedImageIdsForMultiEditing = [];
+        newState.hoveringOverUncheckedIconId = '';
         break;
       case ActionTypes.UPDATE_HOVERING_OVER_ICON_ID:
         newState.hoveringOverUncheckedIconId = action.iconId;
