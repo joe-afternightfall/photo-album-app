@@ -25,6 +25,13 @@ const useStyles = makeStyles(() =>
         cursor: 'pointer',
       },
     },
+    multiSelectModeImage: {
+      background: 'red',
+      zIndex: 1,
+      '&:hover': {
+        cursor: 'pointer',
+      },
+    },
     selectedImage: {
       zIndex: -1,
       position: 'sticky',
@@ -71,7 +78,11 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
         setHoveringOverImageId('');
       }}
       key={image.id}
-      className={classes.imageListItem}
+      className={
+        isInMultiSelectMode
+          ? classes.multiSelectModeImage
+          : classes.imageListItem
+      }
       onClick={() => {
         isInMultiSelectMode
           ? updateAndClear()
@@ -146,7 +157,7 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
       />
 
       {!imageLoaded && <SkeletonImage index={index} />}
-      {isMd ? (
+      {isInMultiSelectMode ? null : isMd ? (
         hoveringOverImageId === image.id ? (
           <Fade in={hoveringOverImageId === image.id}>
             <div>
