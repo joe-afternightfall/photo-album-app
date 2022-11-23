@@ -88,7 +88,7 @@ interface StateProps {
 const mapStateToProps = (state: State): StateProps => {
   const signedInUser = state.applicationState.signedInUser;
   return {
-    selectedAlbum: state.applicationState.selectedAlbumToView,
+    selectedAlbum: state.selectedAlbumState.currentAlbum,
     favoriteImageIds: signedInUser ? signedInUser.favoriteImageIds : [],
   };
 };
