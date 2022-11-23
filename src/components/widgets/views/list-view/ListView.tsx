@@ -2,14 +2,20 @@ import { useMediaQuery } from '@mui/material';
 import Box from '@mui/material/Box';
 import ImageList from '@mui/material/ImageList';
 import { useTheme } from '@mui/material/styles';
+import { makeStyles, createStyles } from '@mui/styles';
 import * as ramda from 'ramda';
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import { ImageVO } from '../../../../configs/interfaces';
+import { State } from '../../../../configs/redux/store';
 import ListViewLightbox from './lightbox/ListViewLightbox';
 import Image from './masonry-image/Image';
 
-export default function ListView(props: ListViewProps): JSX.Element {
+const useStyles = makeStyles(() => createStyles({}));
+
+const ListView = (props: Props): JSX.Element => {
   const theme = useTheme();
   const { images } = props;
   const isXs = useMediaQuery(theme.breakpoints.down(700));
@@ -75,8 +81,26 @@ export default function ListView(props: ListViewProps): JSX.Element {
       />
     </Box>
   );
-}
+};
 
-interface ListViewProps {
+type Props = PassedInProps & StateProps & DispatchProps;
+
+interface PassedInProps {
   images: ImageVO[];
 }
+
+interface StateProps {
+  DELETE_ME?: string;
+}
+
+interface DispatchProps {
+  DELETE_ME?: string;
+}
+
+const mapStateToProps = (state: State): StateProps => {
+  return {};
+};
+
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListView);
