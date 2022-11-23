@@ -6,17 +6,9 @@ import { createStyles, makeStyles } from '@mui/styles';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
 
 import { AlbumVO, ImageVO } from '../../../../../../configs/interfaces';
-import { UserVO } from '../../../../../../configs/interfaces/user/UserVO';
 import { State } from '../../../../../../configs/redux/store';
-import { ApplicationActions } from '../../../../../../creators/actions';
-import {
-  removeImageFromUsersFavoriteList,
-  tagImageAsFavorite,
-} from '../../../../../../firebase/services/firebase-users-service';
 import { downloadImage } from '../../../../../../utils/save-images';
 import FavButton from '../fav-button/FavButton';
 import SettingsMenu from '../settings-menu/SettingsMenu';
@@ -82,7 +74,7 @@ const BottomFullToolbar = (props: Props): JSX.Element => {
   );
 };
 
-type Props = PassedInProps & StateProps & DispatchProps;
+type Props = PassedInProps & StateProps;
 
 interface PassedInProps {
   image: ImageVO;
@@ -91,22 +83,14 @@ interface PassedInProps {
 interface StateProps {
   selectedAlbum?: AlbumVO;
   favoriteImageIds: string[];
-  signedInUser?: UserVO;
-}
-
-interface DispatchProps {
-  deleteMe?: string;
 }
 
 const mapStateToProps = (state: State): StateProps => {
   const signedInUser = state.applicationState.signedInUser;
   return {
-    signedInUser,
     selectedAlbum: state.applicationState.selectedAlbumToView,
     favoriteImageIds: signedInUser ? signedInUser.favoriteImageIds : [],
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
-
-export default connect(mapStateToProps, mapDispatchToProps)(BottomFullToolbar);
+export default connect(mapStateToProps)(BottomFullToolbar);
