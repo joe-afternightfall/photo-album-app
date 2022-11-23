@@ -16,8 +16,11 @@ import {
 
 const useStyles = makeStyles(() =>
   createStyles({
-    iconButton: {
+    greyStar: {
       color: 'rgba(255, 255, 255, 0.54)',
+    },
+    whiteStar: {
+      color: '#fff',
     },
   })
 );
@@ -28,13 +31,16 @@ const FavButton = (props: Props): JSX.Element => {
 
   return (
     <IconButton
-      className={classes.iconButton}
       onClick={(e) => {
         e.stopPropagation();
         toggleFavHandler(isFav);
       }}
     >
-      {isFav ? <StarIcon /> : <StarBorderIcon />}
+      {isFav ? (
+        <StarIcon className={classes.whiteStar} />
+      ) : (
+        <StarBorderIcon className={classes.greyStar} />
+      )}
     </IconButton>
   );
 };
