@@ -1,10 +1,14 @@
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import DoneIcon from '@mui/icons-material/Done';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { useMediaQuery } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
 import Fade from '@mui/material/Fade';
 import ImageListItem from '@mui/material/ImageListItem';
+import { blue } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
 import { makeStyles, createStyles } from '@mui/styles';
+import clsx from 'clsx';
 import React, { useState } from 'react';
 
 import { ImageVO } from '../../../../../configs/interfaces';
@@ -20,6 +24,16 @@ const useStyles = makeStyles(() =>
         cursor: 'pointer',
       },
     },
+    selectedImage: {
+      zIndex: -1,
+      position: 'sticky',
+      transform: 'translateZ(0px) scale3d(0.85, 0.88, 1)',
+    },
+    image: {
+      objectFit: 'contain',
+      overflow: 'hidden',
+      transition: 'transform .135s cubic-bezier(0,0,.2,1)',
+    },
   })
 );
 
@@ -29,16 +43,23 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
   const isMd = useMediaQuery(theme.breakpoints.up('md'));
   const {
     image,
-    clickHandler,
+    displayFullImageHandler,
     index,
     isInMultiSelectMode,
+    imageIsInMultiSelectList,
     setIsInMultiSelectModeClickHandler,
+    toggleImageFromMultiSelectHandler,
   } = props;
 
   const [hoveringOverImageId, setHoveringOverImageId] = useState('');
   const [hoveringOverUncheckedIcon, setHoveringOverUncheckedIcon] =
     useState('');
   const [imageLoaded, setImageLoaded] = useState(false);
+
+  const updateAndClear = () => {
+    toggleImageFromMultiSelectHandler(image.id);
+    setHoveringOverUncheckedIcon('');
+  };
 
   return (
     <ImageListItem
@@ -51,17 +72,37 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
       key={image.id}
       className={classes.imageListItem}
       onClick={() => {
-        clickHandler({
-          open: true,
-          downloadURL: image.downloadURL,
-          index: index,
-        });
+        isInMultiSelectMode
+          ? updateAndClear()
+          : displayFullImageHandler({
+              open: true,
+              downloadURL: image.downloadURL,
+              index: index,
+            });
       }}
     >
       {/* todo: handle when in mobile/tablet */}
       <Fade in={hoveringOverImageId === image.id || isInMultiSelectMode}>
         <div style={{ position: 'absolute' }}>
-          {hoveringOverUncheckedIcon ? (
+          {imageIsInMultiSelectList ? (
+            <Avatar
+              sx={{
+                height: '24px',
+                width: '24px',
+                ml: 1,
+                mt: 1,
+                bgcolor: blue[500],
+              }}
+            >
+              <DoneIcon
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleImageFromMultiSelectHandler(image.id);
+                  setHoveringOverUncheckedIcon('');
+                }}
+              />
+            </Avatar>
+          ) : hoveringOverUncheckedIcon ? (
             <CheckCircleIcon
               sx={{ ml: 1, mt: 1 }}
               onMouseLeave={() => {
@@ -70,6 +111,7 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
               onClick={(e) => {
                 e.stopPropagation();
                 setIsInMultiSelectModeClickHandler();
+                toggleImageFromMultiSelectHandler(image.id);
               }}
             />
           ) : (
@@ -95,10 +137,15 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
         alt={image.fileName}
         loading="lazy"
         style={{
-          objectFit: 'contain',
-          overflow: 'hidden',
+          // objectFit: 'contain',
+          // overflow: 'hidden',
           display: imageLoaded ? 'block' : 'none',
+          // transform: 'translateZ(0px) scale3d(0.88, 0.83, 1)',
+          // transition: 'transform .135s cubic-bezier(0,0,.2,1)',
         }}
+        className={clsx(classes.image, {
+          [classes.selectedImage]: imageIsInMultiSelectList,
+        })}
       />
 
       {!imageLoaded && <SkeletonImage index={index} />}
@@ -120,7 +167,9 @@ interface MasonryListImageProps {
   image: ImageVO;
   isInMultiSelectMode: boolean;
   setIsInMultiSelectModeClickHandler: () => void;
-  clickHandler: (props: {
+  imageIsInMultiSelectList: boolean;
+  toggleImageFromMultiSelectHandler: (imageId: string) => void;
+  displayFullImageHandler: (props: {
     open: boolean;
     downloadURL: string;
     index: number;
