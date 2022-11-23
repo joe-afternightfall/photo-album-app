@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 
 import { ImageVO } from '../../../../../configs/interfaces';
 import SkeletonImage from './SkeletonImage';
-import ImageToolbar from './toolbar/ImageToolbar';
+import BottomFullToolbar from './toolbars/BottomFullToolbar';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -137,11 +137,7 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
         alt={image.fileName}
         loading="lazy"
         style={{
-          // objectFit: 'contain',
-          // overflow: 'hidden',
           display: imageLoaded ? 'block' : 'none',
-          // transform: 'translateZ(0px) scale3d(0.88, 0.83, 1)',
-          // transition: 'transform .135s cubic-bezier(0,0,.2,1)',
         }}
         className={clsx(classes.image, {
           [classes.selectedImage]: imageIsInMultiSelectList,
@@ -152,11 +148,11 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
       {isMd ? (
         <Fade in={hoveringOverImageId === image.id}>
           <div>
-            <ImageToolbar image={image} />
+            <BottomFullToolbar image={image} />
           </div>
         </Fade>
       ) : (
-        <ImageToolbar image={image} />
+        <BottomFullToolbar image={image} />
       )}
     </ImageListItem>
   );
