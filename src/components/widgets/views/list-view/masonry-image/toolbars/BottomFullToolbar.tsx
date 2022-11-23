@@ -1,6 +1,4 @@
 import DownloadIcon from '@mui/icons-material/Download';
-import StarBorderIcon from '@mui/icons-material/StarBorderRounded';
-import StarIcon from '@mui/icons-material/StarRounded';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
@@ -20,6 +18,7 @@ import {
   tagImageAsFavorite,
 } from '../../../../../../firebase/services/firebase-users-service';
 import { downloadImage } from '../../../../../../utils/save-images';
+import FavButton from '../fav-button/FavButton';
 import SettingsMenu from '../settings-menu/SettingsMenu';
 
 const useStyles = makeStyles(() =>
@@ -30,9 +29,9 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const ImageToolbar = (props: ImageToolbarProps): JSX.Element => {
+const BottomFullToolbar = (props: Props): JSX.Element => {
   const classes = useStyles();
-  const { image, favoriteImageIds, selectedAlbum, toggleFavHandler } = props;
+  const { image, favoriteImageIds, selectedAlbum } = props;
   const [isFav, setIsFav] = useState(false);
 
   useEffect(() => {
@@ -52,15 +51,7 @@ const ImageToolbar = (props: ImageToolbarProps): JSX.Element => {
       title={
         <Grid container justifyContent="space-between">
           <Grid item>
-            <IconButton
-              className={classes.iconButton}
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleFavHandler(isFav);
-              }}
-            >
-              {isFav ? <StarIcon /> : <StarBorderIcon />}
-            </IconButton>
+            <FavButton isFav={isFav} imageId={image.id} />
           </Grid>
           <Grid item>
             <Grid container>
@@ -91,7 +82,7 @@ const ImageToolbar = (props: ImageToolbarProps): JSX.Element => {
   );
 };
 
-type ImageToolbarProps = PassedInProps & StateProps & DispatchProps;
+type Props = PassedInProps & StateProps & DispatchProps;
 
 interface PassedInProps {
   image: ImageVO;
@@ -104,7 +95,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  toggleFavHandler: (isFav: boolean) => void;
+  deleteMe?: string;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -116,17 +107,6 @@ const mapStateToProps = (state: State): StateProps => {
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: Dispatch,
-  ownProps: PassedInProps
-): DispatchProps => ({
-  toggleFavHandler: (isFav: boolean) => {
-    (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
-      isFav
-        ? removeImageFromUsersFavoriteList(ownProps.image.id)
-        : tagImageAsFavorite(ownProps.image.id)
-    );
-  },
-});
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(ImageToolbar);
+export default connect(mapStateToProps, mapDispatchToProps)(BottomFullToolbar);
