@@ -12,11 +12,14 @@ import { Dispatch } from 'redux';
 
 import { auth } from '../../../configs/firebase/firebase-config';
 import { State } from '../../../configs/redux/store';
+import MultiSelectToolbar from './variants/MultiSelectToolbar';
 
 const useStyles = makeStyles(() => createStyles({}));
 
 const TopAppBar = (props: Props): JSX.Element => {
   const classes = useStyles();
+  const { isInMultiSelectMode } = props;
+
   const signOut = async () => {
     window.location.replace('/');
     await auth.signOut();
@@ -24,45 +27,49 @@ const TopAppBar = (props: Props): JSX.Element => {
 
   return (
     <AppBar position="fixed" data-testid="top-app-bar">
-      <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={() => {
-            console.log('hamburger clicked');
-          }}
-          edge="start"
-          sx={{
-            mr: 2,
-          }}
-          data-testid="hamburger-toggle"
-        >
-          <MenuIcon />
-        </IconButton>
-        <Grid
-          item
-          xs={12}
-          container
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Grid item>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              data-testid="app-bar-title"
-            >
-              {'Album App'}
-            </Typography>
+      {isInMultiSelectMode ? (
+        <MultiSelectToolbar />
+      ) : (
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={() => {
+              console.log('hamburger clicked');
+            }}
+            edge="start"
+            sx={{
+              mr: 2,
+            }}
+            data-testid="hamburger-toggle"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Grid
+            item
+            xs={12}
+            container
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Grid item>
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
+                data-testid="app-bar-title"
+              >
+                {'Album App'}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={signOut}>
+                <LogoutIcon />
+              </IconButton>
+            </Grid>
           </Grid>
-          <Grid item>
-            <IconButton onClick={signOut}>
-              <LogoutIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
-      </Toolbar>
+        </Toolbar>
+      )}
     </AppBar>
   );
 };
@@ -74,7 +81,7 @@ interface PassedInProps {
 }
 
 interface StateProps {
-  DELETE_ME?: string;
+  isInMultiSelectMode: boolean;
 }
 
 interface DispatchProps {
@@ -82,7 +89,9 @@ interface DispatchProps {
 }
 
 const mapStateToProps = (state: State): StateProps => {
-  return {};
+  return {
+    isInMultiSelectMode: state.selectedAlbumState.isInMultiSelectMode,
+  };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
