@@ -16,6 +16,9 @@ export default {
       case ActionTypes.FILTER_IMAGES_BY_ACCESS_TYPE:
         newState.filterImagesForAccessType = action.accessType;
         break;
+      case ActionTypes.TOGGLE_MULTI_SELECT_MODE:
+        newState.isInMultiSelectMode = action.isInMultiSelectMode;
+        break;
     }
     return newState;
   },
@@ -24,4 +27,5 @@ export default {
 export interface SelectedAlbumState {
   currentAlbum?: AlbumVO;
   filterImagesForAccessType: ACCESS_TYPE;
+  isInMultiSelectMode: boolean;
 }

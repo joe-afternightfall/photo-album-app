@@ -64,6 +64,7 @@ export const createStore = (history: History): Store => {
     selectedAlbumState: {
       currentAlbum: undefined,
       filterImagesForAccessType: ACCESS_TYPE.ALL,
+      isInMultiSelectMode: false,
     } as SelectedAlbumState,
   } as State);
 };
