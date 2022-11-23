@@ -42,9 +42,15 @@ const ImageToolbar = (props: ImageToolbarProps): JSX.Element => {
 
   return (
     <ImageListItemBar
-      sx={{ p: 0 }}
-      actionIcon={
-        <Grid container justifyContent="center">
+      position="bottom"
+      sx={{
+        p: 0,
+        '& .MuiImageListItemBar-titleWrap': {
+          p: 1,
+        },
+      }}
+      title={
+        <Grid container justifyContent="space-between">
           <Grid item>
             <IconButton
               className={classes.iconButton}
@@ -57,23 +63,27 @@ const ImageToolbar = (props: ImageToolbarProps): JSX.Element => {
             </IconButton>
           </Grid>
           <Grid item>
-            <IconButton
-              className={classes.iconButton}
-              onClick={async (e) => {
-                e.stopPropagation();
-                await downloadImage(image);
-              }}
-            >
-              <DownloadIcon />
-            </IconButton>
-          </Grid>
-          <Grid item>
-            {selectedAlbum && (
-              <SettingsMenu
-                image={image}
-                albumFirebaseId={selectedAlbum.firebaseId}
-              />
-            )}
+            <Grid container>
+              <Grid item>
+                <IconButton
+                  className={classes.iconButton}
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    await downloadImage(image);
+                  }}
+                >
+                  <DownloadIcon />
+                </IconButton>
+              </Grid>
+              <Grid item>
+                {selectedAlbum && (
+                  <SettingsMenu
+                    image={image}
+                    albumFirebaseId={selectedAlbum.firebaseId}
+                  />
+                )}
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       }
