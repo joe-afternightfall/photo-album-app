@@ -3,8 +3,8 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
-import { State } from '../../../../../../../configs/redux/store';
-import FavButton from '../../fav-button/FavButton';
+import { State } from '../../../../../../configs/redux/store';
+import FavButton from '../fav-button/FavButton';
 
 const BottomFavToolbar = (props: Props): JSX.Element => {
   const { imageId, favoriteImageIds } = props;

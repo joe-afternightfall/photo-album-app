@@ -14,7 +14,7 @@ import React, { useState } from 'react';
 import { ImageVO } from '../../../../../configs/interfaces';
 import SkeletonImage from './SkeletonImage';
 import BottomFullToolbar from './toolbars/BottomFullToolbar';
-import BottomFavToolbar from './toolbars/variants/BottomFavToolbar';
+import BottomFavToolbar from './toolbars/BottomFavToolbar';
 
 const useStyles = makeStyles(() =>
   createStyles({
