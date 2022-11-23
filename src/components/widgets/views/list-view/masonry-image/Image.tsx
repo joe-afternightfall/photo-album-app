@@ -14,6 +14,7 @@ import React, { useState } from 'react';
 import { ImageVO } from '../../../../../configs/interfaces';
 import SkeletonImage from './SkeletonImage';
 import BottomFullToolbar from './toolbars/BottomFullToolbar';
+import BottomFavToolbar from './toolbars/variants/BottomFavToolbar';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -43,9 +44,9 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
   const isMd = useMediaQuery(theme.breakpoints.up('md'));
   const {
     image,
-    displayFullImageHandler,
     index,
     isInMultiSelectMode,
+    displayFullImageHandler,
     imageIsInMultiSelectList,
     setIsInMultiSelectModeClickHandler,
     toggleImageFromMultiSelectHandler,
@@ -146,11 +147,15 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
 
       {!imageLoaded && <SkeletonImage index={index} />}
       {isMd ? (
-        <Fade in={hoveringOverImageId === image.id}>
-          <div>
-            <BottomFullToolbar image={image} />
-          </div>
-        </Fade>
+        hoveringOverImageId === image.id ? (
+          <Fade in={hoveringOverImageId === image.id}>
+            <div>
+              <BottomFullToolbar image={image} />
+            </div>
+          </Fade>
+        ) : (
+          <BottomFavToolbar imageId={image.id} />
+        )
       ) : (
         <BottomFullToolbar image={image} />
       )}
