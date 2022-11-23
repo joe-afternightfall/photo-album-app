@@ -1,11 +1,6 @@
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import DoneIcon from '@mui/icons-material/Done';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { useMediaQuery } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
 import Fade from '@mui/material/Fade';
 import ImageListItem from '@mui/material/ImageListItem';
-import { blue } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
 import { makeStyles, createStyles } from '@mui/styles';
 import clsx from 'clsx';
@@ -15,6 +10,7 @@ import { ImageVO } from '../../../../../configs/interfaces';
 import SkeletonImage from './SkeletonImage';
 import BottomFavToolbar from './toolbars/BottomFavToolbar';
 import BottomFullToolbar from './toolbars/BottomFullToolbar';
+import TopToolbar from './toolbars/TopToolbar';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -126,48 +122,17 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
     >
       {/* todo: handle when in mobile/tablet */}
       <Fade in={hoveringOverImageId === image.id || isInMultiSelectMode}>
-        <div style={{ position: 'absolute' }}>
-          {imageIsInMultiSelectList ? (
-            <Avatar
-              sx={{
-                height: '24px',
-                width: '24px',
-                ml: 1,
-                mt: 1,
-                bgcolor: blue[500],
-              }}
-            >
-              <DoneIcon
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleImageFromMultiSelectHandler(image.id);
-                  setHoveringOverUncheckedIcon('');
-                }}
-              />
-            </Avatar>
-          ) : hoveringOverUncheckedIcon ? (
-            <CheckCircleIcon
-              sx={{ ml: 1, mt: 1 }}
-              onMouseLeave={() => {
-                setHoveringOverUncheckedIcon('');
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsInMultiSelectModeClickHandler();
-                toggleImageFromMultiSelectHandler(image.id);
-              }}
-            />
-          ) : (
-            <RadioButtonUncheckedIcon
-              sx={{ ml: 1, mt: 1 }}
-              onMouseOver={() => {
-                setHoveringOverUncheckedIcon(image.id);
-              }}
-              onMouseLeave={() => {
-                setHoveringOverUncheckedIcon('');
-              }}
-            />
-          )}
+        <div>
+          <TopToolbar
+            imageId={image.id}
+            imageIsInMultiSelectList={imageIsInMultiSelectList}
+            hoveringOverUncheckedIcon={hoveringOverUncheckedIcon}
+            toggleHandler={toggleImageFromMultiSelectHandler}
+            onHoverHandler={setHoveringOverUncheckedIcon}
+            setIsInMultiSelectModeClickHandler={
+              setIsInMultiSelectModeClickHandler
+            }
+          />
         </div>
       </Fade>
 
