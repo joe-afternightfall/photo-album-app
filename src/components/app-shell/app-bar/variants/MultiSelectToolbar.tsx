@@ -2,6 +2,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
 import StarBorderIcon from '@mui/icons-material/StarBorderRounded';
+import StarIcon from '@mui/icons-material/StarRounded';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
@@ -24,7 +25,12 @@ const useStyles = makeStyles(() => createStyles({}));
 
 const MultiSelectToolbar = (props: Props): JSX.Element => {
   const classes = useStyles();
-  const { selectedImages, downloadHandler, exitMultiSelectModeHandler } = props;
+  const {
+    selectedImages,
+    allImagesAreFavorites,
+    downloadHandler,
+    exitMultiSelectModeHandler,
+  } = props;
 
   return (
     <Toolbar>
@@ -60,7 +66,7 @@ const MultiSelectToolbar = (props: Props): JSX.Element => {
           <AppTooltip title="Favorite" placement="bottom" arrow>
             <IconButton>
               {/*todo: if all photos selected are favs, toggle off, otherwise toggle favs*/}
-              <StarBorderIcon />
+              {allImagesAreFavorites ? <StarIcon /> : <StarBorderIcon />}
             </IconButton>
           </AppTooltip>
         </Grid>
@@ -103,8 +109,8 @@ interface PassedInProps {
 }
 
 interface StateProps {
-  selectedImageIds: string[];
   selectedImages: ImageVO[];
+  allImagesAreFavorites: boolean;
 }
 
 interface DispatchProps {
@@ -113,19 +119,31 @@ interface DispatchProps {
 }
 
 const mapStateToProps = (state: State): StateProps => {
+  const signedInUser = state.applicationState.signedInUser;
   const selectedIds = state.selectedAlbumState.selectedImageIdsForMultiEditing;
   const selectedImages: ImageVO[] = [];
+  const favoriteSelectedImages: string[] = [];
 
   selectedIds.map((imageId: string) => {
     const foundImage = state.applicationState.images.find(
       (image) => image.id === imageId
     );
-    foundImage && selectedImages.push(foundImage);
+    if (foundImage) {
+      selectedImages.push(foundImage);
+      if (signedInUser) {
+        signedInUser.favoriteImageIds.map((favId) => {
+          if (foundImage.id === favId) {
+            favoriteSelectedImages.push(favId);
+          }
+        });
+      }
+    }
   });
 
   return {
     selectedImages,
-    selectedImageIds: state.selectedAlbumState.selectedImageIdsForMultiEditing,
+    allImagesAreFavorites:
+      favoriteSelectedImages.length === selectedImages.length,
   };
 };
 
