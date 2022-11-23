@@ -2,22 +2,28 @@ import { useMediaQuery } from '@mui/material';
 import Box from '@mui/material/Box';
 import ImageList from '@mui/material/ImageList';
 import { useTheme } from '@mui/material/styles';
-import { makeStyles, createStyles } from '@mui/styles';
-import * as ramda from 'ramda';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { ImageVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
+import {
+  toggleMultiSelectMode,
+  updateMultiSelectIds,
+} from '../../../../creators/selected-album/multi-select-mode';
 import ListViewLightbox from './lightbox/ListViewLightbox';
 import Image from './masonry-image/Image';
 
-const useStyles = makeStyles(() => createStyles({}));
-
 const ListView = (props: Props): JSX.Element => {
   const theme = useTheme();
-  const { images } = props;
+  const {
+    images,
+    selectedImageIdsForMultiEditing,
+    isInMultiSelectMode,
+    updateSelectedIdsHandler,
+    toggleIsInMultiSelectModeHandler,
+  } = props;
   const isXs = useMediaQuery(theme.breakpoints.down(700));
 
   const [displayFullImage, setDisplayFullImage] = useState({
@@ -25,31 +31,16 @@ const ListView = (props: Props): JSX.Element => {
     downloadURL: '',
     index: -1,
   });
-  const [isInMultiSelectMode, setIsInMultiSelectMode] = useState(false);
-  const [imagesSelectedForMulti, setImagesSelectedForMulti] = useState<
-    string[]
-  >([]);
 
   const toggleImageFromMultiSelect = (imageId: string) => {
-    const clonedList = ramda.clone(imagesSelectedForMulti);
-    const imageIndex = clonedList.indexOf(imageId);
-    if (imageIndex === -1) {
-      clonedList.push(imageId);
-      setImagesSelectedForMulti(clonedList);
-    } else {
-      const newList = clonedList.filter((id) => id !== imageId);
-      if (newList.length === 0) {
-        setIsInMultiSelectMode(false);
-      }
-      setImagesSelectedForMulti(newList);
-    }
+    updateSelectedIdsHandler(imageId);
   };
 
   return (
     <Box>
       <ImageList variant="masonry" cols={isXs ? 2 : 4} gap={8}>
         {images.map((image, index) => {
-          const isIn = imagesSelectedForMulti.indexOf(image.id) !== -1;
+          const isIn = selectedImageIdsForMultiEditing.indexOf(image.id) !== -1;
           return (
             <Image
               index={index}
@@ -58,7 +49,7 @@ const ListView = (props: Props): JSX.Element => {
               displayFullImageHandler={setDisplayFullImage}
               isInMultiSelectMode={isInMultiSelectMode}
               setIsInMultiSelectModeClickHandler={() => {
-                setIsInMultiSelectMode(true);
+                toggleIsInMultiSelectModeHandler(true);
               }}
               toggleImageFromMultiSelectHandler={toggleImageFromMultiSelect}
               imageIsInMultiSelectList={isIn}
@@ -90,17 +81,30 @@ interface PassedInProps {
 }
 
 interface StateProps {
-  DELETE_ME?: string;
+  isInMultiSelectMode: boolean;
+  selectedImageIdsForMultiEditing: string[];
 }
 
 interface DispatchProps {
-  DELETE_ME?: string;
+  toggleIsInMultiSelectModeHandler: (value: boolean) => void;
+  updateSelectedIdsHandler: (imageId: string) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
-  return {};
+  return {
+    isInMultiSelectMode: state.selectedAlbumState.isInMultiSelectMode,
+    selectedImageIdsForMultiEditing:
+      state.selectedAlbumState.selectedImageIdsForMultiEditing,
+  };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+  toggleIsInMultiSelectModeHandler: (value: boolean) => {
+    dispatch(toggleMultiSelectMode(value));
+  },
+  updateSelectedIdsHandler: (imageId: string) => {
+    dispatch(updateMultiSelectIds(imageId));
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListView);

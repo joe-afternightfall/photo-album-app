@@ -13,3 +13,17 @@ export const toggleMultiSelectMode = (
     isInMultiSelectMode,
   };
 };
+
+export interface UpdateMultiSelectIdsAction {
+  type: ActionTypes.UPDATE_MULTI_SELECT_IDS;
+  imageId: string;
+}
+
+export const updateMultiSelectIds = (
+  imageId: string
+): UpdateMultiSelectIdsAction => {
+  return {
+    type: ActionTypes.UPDATE_MULTI_SELECT_IDS,
+    imageId,
+  };
+};

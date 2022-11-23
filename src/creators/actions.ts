@@ -13,7 +13,10 @@ import {
 import { ToggleDeleteImageDialogAction } from './dialogs/delete-image';
 import { FilterImagesByAccessTypeAction, LoadImagesAction } from './images';
 import { LoadNewUserRequestsAction } from './new-user-requests';
-import { ToggleMultiSelectModeAction } from './selected-album/multi-select-mode';
+import {
+  ToggleMultiSelectModeAction,
+  UpdateMultiSelectIdsAction,
+} from './selected-album/multi-select-mode';
 import { LoggedInUserAction } from './user';
 
 export enum ActionTypes {
@@ -29,6 +32,7 @@ export enum ActionTypes {
   FILTER_IMAGES_BY_ACCESS_TYPE = 'FILTER_IMAGES_BY_ACCESS_TYPE',
   LOAD_NEW_USER_REQUESTS = 'LOAD_NEW_USER_REQUESTS',
   TOGGLE_MULTI_SELECT_MODE = 'TOGGLE_MULTI_SELECT_MODE',
+  UPDATE_MULTI_SELECT_IDS = 'UPDATE_MULTI_SELECT_IDS',
 
   // App Dialog Actions
   TOGGLE_ALBUM_INFO_DIALOG = 'TOGGLE_ALBUM_INFO_DIALOG',
@@ -50,4 +54,5 @@ export type ApplicationActions =
   | ToggleDeleteAlbumDialog
   | FilterImagesByAccessTypeAction
   | LoadNewUserRequestsAction
-  | ToggleMultiSelectModeAction;
+  | ToggleMultiSelectModeAction
+  | UpdateMultiSelectIdsAction;

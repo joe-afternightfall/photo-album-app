@@ -65,6 +65,7 @@ export const createStore = (history: History): Store => {
       currentAlbum: undefined,
       filterImagesForAccessType: ACCESS_TYPE.ALL,
       isInMultiSelectMode: false,
+      selectedImageIdsForMultiEditing: [],
     } as SelectedAlbumState,
   } as State);
 };
