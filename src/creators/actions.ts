@@ -16,6 +16,7 @@ import { LoadNewUserRequestsAction } from './new-user-requests';
 import {
   ClearMultiSelectIdsAction,
   ToggleMultiSelectModeAction,
+  UpdateHoveringOverIconIdAction,
   UpdateMultiSelectIdsAction,
 } from './selected-album/multi-select-mode';
 import { LoggedInUserAction } from './user';
@@ -35,6 +36,7 @@ export enum ActionTypes {
   TOGGLE_MULTI_SELECT_MODE = 'TOGGLE_MULTI_SELECT_MODE',
   UPDATE_MULTI_SELECT_IDS = 'UPDATE_MULTI_SELECT_IDS',
   CLEAR_MULTI_SELECT_IDS = 'CLEAR_MULTI_SELECT_IDS',
+  UPDATE_HOVERING_OVER_ICON_ID = 'UPDATE_HOVERING_OVER_ICON_ID',
 
   // App Dialog Actions
   TOGGLE_ALBUM_INFO_DIALOG = 'TOGGLE_ALBUM_INFO_DIALOG',
@@ -58,4 +60,5 @@ export type ApplicationActions =
   | LoadNewUserRequestsAction
   | ToggleMultiSelectModeAction
   | UpdateMultiSelectIdsAction
-  | ClearMultiSelectIdsAction;
+  | ClearMultiSelectIdsAction
+  | UpdateHoveringOverIconIdAction;

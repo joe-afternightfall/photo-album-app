@@ -5,8 +5,12 @@ import { useTheme } from '@mui/material/styles';
 import { makeStyles, createStyles } from '@mui/styles';
 import clsx from 'clsx';
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import { ImageVO } from '../../../../../configs/interfaces';
+import { State } from '../../../../../configs/redux/store';
+import { updateHoveringOverIconId } from '../../../../../creators/selected-album/multi-select-mode';
 import SkeletonImage from './SkeletonImage';
 import BottomFavToolbar from './toolbars/BottomFavToolbar';
 import BottomFullToolbar from './toolbars/BottomFullToolbar';
@@ -72,7 +76,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export default function Image(props: MasonryListImageProps): JSX.Element {
+const Image = (props: Props): JSX.Element => {
   const classes = useStyles();
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.up('md'));
@@ -84,16 +88,16 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
     imageIsInMultiSelectList,
     setIsInMultiSelectModeClickHandler,
     toggleImageFromMultiSelectHandler,
+    hoveringOverUncheckedIconId,
+    onHoverHandler,
   } = props;
 
   const [hoveringOverImageId, setHoveringOverImageId] = useState('');
-  const [hoveringOverUncheckedIconId, setHoveringOverUncheckedIconId] =
-    useState('');
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const updateAndClear = () => {
     toggleImageFromMultiSelectHandler(image.id);
-    setHoveringOverUncheckedIconId('');
+    onHoverHandler('');
   };
 
   return (
@@ -128,7 +132,7 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
             imageIsInMultiSelectList={imageIsInMultiSelectList}
             hoveringOverUncheckedIconId={hoveringOverUncheckedIconId}
             toggleHandler={toggleImageFromMultiSelectHandler}
-            onHoverHandler={setHoveringOverUncheckedIconId}
+            onHoverHandler={onHoverHandler}
             setIsInMultiSelectModeClickHandler={
               setIsInMultiSelectModeClickHandler
             }
@@ -168,9 +172,11 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
       )}
     </ImageListItem>
   );
-}
+};
 
-interface MasonryListImageProps {
+type Props = PassedInProps & StateProps & DispatchProps;
+
+interface PassedInProps {
   index: number;
   image: ImageVO;
   isInMultiSelectMode: boolean;
@@ -183,3 +189,26 @@ interface MasonryListImageProps {
     index: number;
   }) => void;
 }
+
+interface StateProps {
+  hoveringOverUncheckedIconId: string;
+}
+
+interface DispatchProps {
+  onHoverHandler: (imageId: string) => void;
+}
+
+const mapStateToProps = (state: State): StateProps => {
+  return {
+    hoveringOverUncheckedIconId:
+      state.selectedAlbumState.hoveringOverUncheckedIconId,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+  onHoverHandler: (iconId: string) => {
+    dispatch(updateHoveringOverIconId(iconId));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Image);

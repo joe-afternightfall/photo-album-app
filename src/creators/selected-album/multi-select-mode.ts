@@ -37,3 +37,17 @@ export const clearMultiSelectIds = (): ClearMultiSelectIdsAction => {
     type: ActionTypes.CLEAR_MULTI_SELECT_IDS,
   };
 };
+
+export interface UpdateHoveringOverIconIdAction {
+  type: ActionTypes.UPDATE_HOVERING_OVER_ICON_ID;
+  iconId: string;
+}
+
+export const updateHoveringOverIconId = (
+  iconId: string
+): UpdateHoveringOverIconIdAction => {
+  return {
+    type: ActionTypes.UPDATE_HOVERING_OVER_ICON_ID,
+    iconId,
+  };
+};
