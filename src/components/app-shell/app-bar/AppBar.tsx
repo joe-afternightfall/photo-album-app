@@ -5,11 +5,18 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { makeStyles, createStyles } from '@mui/styles';
 import React from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import { auth } from '../../../configs/firebase/firebase-config';
+import { State } from '../../../configs/redux/store';
 
-export default function TopAppBar(): JSX.Element {
+const useStyles = makeStyles(() => createStyles({}));
+
+const TopAppBar = (props: Props): JSX.Element => {
+  const classes = useStyles();
   const signOut = async () => {
     window.location.replace('/');
     await auth.signOut();
@@ -58,4 +65,26 @@ export default function TopAppBar(): JSX.Element {
       </Toolbar>
     </AppBar>
   );
+};
+
+type Props = PassedInProps & StateProps & DispatchProps;
+
+interface PassedInProps {
+  DELETE_ME?: string;
 }
+
+interface StateProps {
+  DELETE_ME?: string;
+}
+
+interface DispatchProps {
+  DELETE_ME?: string;
+}
+
+const mapStateToProps = (state: State): StateProps => {
+  return {};
+};
+
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopAppBar);
