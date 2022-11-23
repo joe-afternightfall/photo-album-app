@@ -3,6 +3,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import Avatar from '@mui/material/Avatar';
 import { blue } from '@mui/material/colors';
+import isEmpty from 'is-empty';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -18,6 +19,8 @@ const TopToolbar = (props: TopToolbarProps): JSX.Element => {
     hoveringOverUncheckedIconId,
     setIsInMultiSelectModeClickHandler,
   } = props;
+
+  const isHoveringOverIcon = hoveringOverUncheckedIconId === imageId;
 
   return (
     <div style={{ position: 'absolute' }}>
@@ -39,7 +42,7 @@ const TopToolbar = (props: TopToolbarProps): JSX.Element => {
             }}
           />
         </Avatar>
-      ) : hoveringOverUncheckedIconId ? (
+      ) : isHoveringOverIcon ? (
         <CheckCircleIcon
           sx={{ ml: 1, mt: 1 }}
           onMouseLeave={() => {
