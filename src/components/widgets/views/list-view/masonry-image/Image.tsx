@@ -1,3 +1,5 @@
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { useMediaQuery } from '@mui/material';
 import Fade from '@mui/material/Fade';
 import ImageListItem from '@mui/material/ImageListItem';
@@ -25,18 +27,26 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
   const classes = useStyles();
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.up('md'));
-  const { image, clickHandler, index } = props;
+  const {
+    image,
+    clickHandler,
+    index,
+    isInMultiSelectMode,
+    setIsInMultiSelectModeClickHandler,
+  } = props;
 
-  const [displayToolBar, setDisplayToolbar] = useState('');
+  const [hoveringOverImageId, setHoveringOverImageId] = useState('');
+  const [hoveringOverUncheckedIcon, setHoveringOverUncheckedIcon] =
+    useState('');
   const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <ImageListItem
       onMouseOver={() => {
-        setDisplayToolbar(image.id);
+        setHoveringOverImageId(image.id);
       }}
       onMouseLeave={() => {
-        setDisplayToolbar('');
+        setHoveringOverImageId('');
       }}
       key={image.id}
       className={classes.imageListItem}
@@ -48,6 +58,34 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
         });
       }}
     >
+      {/* todo: handle when in mobile/tablet */}
+      <Fade in={hoveringOverImageId === image.id || isInMultiSelectMode}>
+        <div style={{ position: 'absolute' }}>
+          {hoveringOverUncheckedIcon ? (
+            <CheckCircleIcon
+              sx={{ ml: 1, mt: 1 }}
+              onMouseLeave={() => {
+                setHoveringOverUncheckedIcon('');
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsInMultiSelectModeClickHandler();
+              }}
+            />
+          ) : (
+            <RadioButtonUncheckedIcon
+              sx={{ ml: 1, mt: 1 }}
+              onMouseOver={() => {
+                setHoveringOverUncheckedIcon(image.id);
+              }}
+              onMouseLeave={() => {
+                setHoveringOverUncheckedIcon('');
+              }}
+            />
+          )}
+        </div>
+      </Fade>
+
       <img
         id={`image-item-${index}`}
         onLoad={() => {
@@ -65,7 +103,7 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
 
       {!imageLoaded && <SkeletonImage index={index} />}
       {isMd ? (
-        <Fade in={displayToolBar === image.id}>
+        <Fade in={hoveringOverImageId === image.id}>
           <div>
             <ImageToolbar image={image} />
           </div>
@@ -80,6 +118,8 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
 interface MasonryListImageProps {
   index: number;
   image: ImageVO;
+  isInMultiSelectMode: boolean;
+  setIsInMultiSelectModeClickHandler: () => void;
   clickHandler: (props: {
     open: boolean;
     downloadURL: string;

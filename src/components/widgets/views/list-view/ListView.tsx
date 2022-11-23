@@ -18,6 +18,10 @@ export default function ListView(props: ListViewProps): JSX.Element {
     downloadURL: '',
     index: -1,
   });
+  const [isInMultiSelectMode, setIsInMultiSelectMode] = useState(false);
+  const [imagesSelectedForMulti, setImagesSelectedForMulti] = useState<
+    string[]
+  >([]);
 
   return (
     <Box>
@@ -29,6 +33,10 @@ export default function ListView(props: ListViewProps): JSX.Element {
               key={image.id}
               image={image}
               clickHandler={setDisplayFullImage}
+              isInMultiSelectMode={isInMultiSelectMode}
+              setIsInMultiSelectModeClickHandler={() => {
+                setIsInMultiSelectMode(true);
+              }}
             />
           );
         })}
