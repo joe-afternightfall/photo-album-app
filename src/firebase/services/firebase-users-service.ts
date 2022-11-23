@@ -94,6 +94,33 @@ export const removeImageFromUsersFavoriteList =
     }
   };
 
+export const removeSelectedImageIdsFromUsersFavoriteList =
+  (): ThunkAction<void, State, void, ApplicationActions> =>
+  async (dispatch: Dispatch, getState: () => State): Promise<void> => {
+    const signedInUser = getState().applicationState.signedInUser;
+    const selectedIds =
+      getState().selectedAlbumState.selectedImageIdsForMultiEditing;
+
+    if (signedInUser) {
+      const clonedImageIds = ramda.clone(signedInUser.favoriteImageIds);
+
+      selectedIds.map((selectedImageId) => {
+        const foundImage = clonedImageIds.find((id) => id === selectedImageId);
+
+        if (foundImage) {
+          const foundIndex = clonedImageIds.indexOf(foundImage);
+          if (foundIndex !== -1) {
+            clonedImageIds.splice(foundIndex, 1);
+          }
+        }
+      });
+
+      (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+        updateFavoritesList(clonedImageIds)
+      );
+    }
+  };
+
 export const tagImageAsFavorite =
   (imageId: string): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch, getState: () => State): Promise<void> => {

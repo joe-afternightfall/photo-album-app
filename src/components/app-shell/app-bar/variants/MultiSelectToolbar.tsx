@@ -19,7 +19,10 @@ import {
   clearMultiSelectIds,
   toggleMultiSelectMode,
 } from '../../../../creators/selected-album/multi-select-mode';
-import { tagSelectedImagesAsFavorites } from '../../../../firebase/services/firebase-users-service';
+import {
+  removeSelectedImageIdsFromUsersFavoriteList,
+  tagSelectedImagesAsFavorites,
+} from '../../../../firebase/services/firebase-users-service';
 import { zipImages } from '../../../../utils/save-images';
 import AppTooltip from '../../../shared/app-tooltip/AppTooltip';
 
@@ -69,7 +72,6 @@ const MultiSelectToolbar = (props: Props): JSX.Element => {
                 updateFavoritesHandler(allImagesAreFavorites);
               }}
             >
-              {/*todo: if all photos selected are favs, toggle off, otherwise toggle favs*/}
               {allImagesAreFavorites ? <StarIcon /> : <StarBorderIcon />}
             </IconButton>
           </AppTooltip>
@@ -164,7 +166,11 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
   updateFavoritesHandler: async (allImagesAreFavorites: boolean) => {
     if (allImagesAreFavorites) {
-      console.log('inside first if');
+      (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+        removeSelectedImageIdsFromUsersFavoriteList()
+      );
+      dispatch(toggleMultiSelectMode(false));
+      dispatch(clearMultiSelectIds());
     } else {
       (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
         tagSelectedImagesAsFavorites()
