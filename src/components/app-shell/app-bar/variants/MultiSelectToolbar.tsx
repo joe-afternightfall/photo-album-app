@@ -7,28 +7,28 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { makeStyles, createStyles } from '@mui/styles';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 
 import { ImageVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
+import { ApplicationActions } from '../../../../creators/actions';
 import {
   clearMultiSelectIds,
   toggleMultiSelectMode,
 } from '../../../../creators/selected-album/multi-select-mode';
+import { tagSelectedImagesAsFavorites } from '../../../../firebase/services/firebase-users-service';
 import { zipImages } from '../../../../utils/save-images';
 import AppTooltip from '../../../shared/app-tooltip/AppTooltip';
 
-const useStyles = makeStyles(() => createStyles({}));
-
 const MultiSelectToolbar = (props: Props): JSX.Element => {
-  const classes = useStyles();
   const {
     selectedImages,
     allImagesAreFavorites,
     downloadHandler,
+    updateFavoritesHandler,
     exitMultiSelectModeHandler,
   } = props;
 
@@ -64,7 +64,11 @@ const MultiSelectToolbar = (props: Props): JSX.Element => {
         </Grid>
         <Grid item>
           <AppTooltip title="Favorite" placement="bottom" arrow>
-            <IconButton>
+            <IconButton
+              onClick={() => {
+                updateFavoritesHandler(allImagesAreFavorites);
+              }}
+            >
               {/*todo: if all photos selected are favs, toggle off, otherwise toggle favs*/}
               {allImagesAreFavorites ? <StarIcon /> : <StarBorderIcon />}
             </IconButton>
@@ -116,6 +120,7 @@ interface StateProps {
 interface DispatchProps {
   exitMultiSelectModeHandler: () => void;
   downloadHandler: (images: ImageVO[]) => void;
+  updateFavoritesHandler: (allImagesAreFavorites: boolean) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -156,6 +161,17 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
     await zipImages('selected-images', images);
     dispatch(toggleMultiSelectMode(false));
     dispatch(clearMultiSelectIds());
+  },
+  updateFavoritesHandler: async (allImagesAreFavorites: boolean) => {
+    if (allImagesAreFavorites) {
+      console.log('inside first if');
+    } else {
+      (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+        tagSelectedImagesAsFavorites()
+      );
+      dispatch(toggleMultiSelectMode(false));
+      dispatch(clearMultiSelectIds());
+    }
   },
 });
 

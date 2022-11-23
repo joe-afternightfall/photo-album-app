@@ -1,4 +1,5 @@
 import firebase from 'firebase/compat/app';
+import isEmpty from 'is-empty';
 import * as ramda from 'ramda';
 import { Dispatch } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
@@ -105,6 +106,30 @@ export const tagImageAsFavorite =
         updateFavoritesList(clonedImageIds)
       );
     }
+  };
+
+export const tagSelectedImagesAsFavorites =
+  (): ThunkAction<void, State, void, ApplicationActions> =>
+  async (dispatch: Dispatch, getState: () => State): Promise<void> => {
+    const signedInUser = getState().applicationState.signedInUser;
+    const selectedIds =
+      getState().selectedAlbumState.selectedImageIdsForMultiEditing;
+    const clonedFavoriteImageIds = ramda.clone(
+      signedInUser ? signedInUser.favoriteImageIds : []
+    );
+
+    selectedIds.map((imageId: string) => {
+      const foundImageIdInFavsList = clonedFavoriteImageIds.find(
+        (favId) => favId === imageId
+      );
+      if (isEmpty(foundImageIdInFavsList)) {
+        clonedFavoriteImageIds.push(imageId);
+      }
+    });
+
+    (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+      updateFavoritesList(clonedFavoriteImageIds)
+    );
   };
 
 const updateFavoritesList =
