@@ -27,3 +27,13 @@ export const updateMultiSelectIds = (
     imageId,
   };
 };
+
+export interface ClearMultiSelectIdsAction {
+  type: ActionTypes.CLEAR_MULTI_SELECT_IDS;
+}
+
+export const clearMultiSelectIds = (): ClearMultiSelectIdsAction => {
+  return {
+    type: ActionTypes.CLEAR_MULTI_SELECT_IDS,
+  };
+};

@@ -87,13 +87,13 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
   } = props;
 
   const [hoveringOverImageId, setHoveringOverImageId] = useState('');
-  const [hoveringOverUncheckedIcon, setHoveringOverUncheckedIcon] =
+  const [hoveringOverUncheckedIconId, setHoveringOverUncheckedIconId] =
     useState('');
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const updateAndClear = () => {
     toggleImageFromMultiSelectHandler(image.id);
-    setHoveringOverUncheckedIcon('');
+    setHoveringOverUncheckedIconId('');
   };
 
   return (
@@ -126,9 +126,9 @@ export default function Image(props: MasonryListImageProps): JSX.Element {
           <TopToolbar
             imageId={image.id}
             imageIsInMultiSelectList={imageIsInMultiSelectList}
-            hoveringOverUncheckedIcon={hoveringOverUncheckedIcon}
+            hoveringOverUncheckedIconId={hoveringOverUncheckedIconId}
             toggleHandler={toggleImageFromMultiSelectHandler}
-            onHoverHandler={setHoveringOverUncheckedIcon}
+            onHoverHandler={setHoveringOverUncheckedIconId}
             setIsInMultiSelectModeClickHandler={
               setIsInMultiSelectModeClickHandler
             }

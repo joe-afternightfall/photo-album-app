@@ -3,26 +3,19 @@ import DoneIcon from '@mui/icons-material/Done';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import Avatar from '@mui/material/Avatar';
 import { blue } from '@mui/material/colors';
-import { makeStyles, createStyles } from '@mui/styles';
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { State } from '../../../../../../configs/redux/store';
 
-const useStyles = makeStyles(() => createStyles({}));
-
 const TopToolbar = (props: TopToolbarProps): JSX.Element => {
-  const classes = useStyles();
-
-  // const [hoveringOverUncheckedIcon, setHoveringOverUncheckedIcon] =
-  //   useState('');
   const {
     imageId,
     onHoverHandler,
     toggleHandler,
     imageIsInMultiSelectList,
-    hoveringOverUncheckedIcon,
+    hoveringOverUncheckedIconId,
     setIsInMultiSelectModeClickHandler,
   } = props;
 
@@ -46,7 +39,7 @@ const TopToolbar = (props: TopToolbarProps): JSX.Element => {
             }}
           />
         </Avatar>
-      ) : hoveringOverUncheckedIcon ? (
+      ) : hoveringOverUncheckedIconId ? (
         <CheckCircleIcon
           sx={{ ml: 1, mt: 1 }}
           onMouseLeave={() => {
@@ -79,7 +72,7 @@ interface PassedInProps {
   imageId: string;
   imageIsInMultiSelectList: boolean;
   // hoveringOverUncheckedIcon: boolean; // todo: try this out as a boolean with isEmpty()
-  hoveringOverUncheckedIcon: string;
+  hoveringOverUncheckedIconId: string;
   toggleHandler: (imageId: string) => void;
   onHoverHandler: (imageId: string) => void;
   setIsInMultiSelectModeClickHandler: () => void;

@@ -11,12 +11,16 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { State } from '../../../../configs/redux/store';
+import {
+  clearMultiSelectIds,
+  toggleMultiSelectMode,
+} from '../../../../creators/selected-album/multi-select-mode';
 
 const useStyles = makeStyles(() => createStyles({}));
 
 const MultiSelectToolbar = (props: Props): JSX.Element => {
   const classes = useStyles();
-  const { selectedNumber } = props;
+  const { selectedNumber, exitMultiSelectModeHandler } = props;
   return (
     <Toolbar>
       <IconButton
@@ -26,9 +30,7 @@ const MultiSelectToolbar = (props: Props): JSX.Element => {
           mr: 2,
         }}
         data-testid="exit-multi-select"
-        onClick={() => {
-          console.log('hamburger clicked');
-        }}
+        onClick={exitMultiSelectModeHandler}
       >
         <CloseIcon />
       </IconButton>
@@ -65,7 +67,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  DELETE_ME?: string;
+  exitMultiSelectModeHandler: () => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -75,6 +77,11 @@ const mapStateToProps = (state: State): StateProps => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+  exitMultiSelectModeHandler: () => {
+    dispatch(toggleMultiSelectMode(false));
+    dispatch(clearMultiSelectIds());
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MultiSelectToolbar);

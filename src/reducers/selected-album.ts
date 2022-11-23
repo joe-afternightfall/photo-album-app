@@ -40,6 +40,9 @@ export default {
         }
         break;
       }
+      case ActionTypes.CLEAR_MULTI_SELECT_IDS:
+        newState.selectedImageIdsForMultiEditing = [];
+        break;
     }
     return newState;
   },
