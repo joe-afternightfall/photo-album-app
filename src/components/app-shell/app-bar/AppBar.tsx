@@ -16,7 +16,7 @@ import { AppPaths } from '../../../configs/app-settings/app-routes';
 import { auth } from '../../../configs/firebase/firebase-config';
 import { AlbumVO } from '../../../configs/interfaces';
 import { State } from '../../../configs/redux/store';
-import MultiSelectToolbar from './variants/MultiSelectToolbar';
+import MultiSelectModeToolbar from './variants/MultiSelectModeToolbar';
 
 const useStyles = makeStyles(() => createStyles({}));
 
@@ -33,7 +33,7 @@ const TopAppBar = (props: Props): JSX.Element => {
   return (
     <AppBar position="fixed" data-testid="top-app-bar">
       {isInMultiSelectMode ? (
-        <MultiSelectToolbar />
+        <MultiSelectModeToolbar />
       ) : (
         <Toolbar>
           <IconButton

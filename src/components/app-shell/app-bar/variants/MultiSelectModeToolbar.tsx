@@ -26,7 +26,7 @@ import {
 import { zipImages } from '../../../../utils/save-images';
 import AppTooltip from '../../../shared/app-tooltip/AppTooltip';
 
-const MultiSelectToolbar = (props: Props): JSX.Element => {
+const MultiSelectModeToolbar = (props: Props): JSX.Element => {
   const {
     selectedImages,
     allImagesAreFavorites,
@@ -181,4 +181,7 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MultiSelectToolbar);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MultiSelectModeToolbar);
