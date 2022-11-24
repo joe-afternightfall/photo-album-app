@@ -2,23 +2,23 @@ import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
-import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import { routerActions } from 'connected-react-router';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { AppPaths } from '../../../../configs/app-settings/app-routes';
-import { AlbumVO } from '../../../../configs/interfaces';
+import { AlbumVO, ImageVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
 import { selectAlbumToView } from '../../../../creators/albums';
 import { openAlbumInfoDialog } from '../../../../creators/dialogs/album-info';
-import AlbumActionMenu from './AlbumActionMenu';
 
 const AllAlbumsView = (props: AllAlbumsViewProps): JSX.Element => {
-  const { albums, selectAlbumHandler, openDialogHandler } = props;
+  const { albums, images, selectAlbumHandler, openDialogHandler } = props;
 
   return (
     <Grid container spacing={2} alignItems="center" justifyContent="center">
@@ -34,14 +34,9 @@ const AllAlbumsView = (props: AllAlbumsViewProps): JSX.Element => {
       {albums.map((album) => (
         <Grid key={album.id} item xs={10} sm={6} md={4} lg={3}>
           <Card sx={{ width: '100%' }}>
-            <CardHeader
-              title={album.title}
-              subheader={album.subtitle}
-              action={<AlbumActionMenu album={album} />}
-            />
             <CardActionArea
               onClick={() => {
-                selectAlbumHandler(album);
+                selectAlbumHandler(album, images);
               }}
             >
               <CardMedia
@@ -50,6 +45,14 @@ const AllAlbumsView = (props: AllAlbumsViewProps): JSX.Element => {
                 image={album.coverImageDownloadURL}
                 alt={album.title}
               />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {album.title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {album.subtitle}
+                </Typography>
+              </CardContent>
             </CardActionArea>
           </Card>
         </Grid>
@@ -62,22 +65,24 @@ type AllAlbumsViewProps = StateProps & DispatchProps;
 
 interface StateProps {
   albums: AlbumVO[];
+  images: ImageVO[];
 }
 
 interface DispatchProps {
-  selectAlbumHandler: (album: AlbumVO) => void;
+  selectAlbumHandler: (album: AlbumVO, images: ImageVO[]) => void;
   openDialogHandler: () => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
   return {
     albums: state.applicationState.albums,
+    images: state.applicationState.images,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-  selectAlbumHandler: (album: AlbumVO) => {
-    dispatch(selectAlbumToView(album));
+  selectAlbumHandler: (album: AlbumVO, images: ImageVO[]) => {
+    dispatch(selectAlbumToView(album, images));
     dispatch(routerActions.push(AppPaths.selectedAlbum));
   },
   openDialogHandler: () => {

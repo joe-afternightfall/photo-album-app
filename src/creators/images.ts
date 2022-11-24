@@ -17,13 +17,16 @@ export const loadImages = (images: ImageVO[]): LoadImagesAction => {
 export interface FilterImagesByAccessTypeAction {
   type: ActionTypes.FILTER_IMAGES_BY_ACCESS_TYPE;
   accessType: ACCESS_TYPE;
+  images: ImageVO[];
 }
 
 export const filterImagesByAccessType = (
-  accessType: ACCESS_TYPE
+  accessType: ACCESS_TYPE,
+  images: ImageVO[]
 ): FilterImagesByAccessTypeAction => {
   return {
     type: ActionTypes.FILTER_IMAGES_BY_ACCESS_TYPE,
     accessType,
+    images,
   };
 };
