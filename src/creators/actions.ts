@@ -13,6 +13,7 @@ import {
 import { ToggleDeleteImageDialogAction } from './dialogs/delete-image';
 import { FilterImagesByAccessTypeAction, LoadImagesAction } from './images';
 import { LoadNewUserRequestsAction } from './new-user-requests';
+import { ToggleFavoritesAction } from './selected-album/favorites';
 import {
   ClearMultiSelectIdsAction,
   ToggleMultiSelectModeAction,
@@ -37,6 +38,7 @@ export enum ActionTypes {
   UPDATE_MULTI_SELECT_IDS = 'UPDATE_MULTI_SELECT_IDS',
   CLEAR_MULTI_SELECT_IDS = 'CLEAR_MULTI_SELECT_IDS',
   UPDATE_HOVERING_OVER_ICON_ID = 'UPDATE_HOVERING_OVER_ICON_ID',
+  TOGGLE_FAVORITES = 'TOGGLE_FAVORITES',
 
   // App Dialog Actions
   TOGGLE_ALBUM_INFO_DIALOG = 'TOGGLE_ALBUM_INFO_DIALOG',
@@ -61,4 +63,5 @@ export type ApplicationActions =
   | ToggleMultiSelectModeAction
   | UpdateMultiSelectIdsAction
   | ClearMultiSelectIdsAction
-  | UpdateHoveringOverIconIdAction;
+  | UpdateHoveringOverIconIdAction
+  | ToggleFavoritesAction;

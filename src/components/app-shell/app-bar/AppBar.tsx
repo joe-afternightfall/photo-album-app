@@ -1,5 +1,4 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Grid from '@mui/material/Grid';
@@ -14,16 +13,22 @@ import { Dispatch } from 'redux';
 
 import { AppPaths } from '../../../configs/app-settings/app-routes';
 import { auth } from '../../../configs/firebase/firebase-config';
-import { AlbumVO } from '../../../configs/interfaces';
 import { State } from '../../../configs/redux/store';
+import ActionMenu from './ActionMenu';
+import FavoritesToolbar from './variants/FavoritesToolbar';
 import MultiSelectModeToolbar from './variants/MultiSelectModeToolbar';
 
 const useStyles = makeStyles(() => createStyles({}));
 
 const TopAppBar = (props: Props): JSX.Element => {
   const classes = useStyles();
-  const { title, displayBackButton, goBackHandler, isInMultiSelectMode } =
-    props;
+  const {
+    title,
+    displayFavorites,
+    displayBackButton,
+    goBackHandler,
+    isInMultiSelectMode,
+  } = props;
 
   const signOut = async () => {
     window.location.replace('/');
@@ -34,6 +39,8 @@ const TopAppBar = (props: Props): JSX.Element => {
     <AppBar position="fixed" data-testid="top-app-bar">
       {isInMultiSelectMode ? (
         <MultiSelectModeToolbar />
+      ) : displayFavorites ? (
+        <FavoritesToolbar />
       ) : (
         <Toolbar>
           <IconButton
@@ -68,9 +75,7 @@ const TopAppBar = (props: Props): JSX.Element => {
               </Typography>
             </Grid>
             <Grid item>
-              <IconButton onClick={signOut}>
-                <LogoutIcon />
-              </IconButton>
+              <ActionMenu />
             </Grid>
           </Grid>
         </Toolbar>
@@ -79,17 +84,13 @@ const TopAppBar = (props: Props): JSX.Element => {
   );
 };
 
-type Props = PassedInProps & StateProps & DispatchProps;
-
-interface PassedInProps {
-  DELETE_ME?: string;
-}
+type Props = StateProps & DispatchProps;
 
 interface StateProps {
   isInMultiSelectMode: boolean;
-  selectedAlbum?: AlbumVO;
   title: string;
   displayBackButton: boolean;
+  displayFavorites: boolean;
 }
 
 interface DispatchProps {
@@ -109,7 +110,7 @@ const mapStateToProps = (state: State): StateProps => {
     title: `${title} Album`,
     displayBackButton,
     isInMultiSelectMode: state.selectedAlbumState.isInMultiSelectMode,
-    selectedAlbum: state.selectedAlbumState.currentAlbum,
+    displayFavorites: state.selectedAlbumState.displayFavorites,
   };
 };
 
