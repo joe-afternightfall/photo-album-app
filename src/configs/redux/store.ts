@@ -68,6 +68,7 @@ export const createStore = (history: History): Store => {
       selectedImageIdsForMultiEditing: [],
       albumImages: [],
       hoveringOverUncheckedIconId: '',
+      displayFavorites: false,
     } as SelectedAlbumState,
   } as State);
 };

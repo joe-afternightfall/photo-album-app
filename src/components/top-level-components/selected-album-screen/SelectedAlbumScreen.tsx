@@ -17,9 +17,8 @@ import ListView from '../../widgets/views/list-view/ListView';
 import ImageAccessTypeSelectMenu from './components/ImageAccessTypeSelectMenu';
 
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
-  const { albumImages, selectedAlbum, favoriteImages } = props;
-
-  const [imageSelection, setImageSelection] = React.useState('all');
+  const { albumImages, selectedAlbum, displayFavorites, favoriteImages } =
+    props;
 
   useEffect(() => {
     if (isEmpty(selectedAlbum)) {
@@ -27,15 +26,7 @@ const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
     }
   }, [selectedAlbum]);
 
-  const toggleImages = (
-    event: React.MouseEvent<HTMLElement>,
-    selection: string
-  ) => {
-    setImageSelection(selection);
-  };
-
-  const imagesToDisplay =
-    imageSelection === 'all' ? albumImages : favoriteImages;
+  const imagesToDisplay = displayFavorites ? favoriteImages : albumImages;
 
   return (
     <Grid container>
@@ -53,17 +44,6 @@ const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
         </Grid>
         <Grid item>
           <Grid container alignItems="center">
-            <Grid item>
-              <ToggleButtonGroup
-                color="primary"
-                value={imageSelection}
-                exclusive
-                onChange={toggleImages}
-              >
-                <ToggleButton value="all">All</ToggleButton>
-                <ToggleButton value="favorites">Favorites</ToggleButton>
-              </ToggleButtonGroup>
-            </Grid>
             <Grid item>
               <Button
                 variant="outlined"
@@ -101,8 +81,8 @@ type SelectedAlbumScreenProps = StateProps;
 interface StateProps {
   selectedAlbum?: AlbumVO;
   albumImages: ImageVO[];
-  favoriteImageIds: string[];
   favoriteImages: ImageVO[];
+  displayFavorites: boolean;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -132,10 +112,10 @@ const mapStateToProps = (state: State): StateProps => {
   }
 
   return {
-    selectedAlbum: selectedAlbum,
+    selectedAlbum,
     albumImages,
-    favoriteImageIds: signedInUser ? signedInUser.favoriteImageIds : [],
     favoriteImages,
+    displayFavorites: state.selectedAlbumState.displayFavorites,
   };
 };
 

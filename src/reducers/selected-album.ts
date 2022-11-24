@@ -47,6 +47,9 @@ export default {
       case ActionTypes.UPDATE_HOVERING_OVER_ICON_ID:
         newState.hoveringOverUncheckedIconId = action.iconId;
         break;
+      case ActionTypes.TOGGLE_FAVORITES:
+        newState.displayFavorites = action.displayFavorites;
+        break;
     }
     return newState;
   },
@@ -59,4 +62,5 @@ export interface SelectedAlbumState {
   isInMultiSelectMode: boolean;
   selectedImageIdsForMultiEditing: string[];
   hoveringOverUncheckedIconId: string;
+  displayFavorites: boolean;
 }
