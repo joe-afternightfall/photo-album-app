@@ -3,6 +3,7 @@ import * as ramda from 'ramda';
 import { AlbumVO, ImageVO } from '../configs/interfaces';
 import { ACCESS_TYPE } from '../configs/interfaces/image/ImageDAO';
 import { ActionTypes, ApplicationActions } from '../creators/actions';
+import { filterImagesForAccessType } from '../utils/filter-images';
 
 export default {
   reducer: (
@@ -12,12 +13,26 @@ export default {
     const newState = Object.assign({}, state);
 
     switch (action.type) {
-      case ActionTypes.SELECT_ALBUM_TO_VIEW:
+      case ActionTypes.SELECT_ALBUM_TO_VIEW: {
         newState.currentAlbum = action.album;
+        newState.albumImages = filterImagesForAccessType(
+          newState.currentAlbum,
+          action.images,
+          ACCESS_TYPE.ALL
+        );
         break;
-      case ActionTypes.FILTER_IMAGES_BY_ACCESS_TYPE:
+      }
+      case ActionTypes.FILTER_IMAGES_BY_ACCESS_TYPE: {
         newState.filterImagesForAccessType = action.accessType;
+        if (newState.currentAlbum) {
+          newState.albumImages = filterImagesForAccessType(
+            newState.currentAlbum,
+            action.images,
+            action.accessType
+          );
+        }
         break;
+      }
       case ActionTypes.TOGGLE_MULTI_SELECT_MODE:
         newState.isInMultiSelectMode = action.isInMultiSelectMode;
         break;
