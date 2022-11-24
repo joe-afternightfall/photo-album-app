@@ -1,3 +1,4 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
@@ -6,11 +7,14 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { makeStyles, createStyles } from '@mui/styles';
+import { routerActions } from 'connected-react-router';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
+import { AppPaths } from '../../../configs/app-settings/app-routes';
 import { auth } from '../../../configs/firebase/firebase-config';
+import { AlbumVO } from '../../../configs/interfaces';
 import { State } from '../../../configs/redux/store';
 import MultiSelectToolbar from './variants/MultiSelectToolbar';
 
@@ -18,7 +22,8 @@ const useStyles = makeStyles(() => createStyles({}));
 
 const TopAppBar = (props: Props): JSX.Element => {
   const classes = useStyles();
-  const { isInMultiSelectMode } = props;
+  const { title, displayBackButton, goBackHandler, isInMultiSelectMode } =
+    props;
 
   const signOut = async () => {
     window.location.replace('/');
@@ -33,17 +38,17 @@ const TopAppBar = (props: Props): JSX.Element => {
         <Toolbar>
           <IconButton
             color="inherit"
-            aria-label="open drawer"
-            onClick={() => {
-              console.log('hamburger clicked');
-            }}
             edge="start"
             sx={{
               mr: 2,
             }}
-            data-testid="hamburger-toggle"
+            onClick={() => {
+              displayBackButton
+                ? goBackHandler()
+                : console.log('hamburger clicked');
+            }}
           >
-            <MenuIcon />
+            {displayBackButton ? <ArrowBackIcon /> : <MenuIcon />}
           </IconButton>
           <Grid
             item
@@ -59,7 +64,7 @@ const TopAppBar = (props: Props): JSX.Element => {
                 component="div"
                 data-testid="app-bar-title"
               >
-                {'Album App'}
+                {title}
               </Typography>
             </Grid>
             <Grid item>
@@ -82,18 +87,36 @@ interface PassedInProps {
 
 interface StateProps {
   isInMultiSelectMode: boolean;
+  selectedAlbum?: AlbumVO;
+  title: string;
+  displayBackButton: boolean;
 }
 
 interface DispatchProps {
-  DELETE_ME?: string;
+  goBackHandler: () => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
+  const currentLocation = state.applicationState.currentLocation;
+  const currentAlbum = state.selectedAlbumState.currentAlbum;
+  let title = `Yarbrough Photo's App`;
+  let displayBackButton = false;
+  if (currentLocation === AppPaths.selectedAlbum && currentAlbum) {
+    displayBackButton = true;
+    title = currentAlbum.title;
+  }
   return {
+    title: `${title} Album`,
+    displayBackButton,
     isInMultiSelectMode: state.selectedAlbumState.isInMultiSelectMode,
+    selectedAlbum: state.selectedAlbumState.currentAlbum,
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+  goBackHandler: () => {
+    dispatch(routerActions.push(AppPaths.dashboard));
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopAppBar);

@@ -19,7 +19,9 @@ export default {
         break;
       }
       case ActionTypes.LOGGED_IN_USER: {
-        newState.userIsAdmin = false;
+        if (action.user) {
+          newState.userIsAdmin = action.user.isAdmin;
+        }
         newState.signedInUser = action.user;
         break;
       }
