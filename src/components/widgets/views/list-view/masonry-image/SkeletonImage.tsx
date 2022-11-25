@@ -1,7 +1,23 @@
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
+import { createStyles, makeStyles } from '@mui/styles';
 import React from 'react';
+
+import SkeletonImageToolbar from '../../../../shared/skeleton/skeleton-image-toolbar/SkeletonImageToolbar';
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      width: '100%',
+      objectFit: 'contain',
+      overflow: 'hidden',
+      position: 'absolute',
+      top: 0,
+      height: '100%',
+    },
+  })
+);
 
 const getRandomHeight = (n: number): string => {
   const heights: string[] = ['164px', '118px', '200px', '132px', '178px'];
@@ -26,17 +42,55 @@ const getRandomHeight = (n: number): string => {
 
 export default function SkeletonImage(props: Props): JSX.Element {
   const { index } = props;
+  const classes = useStyles();
 
   return (
-    <Card
-      sx={{ width: '100%', pb: 1, objectFit: 'contain', overflow: 'hidden' }}
-    >
-      <Grid container>
+    <Card sx={{ pb: 1 }} square className={classes.root}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexWrap: 'nowrap',
+          justifyContent: 'flex-start',
+          alignItems: 'stretch',
+          alignContent: 'stretch',
+          height: '100%',
+        }}
+      >
+        <div
+          style={{
+            flex: '1 1 auto',
+            display: 'flex',
+          }}
+        >
+          <Skeleton
+            variant="rectangular"
+            width={'100%'}
+            height={'100%'}
+            animation={false}
+          />
+        </div>
+        <div>
+          <Grid
+            item
+            xs={12}
+            container
+            sx={{ mt: 1, px: 1 }}
+            justifyContent="space-between"
+          >
+            <Grid item xs={8}>
+              <Skeleton variant="rectangular" width="100%" height={10} />
+            </Grid>
+            <SkeletonImageToolbar />
+          </Grid>
+        </div>
+      </div>
+      <Grid container direction="column" justifyContent="space-between">
         <Grid item xs={12}>
           <Skeleton
             variant="rectangular"
             width={'100%'}
-            height={getRandomHeight(index)}
+            height={'100%'}
             animation={false}
           />
         </Grid>
@@ -50,24 +104,7 @@ export default function SkeletonImage(props: Props): JSX.Element {
           <Grid item xs={8}>
             <Skeleton variant="rectangular" width="100%" height={10} />
           </Grid>
-          <Grid
-            item
-            xs={3}
-            container
-            spacing={1}
-            justifyContent="flex-end"
-            // sx={{ px: '4px' }}
-          >
-            <Grid item xs={4}>
-              <Skeleton variant="rectangular" width="100%" height={10} />
-            </Grid>
-            <Grid item xs={4}>
-              <Skeleton variant="rectangular" width="100%" height={10} />
-            </Grid>
-            <Grid item xs={4}>
-              <Skeleton variant="rectangular" width="100%" height={10} />
-            </Grid>
-          </Grid>
+          <SkeletonImageToolbar />
         </Grid>
       </Grid>
     </Card>
