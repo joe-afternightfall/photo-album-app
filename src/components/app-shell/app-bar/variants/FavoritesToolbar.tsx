@@ -1,23 +1,23 @@
 import CloseIcon from '@mui/icons-material/Close';
+import CollectionsIcon from '@mui/icons-material/Collections';
 import DownloadIcon from '@mui/icons-material/Download';
+import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { makeStyles, createStyles } from '@mui/styles';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 
 import { State } from '../../../../configs/redux/store';
+import { ApplicationActions } from '../../../../creators/actions';
 import { clearFavorites } from '../../../../creators/selected-album/favorites';
-import AppTooltip from '../../../shared/app-tooltip/AppTooltip';
-
-const useStyles = makeStyles(() => createStyles({}));
+import { zipAndSaveSelectedAlbumFavorites } from '../../../../utils/zip-images';
 
 const FavoritesToolbar = (props: FavoritesToolbarProps): JSX.Element => {
-  const classes = useStyles();
-  const { clearFavoritesHandler } = props;
+  const { clearFavoritesHandler, downloadFavoritesHandler } = props;
 
   return (
     <Toolbar>
@@ -50,44 +50,48 @@ const FavoritesToolbar = (props: FavoritesToolbarProps): JSX.Element => {
           </Typography>
         </Grid>
         <Grid item>
-          <AppTooltip title="Download" placement="bottom" arrow>
-            <IconButton
-              onClick={() => {
-                console.log('download clicked');
-                // downloadHandler(selectedImages);
-              }}
-            >
-              <DownloadIcon />
-            </IconButton>
-          </AppTooltip>
+          <Grid container spacing={2}>
+            <Grid item>
+              <Button
+                variant="outlined"
+                startIcon={<DownloadIcon />}
+                onClick={downloadFavoritesHandler}
+              >
+                {`Download fav's`}
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="outlined"
+                startIcon={<CollectionsIcon />}
+                onClick={clearFavoritesHandler}
+              >
+                {`All Photos`}
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Toolbar>
   );
 };
 
-type FavoritesToolbarProps = PassedInProps & StateProps & DispatchProps;
-
-interface PassedInProps {
-  DELETE_ME?: string;
-}
-
-interface StateProps {
-  DELETE_ME?: string;
-}
+type FavoritesToolbarProps = DispatchProps;
 
 interface DispatchProps {
   clearFavoritesHandler: () => void;
+  downloadFavoritesHandler: () => void;
 }
-
-const mapStateToProps = (state: State): StateProps => {
-  return {};
-};
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   clearFavoritesHandler: () => {
     dispatch(clearFavorites());
   },
+  downloadFavoritesHandler: () => {
+    (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+      zipAndSaveSelectedAlbumFavorites()
+    );
+  },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FavoritesToolbar);
+export default connect(null, mapDispatchToProps)(FavoritesToolbar);
