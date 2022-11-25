@@ -15,6 +15,7 @@ import { AppPaths } from '../../../configs/app-settings/app-routes';
 import { auth } from '../../../configs/firebase/firebase-config';
 import { State } from '../../../configs/redux/store';
 import ActionMenu from './ActionMenu';
+import ImageAccessTypeSelectMenu from './components/ImageAccessTypeSelectMenu';
 import FavoritesToolbar from './variants/FavoritesToolbar';
 import MultiSelectModeToolbar from './variants/MultiSelectModeToolbar';
 
@@ -75,7 +76,14 @@ const TopAppBar = (props: Props): JSX.Element => {
               </Typography>
             </Grid>
             <Grid item>
-              <ActionMenu />
+              <Grid container alignItems="center">
+                <Grid item>
+                  <ImageAccessTypeSelectMenu />
+                </Grid>
+                <Grid item>
+                  <ActionMenu />
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Toolbar>
