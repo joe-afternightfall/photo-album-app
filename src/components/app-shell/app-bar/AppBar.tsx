@@ -5,24 +5,20 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { makeStyles, createStyles } from '@mui/styles';
 import { routerActions } from 'connected-react-router';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { AppPaths } from '../../../configs/app-settings/app-routes';
-import { auth } from '../../../configs/firebase/firebase-config';
+// import { auth } from '../../../configs/firebase/firebase-config';
 import { State } from '../../../configs/redux/store';
 import ActionMenu from './ActionMenu';
 import ImageAccessTypeSelectMenu from './components/ImageAccessTypeSelectMenu';
 import FavoritesToolbar from './variants/FavoritesToolbar';
 import MultiSelectModeToolbar from './variants/MultiSelectModeToolbar';
 
-const useStyles = makeStyles(() => createStyles({}));
-
 const TopAppBar = (props: Props): JSX.Element => {
-  const classes = useStyles();
   const {
     title,
     displayFavorites,
@@ -31,10 +27,10 @@ const TopAppBar = (props: Props): JSX.Element => {
     isInMultiSelectMode,
   } = props;
 
-  const signOut = async () => {
-    window.location.replace('/');
-    await auth.signOut();
-  };
+  // const signOut = async () => {
+  //   window.location.replace('/');
+  //   await auth.signOut();
+  // };
 
   return (
     <AppBar position="fixed" data-testid="top-app-bar">
