@@ -11,7 +11,6 @@ import { State } from '../../../configs/redux/store';
 import { zipImages } from '../../../utils/save-images';
 import UploadImageDialog from '../../widgets/dialogs/upload-image-dialog/UploadImageDialog';
 import ListView from '../../widgets/views/list-view/ListView';
-import ImageAccessTypeSelectMenu from './components/ImageAccessTypeSelectMenu';
 
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
   const { albumImages, selectedAlbum, displayFavorites, favoriteImages } =
@@ -55,9 +54,6 @@ const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
               >
                 {'Download Favs'}
               </Button>
-            </Grid>
-            <Grid item>
-              <ImageAccessTypeSelectMenu />
             </Grid>
             <Grid item>
               <UploadImageDialog />
