@@ -11,6 +11,7 @@ import { State } from '../../../../../../configs/redux/store';
 import {
   toggleMultiSelectMode,
   updateHoveringOverIconId,
+  updateMultiSelectIds,
 } from '../../../../../../creators/selected-album/multi-select-mode';
 
 const TopToolbar = (props: TopToolbarProps): JSX.Element => {
@@ -76,23 +77,27 @@ type TopToolbarProps = PassedInProps & StateProps & DispatchProps;
 
 interface PassedInProps {
   imageId: string;
-  imageIsInMultiSelectList: boolean;
-  toggleHandler: (imageId: string) => void;
 }
 
 interface StateProps {
+  imageIsInMultiSelectList: boolean;
   hoveringOverUncheckedIconId: string;
 }
 
 interface DispatchProps {
   onHoverHandler: (imageId: string) => void;
   setIsInMultiSelectModeClickHandler: () => void;
+  toggleHandler: (imageId: string) => void;
 }
 
-const mapStateToProps = (state: State): StateProps => {
+const mapStateToProps = (state: State, ownProps: PassedInProps): StateProps => {
+  const selectedIds = state.selectedAlbumState.selectedImageIdsForMultiEditing;
+  const isIn = selectedIds.indexOf(ownProps.imageId) !== -1;
+
   return {
     hoveringOverUncheckedIconId:
       state.selectedAlbumState.hoveringOverUncheckedIconId,
+    imageIsInMultiSelectList: isIn,
   };
 };
 
@@ -102,6 +107,9 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
   setIsInMultiSelectModeClickHandler: () => {
     dispatch(toggleMultiSelectMode(true));
+  },
+  toggleHandler: (imageId: string) => {
+    dispatch(updateMultiSelectIds(imageId));
   },
 });
 

@@ -121,11 +121,7 @@ const Image = (props: Props): JSX.Element => {
       {displayImage && (
         <Fade in={hoveringOverImageId === image.id || isInMultiSelectMode}>
           <div>
-            <TopToolbar
-              imageId={image.id}
-              imageIsInMultiSelectList={imageIsInMultiSelectList}
-              toggleHandler={toggleImageFromMultiSelectHandler}
-            />
+            <TopToolbar imageId={image.id} />
           </div>
         </Fade>
       )}
@@ -174,7 +170,6 @@ interface PassedInProps {
   index: number;
   image: ImageVO;
   isInMultiSelectMode: boolean;
-  // setIsInMultiSelectModeClickHandler: () => void;
   imageIsInMultiSelectList: boolean;
   toggleImageFromMultiSelectHandler: (imageId: string) => void;
   displayFullImageHandler: (props: {
