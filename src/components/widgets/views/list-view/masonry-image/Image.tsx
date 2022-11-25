@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { ImageVO } from '../../../../../configs/interfaces';
-import { State } from '../../../../../configs/redux/store';
 import { updateHoveringOverIconId } from '../../../../../creators/selected-album/multi-select-mode';
 import SkeletonImage from './SkeletonImage';
 import BottomFavToolbar from './toolbars/BottomFavToolbar';
@@ -77,7 +76,6 @@ const Image = (props: Props): JSX.Element => {
     displayFullImageHandler,
     imageIsInMultiSelectList,
     toggleImageFromMultiSelectHandler,
-    hoveringOverUncheckedIconId,
     onHoverHandler,
   } = props;
 
@@ -126,7 +124,6 @@ const Image = (props: Props): JSX.Element => {
             <TopToolbar
               imageId={image.id}
               imageIsInMultiSelectList={imageIsInMultiSelectList}
-              hoveringOverUncheckedIconId={hoveringOverUncheckedIconId}
               toggleHandler={toggleImageFromMultiSelectHandler}
             />
           </div>
@@ -171,7 +168,7 @@ const Image = (props: Props): JSX.Element => {
   );
 };
 
-type Props = PassedInProps & StateProps & DispatchProps;
+type Props = PassedInProps & DispatchProps;
 
 interface PassedInProps {
   index: number;
@@ -187,20 +184,9 @@ interface PassedInProps {
   }) => void;
 }
 
-interface StateProps {
-  hoveringOverUncheckedIconId: string;
-}
-
 interface DispatchProps {
   onHoverHandler: (imageId: string) => void;
 }
-
-const mapStateToProps = (state: State): StateProps => {
-  return {
-    hoveringOverUncheckedIconId:
-      state.selectedAlbumState.hoveringOverUncheckedIconId,
-  };
-};
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   onHoverHandler: (iconId: string) => {
@@ -208,4 +194,4 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Image);
+export default connect(null, mapDispatchToProps)(Image);

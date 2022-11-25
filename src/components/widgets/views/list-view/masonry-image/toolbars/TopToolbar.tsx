@@ -77,12 +77,11 @@ type TopToolbarProps = PassedInProps & StateProps & DispatchProps;
 interface PassedInProps {
   imageId: string;
   imageIsInMultiSelectList: boolean;
-  hoveringOverUncheckedIconId: string;
   toggleHandler: (imageId: string) => void;
 }
 
 interface StateProps {
-  DELETE_ME?: string;
+  hoveringOverUncheckedIconId: string;
 }
 
 interface DispatchProps {
@@ -91,7 +90,10 @@ interface DispatchProps {
 }
 
 const mapStateToProps = (state: State): StateProps => {
-  return {};
+  return {
+    hoveringOverUncheckedIconId:
+      state.selectedAlbumState.hoveringOverUncheckedIconId,
+  };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
