@@ -1,5 +1,4 @@
 import Card from '@mui/material/Card';
-import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
 import { createStyles, makeStyles } from '@mui/styles';
 import React from 'react';
@@ -15,54 +14,40 @@ const useStyles = makeStyles(() =>
       position: 'absolute',
       top: 0,
       height: '100%',
+      paddingBottom: '8px',
+      transition: 'opacity .2s .1s cubic-bezier(.4,0,1,1)',
+    },
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      flexWrap: 'nowrap',
+      justifyContent: 'flex-start',
+      alignItems: 'stretch',
+      alignContent: 'stretch',
+      height: '100%',
+    },
+    skeletonWrapper: {
+      flex: '1 1 auto',
+      display: 'flex',
     },
   })
 );
 
-const getRandomHeight = (n: number): string => {
-  const heights: string[] = ['164px', '118px', '200px', '132px', '178px'];
-  let builtHeight = '156px';
-  for (let x = 0; x < n; x++) {
-    if ((x + 1) % 6 === 0) {
-      builtHeight = heights[4];
-    } else if ((x + 1) % 5 === 0) {
-      builtHeight = heights[2];
-    } else if ((x + 1) % 3 === 0) {
-      builtHeight = heights[1];
-    } else if ((x + 1) % 4 === 0) {
-      builtHeight = heights[3];
-    } else if ((x + 1) % 2 === 0) {
-      builtHeight = heights[0];
-    } else {
-      builtHeight = heights[2];
-    }
-  }
-  return builtHeight;
-};
-
 export default function SkeletonImage(props: Props): JSX.Element {
-  const { index } = props;
   const classes = useStyles();
+  const { displayImage } = props;
 
   return (
-    <Card sx={{ pb: 1 }} square className={classes.root}>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          flexWrap: 'nowrap',
-          justifyContent: 'flex-start',
-          alignItems: 'stretch',
-          alignContent: 'stretch',
-          height: '100%',
-        }}
-      >
-        <div
-          style={{
-            flex: '1 1 auto',
-            display: 'flex',
-          }}
-        >
+    <Card
+      square
+      className={classes.root}
+      sx={{
+        opacity: displayImage ? 0 : 1,
+        zIndex: displayImage ? -1 : 1,
+      }}
+    >
+      <div className={classes.container}>
+        <div className={classes.skeletonWrapper}>
           <Skeleton
             variant="rectangular"
             width={'100%'}
@@ -71,46 +56,13 @@ export default function SkeletonImage(props: Props): JSX.Element {
           />
         </div>
         <div>
-          <Grid
-            item
-            xs={12}
-            container
-            sx={{ mt: 1, px: 1 }}
-            justifyContent="space-between"
-          >
-            <Grid item xs={8}>
-              <Skeleton variant="rectangular" width="100%" height={10} />
-            </Grid>
-            <SkeletonImageToolbar />
-          </Grid>
+          <SkeletonImageToolbar />
         </div>
       </div>
-      <Grid container direction="column" justifyContent="space-between">
-        <Grid item xs={12}>
-          <Skeleton
-            variant="rectangular"
-            width={'100%'}
-            height={'100%'}
-            animation={false}
-          />
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          container
-          sx={{ mt: 1, px: 1 }}
-          justifyContent="space-between"
-        >
-          <Grid item xs={8}>
-            <Skeleton variant="rectangular" width="100%" height={10} />
-          </Grid>
-          <SkeletonImageToolbar />
-        </Grid>
-      </Grid>
     </Card>
   );
 }
 
 interface Props {
-  index: number;
+  displayImage: boolean;
 }
