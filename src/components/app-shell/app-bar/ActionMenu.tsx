@@ -14,13 +14,20 @@ import Tooltip from '@mui/material/Tooltip';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 
 import { State } from '../../../configs/redux/store';
+import { ApplicationActions } from '../../../creators/actions';
 import { openUploadImagesDialog } from '../../../creators/dialogs/upload-images';
 import { displayFavorites } from '../../../creators/selected-album/favorites';
+import { zipAndSaveSelectedAlbumFavorites } from '../../../utils/zip-images';
 
 const ActionMenu = (props: ActionMenuProps): JSX.Element => {
-  const { openUploadDialogHandler, displayFavoritesHandler } = props;
+  const {
+    openUploadDialogHandler,
+    downloadFavoritesHandler,
+    displayFavoritesHandler,
+  } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -65,7 +72,12 @@ const ActionMenu = (props: ActionMenuProps): JSX.Element => {
             </ListItemIcon>
             <ListItemText>{`Show Favorites`}</ListItemText>
           </MenuItem>
-          <MenuItem>
+          <MenuItem
+            onClick={() => {
+              downloadFavoritesHandler();
+              handleClose();
+            }}
+          >
             <ListItemIcon>
               <DownloadIcon />
             </ListItemIcon>
@@ -89,24 +101,13 @@ const ActionMenu = (props: ActionMenuProps): JSX.Element => {
   );
 };
 
-type ActionMenuProps = PassedInProps & StateProps & DispatchProps;
-
-interface PassedInProps {
-  DELETE_ME?: string;
-}
-
-interface StateProps {
-  numberOfFavorites?: number;
-}
+type ActionMenuProps = DispatchProps;
 
 interface DispatchProps {
   displayFavoritesHandler: () => void;
   openUploadDialogHandler: () => void;
+  downloadFavoritesHandler: () => void;
 }
-
-const mapStateToProps = (state: State): StateProps => {
-  return {};
-};
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   displayFavoritesHandler: () => {
@@ -115,6 +116,11 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   openUploadDialogHandler: () => {
     dispatch(openUploadImagesDialog());
   },
+  downloadFavoritesHandler: () => {
+    (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+      zipAndSaveSelectedAlbumFavorites()
+    );
+  },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActionMenu);
+export default connect(null, mapDispatchToProps)(ActionMenu);
