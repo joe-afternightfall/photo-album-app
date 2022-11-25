@@ -14,12 +14,8 @@ import ListViewImageItem from './masonry-image/ListViewImageItem';
 
 const ListView = (props: Props): JSX.Element => {
   const theme = useTheme();
-  const {
-    images,
-    selectedImageIdsForMultiEditing,
-    isInMultiSelectMode,
-    updateSelectedIdsHandler,
-  } = props;
+  const { images, selectedImageIdsForMultiEditing, updateSelectedIdsHandler } =
+    props;
   const isXs = useMediaQuery(theme.breakpoints.down(700));
 
   const [displayFullImage, setDisplayFullImage] = useState({
@@ -43,7 +39,6 @@ const ListView = (props: Props): JSX.Element => {
               key={image.id}
               image={image}
               displayFullImageHandler={setDisplayFullImage}
-              isInMultiSelectMode={isInMultiSelectMode}
               toggleImageFromMultiSelectHandler={toggleImageFromMultiSelect}
               imageIsInMultiSelectList={isIn}
             />
@@ -74,7 +69,6 @@ interface PassedInProps {
 }
 
 interface StateProps {
-  isInMultiSelectMode: boolean;
   selectedImageIdsForMultiEditing: string[];
 }
 
@@ -84,7 +78,6 @@ interface DispatchProps {
 
 const mapStateToProps = (state: State): StateProps => {
   return {
-    isInMultiSelectMode: state.selectedAlbumState.isInMultiSelectMode,
     selectedImageIdsForMultiEditing:
       state.selectedAlbumState.selectedImageIdsForMultiEditing,
   };

@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { ImageVO } from '../../../../../configs/interfaces';
+import { State } from '../../../../../configs/redux/store';
 import { updateHoveringOverIconId } from '../../../../../creators/selected-album/multi-select-mode';
 import SkeletonImage from './SkeletonImage';
 import BottomFavToolbar from './toolbars/BottomFavToolbar';
@@ -164,12 +165,11 @@ const ListViewImageItem = (props: Props): JSX.Element => {
   );
 };
 
-type Props = PassedInProps & DispatchProps;
+type Props = PassedInProps & StateProps & DispatchProps;
 
 interface PassedInProps {
   index: number;
   image: ImageVO;
-  isInMultiSelectMode: boolean;
   imageIsInMultiSelectList: boolean;
   toggleImageFromMultiSelectHandler: (imageId: string) => void;
   displayFullImageHandler: (props: {
@@ -178,6 +178,22 @@ interface PassedInProps {
     index: number;
   }) => void;
 }
+
+interface StateProps {
+  isInMultiSelectMode: boolean;
+}
+
+const mapStateToProps = (state: State, ownProps: PassedInProps): StateProps => {
+  const selectedIds = state.selectedAlbumState.selectedImageIdsForMultiEditing;
+  const isIn = selectedIds.indexOf(ownProps.image.id) !== -1;
+
+  return {
+    // hoveringOverUncheckedIconId:
+    //   state.selectedAlbumState.hoveringOverUncheckedIconId,
+    // imageIsInMultiSelectList: isIn,
+    isInMultiSelectMode: state.selectedAlbumState.isInMultiSelectMode,
+  };
+};
 
 interface DispatchProps {
   onHoverHandler: (imageId: string) => void;
@@ -189,4 +205,4 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
 });
 
-export default connect(null, mapDispatchToProps)(ListViewImageItem);
+export default connect(mapStateToProps, mapDispatchToProps)(ListViewImageItem);
