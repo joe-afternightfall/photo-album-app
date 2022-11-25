@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { AlbumVO, ImageVO } from '../../../configs/interfaces';
 import { State } from '../../../configs/redux/store';
 import { zipImages } from '../../../utils/save-images';
-import UploadImageDialog from '../../widgets/dialogs/upload-image-dialog/UploadImageDialog';
 import ListView from '../../widgets/views/list-view/ListView';
 
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
@@ -54,9 +53,6 @@ const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
               >
                 {'Download Favs'}
               </Button>
-            </Grid>
-            <Grid item>
-              <UploadImageDialog />
             </Grid>
           </Grid>
         </Grid>
