@@ -41,3 +41,4 @@ reportWebVitals();
 // todo: firebase only allow general users to download or view public images
 // todo: hide private albums for public users
 // todo: hide private images for public users
+// todo: bulk editing toolbar delete photos for admin users
