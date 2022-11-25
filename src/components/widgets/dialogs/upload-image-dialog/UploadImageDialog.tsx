@@ -1,4 +1,3 @@
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -13,60 +12,40 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AlbumVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../creators/actions';
+import { closeUploadImagesDialog } from '../../../../creators/dialogs/upload-images';
 import { uploadImageFiles } from '../../../../firebase/services/firebase-images-service';
 import PaperDropzone from '../../../shared/dropzone/DropZone';
 
 const UploadImageDialog = (props: Props): JSX.Element => {
-  const { selectedAlbum, saveHandler } = props;
-  const [open, setOpen] = useState(false);
+  const { open, closeHandler, selectedAlbum, saveHandler } = props;
   const [images, setImages] = useState<File[]>([]);
 
   const handleDropzone = (files: File[]) => {
     setImages(files);
   };
 
-  const openDialog = () => {
-    setOpen(true);
-  };
-
-  const closeDialog = () => {
-    setOpen(false);
-  };
-
   return (
-    <>
-      <Button
-        startIcon={<CloudUploadIcon />}
-        variant="outlined"
-        onClick={openDialog}
-      >
-        {'Upload'}
-      </Button>
-      <Dialog open={open} onClose={closeDialog} maxWidth="sm" fullWidth>
-        <DialogTitle>{'Add Images'}</DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <PaperDropzone
-                dropzoneHandler={handleDropzone}
-                filesLimit={100}
-              />
-            </Grid>
+    <Dialog open={open} onClose={closeHandler} maxWidth="sm" fullWidth>
+      <DialogTitle>{'Add Images'}</DialogTitle>
+      <DialogContent>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <PaperDropzone dropzoneHandler={handleDropzone} filesLimit={100} />
           </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDialog}>{'Cancel'}</Button>
-          <Button
-            onClick={() => {
-              selectedAlbum &&
-                saveHandler(selectedAlbum.id, images, closeDialog);
-            }}
-          >
-            {'Save'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={closeHandler}>{'Cancel'}</Button>
+        <Button
+          onClick={() => {
+            selectedAlbum &&
+              saveHandler(selectedAlbum.id, images, closeHandler);
+          }}
+        >
+          {'Save'}
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
@@ -74,15 +53,18 @@ type Props = StateProps & DispatchProps;
 
 interface StateProps {
   selectedAlbum?: AlbumVO;
+  open: boolean;
 }
 
 interface DispatchProps {
+  closeHandler: () => void;
   saveHandler: (albumId: string, images: File[], cb: () => void) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
   return {
     selectedAlbum: state.selectedAlbumState.currentAlbum,
+    open: state.appDialogState.uploadImageDialog.display,
   };
 };
 
@@ -91,6 +73,9 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
     (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
       uploadImageFiles(albumId, images, cb)
     );
+  },
+  closeHandler: () => {
+    dispatch(closeUploadImagesDialog());
   },
 });
 

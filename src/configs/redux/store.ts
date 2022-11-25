@@ -60,6 +60,9 @@ export const createStore = (history: History): Store => {
       deleteAlbumDialog: {
         display: false,
       },
+      uploadImageDialog: {
+        display: false,
+      },
     } as AppDialogState,
     selectedAlbumState: {
       currentAlbum: undefined,
