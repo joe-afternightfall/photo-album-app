@@ -4,7 +4,7 @@ import ImageListItem from '@mui/material/ImageListItem';
 import { useTheme } from '@mui/material/styles';
 import { makeStyles, createStyles } from '@mui/styles';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -69,6 +69,7 @@ const useStyles = makeStyles(() =>
       transform: 'translateZ(0px) scale3d(0.85, 0.88, 1)',
     },
     image: {
+      height: '100%',
       objectFit: 'contain',
       overflow: 'hidden',
       transition: 'transform .135s cubic-bezier(0,0,.2,1)',
@@ -94,11 +95,18 @@ const Image = (props: Props): JSX.Element => {
 
   const [hoveringOverImageId, setHoveringOverImageId] = useState('');
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [displayImage, setDisplayImage] = useState(false);
 
   const updateAndClear = () => {
     toggleImageFromMultiSelectHandler(image.id);
     onHoverHandler('');
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setDisplayImage(true);
+    }, 350);
+  }, [imageLoaded]);
 
   return (
     <ImageListItem
@@ -125,7 +133,7 @@ const Image = (props: Props): JSX.Element => {
       }}
     >
       {/* todo: handle when in mobile/tablet */}
-      {imageLoaded && (
+      {displayImage && (
         <Fade in={hoveringOverImageId === image.id || isInMultiSelectMode}>
           <div>
             <TopToolbar
@@ -151,15 +159,15 @@ const Image = (props: Props): JSX.Element => {
         alt={image.fileName}
         loading="lazy"
         style={{
-          display: imageLoaded ? 'block' : 'none',
+          display: displayImage ? 'block' : 'none',
         }}
         className={clsx(classes.image, {
           [classes.selectedImage]: imageIsInMultiSelectList,
         })}
       />
 
-      {!imageLoaded && <SkeletonImage index={index} />}
-      {imageLoaded ? (
+      {!displayImage && <SkeletonImage index={index} />}
+      {displayImage ? (
         isInMultiSelectMode ? null : isMd ? (
           hoveringOverImageId === image.id ? (
             <Fade in={hoveringOverImageId === image.id}>

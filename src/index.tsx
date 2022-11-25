@@ -35,3 +35,4 @@ reportWebVitals();
 // todo: general - need app side drawer
 // todo: admin - hide buttons and select menus unless user is admin
 // todo: admin - app side drawer navigation to new users form
+// todo: general - implement grouping photos in albums
