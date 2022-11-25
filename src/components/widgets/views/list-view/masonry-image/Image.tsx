@@ -18,12 +18,12 @@ import TopToolbar from './toolbars/TopToolbar';
 
 const useStyles = makeStyles(() =>
   createStyles({
-    // styles to use later
-    innerWordWrapping: {
-      opacity: 1,
-      transition: 'opacity .2s .1s cubic-bezier(.4,0,1,1)',
-      visibility: 'visible',
+    root: {
+      width: '100%',
+      position: 'relative',
     },
+    pointer: { cursor: 'pointer' },
+    // styles to use later
     innerGroupWrapping: {
       opacity: 1,
       transition: 'opacity .2s .1s cubic-bezier(.4,0,1,1)',
@@ -36,43 +36,32 @@ const useStyles = makeStyles(() =>
       transition: 'opacity .1s 0s cubic-bezier(.4,0,1,1)',
       visibility: 'visible',
     },
-    toolbarWrapping: {
-      opacity: 1,
-      transition: 'opacity .2s .1s cubic-bezier(.4,0,1,1)',
-      visibility: 'visible',
-    },
-    imageListItem: {
-      width: '100%',
-      border: '1px solid black',
-      '&:hover': {
-        cursor: 'pointer',
-      },
-    },
     multiSelectModeImage: {
       backgroundColor: '#121212',
-      // backgroundImage:
-      //   'linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))',
-
       transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
       boxShadow:
         '0px 6px 6px -3px rgb(0 0 0 / 20%), 0px 10px 14px 1px rgb(0 0 0 / 14%), 0px 4px 18px 3px rgb(0 0 0 / 12%)',
       backgroundImage:
         'linear-gradient(rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.13))',
       zIndex: 1,
-      '&:hover': {
-        cursor: 'pointer',
-      },
+      // '&:hover': {
+      //   cursor: 'pointer',
+      // },
     },
     selectedImage: {
       zIndex: -1,
       position: 'sticky',
       transform: 'translateZ(0px) scale3d(0.85, 0.88, 1)',
+      transition: 'transform .2s .1s cubic-bezier(.4,0,1,1)',
     },
     image: {
       height: '100%',
       objectFit: 'contain',
       overflow: 'hidden',
       transition: 'transform .135s cubic-bezier(0,0,.2,1)',
+    },
+    itemImage: {
+      transition: 'opacity .2s .1s cubic-bezier(.4,0,1,1)',
     },
   })
 );
@@ -117,11 +106,10 @@ const Image = (props: Props): JSX.Element => {
         setHoveringOverImageId('');
       }}
       key={image.id}
-      className={
-        isInMultiSelectMode
-          ? classes.multiSelectModeImage
-          : classes.imageListItem
-      }
+      className={clsx(classes.root, {
+        [classes.pointer]: displayImage,
+        [classes.multiSelectModeImage]: isInMultiSelectMode,
+      })}
       onClick={() => {
         isInMultiSelectMode
           ? updateAndClear()
@@ -159,14 +147,16 @@ const Image = (props: Props): JSX.Element => {
         alt={image.fileName}
         loading="lazy"
         style={{
-          display: displayImage ? 'block' : 'none',
+          opacity: displayImage ? 1 : 0,
         }}
         className={clsx(classes.image, {
           [classes.selectedImage]: imageIsInMultiSelectList,
+          [classes.itemImage]: !imageIsInMultiSelectList,
         })}
       />
 
-      {!displayImage && <SkeletonImage index={index} />}
+      <SkeletonImage displayImage={imageLoaded} />
+
       {displayImage ? (
         isInMultiSelectMode ? null : isMd ? (
           hoveringOverImageId === image.id ? (
