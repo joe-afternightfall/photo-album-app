@@ -28,6 +28,9 @@ export default {
           imageFirebaseId: action.imageFirebaseId,
         };
         break;
+      case ActionTypes.TOGGLE_UPLOAD_IMAGES_DIALOG:
+        newState.uploadImageDialog.display = action.open;
+        break;
     }
 
     return newState;
@@ -47,5 +50,8 @@ export interface AppDialogState {
     display: boolean;
     imageId: string;
     imageFirebaseId: string;
+  };
+  uploadImageDialog: {
+    display: boolean;
   };
 }

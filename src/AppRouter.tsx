@@ -10,13 +10,13 @@ import { Store } from 'redux';
 import { Dispatch } from 'redux';
 
 import App from './App';
-import SignInScreen from './components/top-level-components/SignInScreen';
+import SignInScreen from './components/top-level-components/sign-in-screen/SignInScreen';
 import { appRoutes } from './configs/app-settings/app-routes';
 import { getTheme } from './configs/app-settings/theme';
 import { loggedInUser } from './creators/user';
 import { Initializer } from './firebase/Initializer';
 import { AuthContext } from './firebase/auth/AuthContext';
-import { getSignedInUserProfile } from './services/firebase-users-service';
+import { getSignedInUserProfile } from './firebase/services/firebase-users-service';
 
 const AppRouter = (props: AppRouterProps): JSX.Element => {
   const { store, updateLoggedInUserHandler } = props;

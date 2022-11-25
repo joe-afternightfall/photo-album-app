@@ -11,7 +11,7 @@ import { AlbumVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../creators/actions';
 import { closeDeleteAlbumDialog } from '../../../../creators/dialogs/album-info';
-import { deleteAlbum } from '../../../../services/firebase-albums-service';
+import { deleteAlbum } from '../../../../firebase/services/firebase-albums-service';
 import BaseDialog from '../../../shared/dialog/BaseDialog';
 
 const DeleteAlbumDialog = (props: DeleteAlbumDialogProps): JSX.Element => {

@@ -4,12 +4,14 @@ import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { StyledComponentProps } from '@mui/styles';
 import { ComponentType } from 'react';
 
-import DashboardScreen from '../../components/top-level-components/DashboardScreen';
-import SelectedAlbumScreen from '../../components/top-level-components/SelectedAlbumScreen';
+import DashboardScreen from '../../components/top-level-components/dashboard-screen/DashboardScreen';
+import SelectedAlbumScreen from '../../components/top-level-components/selected-album-screen/SelectedAlbumScreen';
+import UserManagementScreen from '../../components/top-level-components/user-management-screen/UserManagementScreen';
 
 export const AppPaths = {
   dashboard: '/',
   selectedAlbum: '/selected-album',
+  manageUsers: '/manage-users',
 };
 
 export interface PageInfoProps {
@@ -34,6 +36,8 @@ export interface AppBreadcrumbs {
 export type AppRouterInfoMap = {
   [key: string]: PageInfoProps;
   DASHBOARD: PageInfoProps;
+  SELECTED_ALBUM: PageInfoProps;
+  USER_MANAGEMENT: PageInfoProps;
 };
 
 export const appRoutes: AppRouterInfoMap = {
@@ -53,6 +57,15 @@ export const appRoutes: AppRouterInfoMap = {
     icon: DashboardIcon,
     adminOnly: false,
     routerComponent: SelectedAlbumScreen,
+    breadCrumbs: [],
+  },
+  USER_MANAGEMENT: {
+    id: 'user-management-screen',
+    path: AppPaths.manageUsers,
+    title: 'User Management',
+    icon: DashboardIcon,
+    adminOnly: true,
+    routerComponent: UserManagementScreen,
     breadCrumbs: [],
   },
 };
