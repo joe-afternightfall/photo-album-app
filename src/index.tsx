@@ -36,3 +36,8 @@ reportWebVitals();
 // todo: admin - hide buttons and select menus unless user is admin
 // todo: admin - app side drawer navigation to new users form
 // todo: general - implement grouping photos in albums
+// todo: selected album screen - implement infinite scrolling on
+// todo: firebase setup dont allow general users to save or write anything
+// todo: firebase only allow general users to download or view public images
+// todo: hide private albums for public users
+// todo: hide private images for public users
