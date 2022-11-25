@@ -42,3 +42,4 @@ reportWebVitals();
 // todo: hide private albums for public users
 // todo: hide private images for public users
 // todo: bulk editing toolbar delete photos for admin users
+// todo: handle loading images on first load its rough, height is 0
