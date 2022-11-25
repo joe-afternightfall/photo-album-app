@@ -125,20 +125,22 @@ const Image = (props: Props): JSX.Element => {
       }}
     >
       {/* todo: handle when in mobile/tablet */}
-      <Fade in={hoveringOverImageId === image.id || isInMultiSelectMode}>
-        <div>
-          <TopToolbar
-            imageId={image.id}
-            imageIsInMultiSelectList={imageIsInMultiSelectList}
-            hoveringOverUncheckedIconId={hoveringOverUncheckedIconId}
-            toggleHandler={toggleImageFromMultiSelectHandler}
-            onHoverHandler={onHoverHandler}
-            setIsInMultiSelectModeClickHandler={
-              setIsInMultiSelectModeClickHandler
-            }
-          />
-        </div>
-      </Fade>
+      {imageLoaded && (
+        <Fade in={hoveringOverImageId === image.id || isInMultiSelectMode}>
+          <div>
+            <TopToolbar
+              imageId={image.id}
+              imageIsInMultiSelectList={imageIsInMultiSelectList}
+              hoveringOverUncheckedIconId={hoveringOverUncheckedIconId}
+              toggleHandler={toggleImageFromMultiSelectHandler}
+              onHoverHandler={onHoverHandler}
+              setIsInMultiSelectModeClickHandler={
+                setIsInMultiSelectModeClickHandler
+              }
+            />
+          </div>
+        </Fade>
+      )}
 
       <img
         id={`image-item-${index}`}
@@ -157,19 +159,21 @@ const Image = (props: Props): JSX.Element => {
       />
 
       {!imageLoaded && <SkeletonImage index={index} />}
-      {isInMultiSelectMode ? null : isMd ? (
-        hoveringOverImageId === image.id ? (
-          <Fade in={hoveringOverImageId === image.id}>
-            <div>
-              <BottomFullToolbar image={image} />
-            </div>
-          </Fade>
+      {imageLoaded ? (
+        isInMultiSelectMode ? null : isMd ? (
+          hoveringOverImageId === image.id ? (
+            <Fade in={hoveringOverImageId === image.id}>
+              <div>
+                <BottomFullToolbar image={image} />
+              </div>
+            </Fade>
+          ) : (
+            <BottomFavToolbar imageId={image.id} />
+          )
         ) : (
-          <BottomFavToolbar imageId={image.id} />
+          <BottomFullToolbar image={image} />
         )
-      ) : (
-        <BottomFullToolbar image={image} />
-      )}
+      ) : null}
     </ImageListItem>
   );
 };
