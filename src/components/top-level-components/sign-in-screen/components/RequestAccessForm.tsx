@@ -1,18 +1,11 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import { makeStyles, createStyles } from '@mui/styles';
 import React, { ChangeEvent, useState } from 'react';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
-import { State } from '../../../../configs/redux/store';
 import { submitRequest } from '../../../../firebase/services/request-access';
 
-const useStyles = makeStyles(() => createStyles({}));
-
-const RequestAccessForm = (props: RequestAccessFormProps): JSX.Element => {
-  const classes = useStyles();
+export default function RequestAccessForm(): JSX.Element {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
@@ -55,26 +48,4 @@ const RequestAccessForm = (props: RequestAccessFormProps): JSX.Element => {
       </Grid>
     </Grid>
   );
-};
-
-type RequestAccessFormProps = PassedInProps & StateProps & DispatchProps;
-
-interface PassedInProps {
-  DELETE_ME?: string;
 }
-
-interface StateProps {
-  DELETE_ME?: string;
-}
-
-interface DispatchProps {
-  DELETE_ME?: string;
-}
-
-const mapStateToProps = (state: State): StateProps => {
-  return {};
-};
-
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
-
-export default connect(mapStateToProps, mapDispatchToProps)(RequestAccessForm);

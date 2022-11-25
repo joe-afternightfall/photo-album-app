@@ -28,9 +28,10 @@ ReactDOM.render(
 reportWebVitals();
 
 // todo: dashboard screen - toolbar buttons need updating
+// todo: selected album screen - handle mobile multi select
+// todo: need to test - how does downloading work for mobile devices / tablets
+// todo: general - need to change saving image strategy / remove albumId from image and update album list of images
+// todo: side drawer - implement logout
 // todo: general - need app side drawer
 // todo: admin - hide buttons and select menus unless user is admin
 // todo: admin - app side drawer navigation to new users form
-// todo: selected album screen - handle mobile multi select
-// todo: how does downloading work for mobile devices / tablets
-// todo: general - need to change saving image strategy / remove albumId from image and update album list of images

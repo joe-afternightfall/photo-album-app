@@ -1,9 +1,6 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { makeStyles, createStyles } from '@mui/styles';
 import React from 'react';
-
-const useStyles = makeStyles(() => createStyles({}));
 
 export default function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;

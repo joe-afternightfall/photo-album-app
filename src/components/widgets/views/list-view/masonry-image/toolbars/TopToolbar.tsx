@@ -3,14 +3,9 @@ import DoneIcon from '@mui/icons-material/Done';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import Avatar from '@mui/material/Avatar';
 import { blue } from '@mui/material/colors';
-import isEmpty from 'is-empty';
 import React from 'react';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
-import { State } from '../../../../../../configs/redux/store';
-
-const TopToolbar = (props: TopToolbarProps): JSX.Element => {
+export default function TopToolbar(props: Props): JSX.Element {
   const {
     imageId,
     onHoverHandler,
@@ -67,11 +62,9 @@ const TopToolbar = (props: TopToolbarProps): JSX.Element => {
       )}
     </div>
   );
-};
+}
 
-type TopToolbarProps = PassedInProps & StateProps & DispatchProps;
-
-interface PassedInProps {
+interface Props {
   imageId: string;
   imageIsInMultiSelectList: boolean;
   // hoveringOverUncheckedIcon: boolean; // todo: try this out as a boolean with isEmpty()
@@ -80,19 +73,3 @@ interface PassedInProps {
   onHoverHandler: (imageId: string) => void;
   setIsInMultiSelectModeClickHandler: () => void;
 }
-
-interface StateProps {
-  DELETE_ME?: string;
-}
-
-interface DispatchProps {
-  DELETE_ME?: string;
-}
-
-const mapStateToProps = (state: State): StateProps => {
-  return {};
-};
-
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
-
-export default connect(mapStateToProps, mapDispatchToProps)(TopToolbar);

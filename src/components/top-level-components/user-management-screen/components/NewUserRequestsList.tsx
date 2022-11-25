@@ -9,21 +9,16 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { makeStyles, createStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 import { AccessRequestVO } from '../../../../configs/interfaces/access-request/AccessRequestVO';
 import { State } from '../../../../configs/redux/store';
 import NewUserDialog from '../../../widgets/dialogs/new-user-dialog/NewUserDialog';
 
-const useStyles = makeStyles(() => createStyles({}));
-
 const NewUsersRequestsList = (
   props: NewUsersRequestsListProps
 ): JSX.Element => {
-  const classes = useStyles();
   const { requests } = props;
   const [open, setOpenDialog] = useState(false);
   const [selectedName, setSelectedName] = useState('');
@@ -79,33 +74,16 @@ const NewUsersRequestsList = (
   );
 };
 
-type NewUsersRequestsListProps = PassedInProps & StateProps & DispatchProps;
-
-interface PassedInProps {
-  DELETE_ME?: string;
-}
+type NewUsersRequestsListProps = StateProps;
 
 interface StateProps {
   requests: AccessRequestVO[];
 }
 
-interface DispatchProps {
-  DELETE_ME?: string;
-}
-
 const mapStateToProps = (state: State): StateProps => {
-  console.log(
-    'state.applicationState.newUserRequests: ' +
-      JSON.stringify(state.applicationState.newUserRequests)
-  );
   return {
     requests: state.applicationState.newUserRequests,
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NewUsersRequestsList);
+export default connect(mapStateToProps)(NewUsersRequestsList);
