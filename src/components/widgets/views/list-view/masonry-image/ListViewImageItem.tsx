@@ -10,7 +10,10 @@ import { Dispatch } from 'redux';
 
 import { ImageVO } from '../../../../../configs/interfaces';
 import { State } from '../../../../../configs/redux/store';
-import { updateHoveringOverIconId } from '../../../../../creators/selected-album/multi-select-mode';
+import {
+  updateHoveringOverIconId,
+  updateMultiSelectIds,
+} from '../../../../../creators/selected-album/multi-select-mode';
 import SkeletonImage from './SkeletonImage';
 import BottomFavToolbar from './toolbars/BottomFavToolbar';
 import BottomFullToolbar from './toolbars/BottomFullToolbar';
@@ -23,19 +26,6 @@ const useStyles = makeStyles(() =>
       position: 'relative',
     },
     pointer: { cursor: 'pointer' },
-    // styles to use later
-    innerGroupWrapping: {
-      opacity: 1,
-      transition: 'opacity .2s .1s cubic-bezier(.4,0,1,1)',
-      visibility: 'visible',
-    },
-    appbarWrapper: {
-      boxShadow:
-        '0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%)',
-      opacity: 1,
-      transition: 'opacity .1s 0s cubic-bezier(.4,0,1,1)',
-      visibility: 'visible',
-    },
     multiSelectModeImage: {
       backgroundColor: '#121212',
       transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
@@ -44,9 +34,6 @@ const useStyles = makeStyles(() =>
       backgroundImage:
         'linear-gradient(rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.13))',
       zIndex: 1,
-      // '&:hover': {
-      //   cursor: 'pointer',
-      // },
     },
     selectedImage: {
       zIndex: -1,
@@ -76,7 +63,7 @@ const ListViewImageItem = (props: Props): JSX.Element => {
     isInMultiSelectMode,
     displayFullImageHandler,
     imageIsInMultiSelectList,
-    toggleImageFromMultiSelectHandler,
+    toggleHandler,
     onHoverHandler,
   } = props;
 
@@ -85,7 +72,7 @@ const ListViewImageItem = (props: Props): JSX.Element => {
   const [displayImage, setDisplayImage] = useState(false);
 
   const updateAndClear = () => {
-    toggleImageFromMultiSelectHandler(image.id);
+    toggleHandler(image.id);
     onHoverHandler('');
   };
 
@@ -170,8 +157,6 @@ type Props = PassedInProps & StateProps & DispatchProps;
 interface PassedInProps {
   index: number;
   image: ImageVO;
-  imageIsInMultiSelectList: boolean;
-  toggleImageFromMultiSelectHandler: (imageId: string) => void;
   displayFullImageHandler: (props: {
     open: boolean;
     downloadURL: string;
@@ -180,6 +165,7 @@ interface PassedInProps {
 }
 
 interface StateProps {
+  imageIsInMultiSelectList: boolean;
   isInMultiSelectMode: boolean;
 }
 
@@ -188,20 +174,22 @@ const mapStateToProps = (state: State, ownProps: PassedInProps): StateProps => {
   const isIn = selectedIds.indexOf(ownProps.image.id) !== -1;
 
   return {
-    // hoveringOverUncheckedIconId:
-    //   state.selectedAlbumState.hoveringOverUncheckedIconId,
-    // imageIsInMultiSelectList: isIn,
     isInMultiSelectMode: state.selectedAlbumState.isInMultiSelectMode,
+    imageIsInMultiSelectList: isIn,
   };
 };
 
 interface DispatchProps {
-  onHoverHandler: (imageId: string) => void;
+  onHoverHandler: (iconId: string) => void;
+  toggleHandler: (imageId: string) => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   onHoverHandler: (iconId: string) => {
     dispatch(updateHoveringOverIconId(iconId));
+  },
+  toggleHandler: (imageId: string) => {
+    dispatch(updateMultiSelectIds(imageId));
   },
 });
 
