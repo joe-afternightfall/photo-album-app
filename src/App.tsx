@@ -37,12 +37,12 @@ function App(props: AppProps) {
   const classes = useStyles();
   return (
     <Box className={classes.root} data-testid="app-shell-wrapper">
+      <AppDialogs />
+      <TopAppBar />
+      <AppSnackbar />
+      <AppLoader />
       <main data-testid="app-main-wrapper">
         <div data-testid="app-header-mixin" className={classes.headerMixin} />
-        <AppDialogs />
-        <TopAppBar />
-        <AppSnackbar />
-        <AppLoader />
         <div>{children}</div>
       </main>
     </Box>
