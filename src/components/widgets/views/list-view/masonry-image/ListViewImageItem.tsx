@@ -75,6 +75,10 @@ const ListViewImageItem = (props: Props): JSX.Element => {
     onHoverHandler('');
   };
 
+  const clearImageHover = () => {
+    setHoveringOverImageId('');
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setDisplayImage(true);
@@ -86,9 +90,7 @@ const ListViewImageItem = (props: Props): JSX.Element => {
       onMouseOver={() => {
         setHoveringOverImageId(image.id);
       }}
-      onMouseLeave={() => {
-        setHoveringOverImageId('');
-      }}
+      onMouseLeave={clearImageHover}
       key={image.id}
       className={clsx(classes.root, {
         [classes.pointer]: displayImage,
@@ -130,14 +132,20 @@ const ListViewImageItem = (props: Props): JSX.Element => {
           hoveringOverImageId === image.id ? (
             <Fade in={hoveringOverImageId === image.id}>
               <div>
-                <BottomFullToolbar image={image} />
+                <BottomFullToolbar
+                  image={image}
+                  clearOnHoverHandler={clearImageHover}
+                />
               </div>
             </Fade>
           ) : (
             <BottomFavToolbar imageId={image.id} />
           )
         ) : (
-          <BottomFullToolbar image={image} />
+          <BottomFullToolbar
+            image={image}
+            clearOnHoverHandler={clearImageHover}
+          />
         )
       ) : null}
     </ImageListItem>

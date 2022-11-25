@@ -23,7 +23,7 @@ const useStyles = makeStyles(() =>
 
 const BottomFullToolbar = (props: Props): JSX.Element => {
   const classes = useStyles();
-  const { image, favoriteImageIds, selectedAlbum } = props;
+  const { image, favoriteImageIds, clearOnHoverHandler, selectedAlbum } = props;
   const [isFav, setIsFav] = useState(false);
 
   useEffect(() => {
@@ -63,6 +63,7 @@ const BottomFullToolbar = (props: Props): JSX.Element => {
                   <SettingsMenu
                     image={image}
                     albumFirebaseId={selectedAlbum.firebaseId}
+                    clearOnHoverHandler={clearOnHoverHandler}
                   />
                 )}
               </Grid>
@@ -78,6 +79,7 @@ type Props = PassedInProps & StateProps;
 
 interface PassedInProps {
   image: ImageVO;
+  clearOnHoverHandler: () => void;
 }
 
 interface StateProps {

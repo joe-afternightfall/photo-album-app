@@ -24,7 +24,12 @@ import { updateAlbumCoverImage } from '../../../../../../firebase/services/fireb
 import AccessTypeRadioGroup from './AccessTypeRadioGroup';
 
 const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
-  const { image, updateCoverImageHandler, openDeleteDialogHandler } = props;
+  const {
+    image,
+    updateCoverImageHandler,
+    clearOnHoverHandler,
+    openDeleteDialogHandler,
+  } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -33,6 +38,7 @@ const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+    clearOnHoverHandler();
   };
 
   return (
@@ -105,6 +111,7 @@ type SettingsMenuProps = PassedInProps & DispatchProps;
 interface PassedInProps {
   albumFirebaseId: string;
   image: ImageVO;
+  clearOnHoverHandler: () => void;
 }
 
 interface StateProps {
