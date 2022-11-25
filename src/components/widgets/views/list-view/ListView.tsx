@@ -10,7 +10,7 @@ import { ImageVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
 import { updateMultiSelectIds } from '../../../../creators/selected-album/multi-select-mode';
 import ListViewLightbox from './lightbox/ListViewLightbox';
-import Image from './masonry-image/Image';
+import ListViewImageItem from './masonry-image/ListViewImageItem';
 
 const ListView = (props: Props): JSX.Element => {
   const theme = useTheme();
@@ -38,7 +38,7 @@ const ListView = (props: Props): JSX.Element => {
         {images.map((image, index) => {
           const isIn = selectedImageIdsForMultiEditing.indexOf(image.id) !== -1;
           return (
-            <Image
+            <ListViewImageItem
               index={index}
               key={image.id}
               image={image}

@@ -65,7 +65,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const Image = (props: Props): JSX.Element => {
+const ListViewImageItem = (props: Props): JSX.Element => {
   const classes = useStyles();
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.up('md'));
@@ -189,4 +189,4 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
 });
 
-export default connect(null, mapDispatchToProps)(Image);
+export default connect(null, mapDispatchToProps)(ListViewImageItem);
