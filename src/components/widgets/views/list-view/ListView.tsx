@@ -12,12 +12,13 @@ export default function ListView(props: Props): JSX.Element {
   const theme = useTheme();
   const { images } = props;
   const isXs = useMediaQuery(theme.breakpoints.down(700));
-
-  const [displayLightbox, setDisplayLightbox] = useState({
+  const defaultDisplay = {
     open: false,
     downloadURL: '',
     index: -1,
-  });
+  };
+
+  const [displayLightbox, setDisplayLightbox] = useState(defaultDisplay);
 
   return (
     <Box>
@@ -44,11 +45,7 @@ export default function ListView(props: Props): JSX.Element {
         images={images}
         selectedIndex={displayLightbox.index}
         closeHandler={() => {
-          setDisplayLightbox({
-            open: false,
-            downloadURL: '',
-            index: -1,
-          });
+          setDisplayLightbox(defaultDisplay);
         }}
       />
     </Box>
