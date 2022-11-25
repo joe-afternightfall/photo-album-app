@@ -1,22 +1,26 @@
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DownloadIcon from '@mui/icons-material/Download';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import StarIcon from '@mui/icons-material/StarRounded';
 import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
 import Tooltip from '@mui/material/Tooltip';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { State } from '../../../configs/redux/store';
+import { openUploadImagesDialog } from '../../../creators/dialogs/upload-images';
 import { displayFavorites } from '../../../creators/selected-album/favorites';
 
 const ActionMenu = (props: ActionMenuProps): JSX.Element => {
-  const { displayFavoritesHandler } = props;
+  const { openUploadDialogHandler, displayFavoritesHandler } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -49,23 +53,37 @@ const ActionMenu = (props: ActionMenuProps): JSX.Element => {
           },
         }}
       >
-        <MenuItem
-          onClick={() => {
-            displayFavoritesHandler();
-            handleClose();
-          }}
-        >
-          <ListItemIcon>
-            <StarIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>{`Show Favorites`}</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <DownloadIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>{'Download Favorites'}</ListItemText>
-        </MenuItem>
+        <MenuList>
+          <MenuItem
+            onClick={() => {
+              displayFavoritesHandler();
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <StarIcon />
+            </ListItemIcon>
+            <ListItemText>{`Show Favorites`}</ListItemText>
+          </MenuItem>
+          <MenuItem>
+            <ListItemIcon>
+              <DownloadIcon />
+            </ListItemIcon>
+            <ListItemText>{'Download Favorites'}</ListItemText>
+          </MenuItem>
+          <Divider />
+          <MenuItem
+            onClick={() => {
+              openUploadDialogHandler();
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <CloudUploadIcon />
+            </ListItemIcon>
+            <ListItemText>{'Upload Images'}</ListItemText>
+          </MenuItem>
+        </MenuList>
       </Menu>
     </React.Fragment>
   );
@@ -83,6 +101,7 @@ interface StateProps {
 
 interface DispatchProps {
   displayFavoritesHandler: () => void;
+  openUploadDialogHandler: () => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -92,6 +111,9 @@ const mapStateToProps = (state: State): StateProps => {
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   displayFavoritesHandler: () => {
     dispatch(displayFavorites());
+  },
+  openUploadDialogHandler: () => {
+    dispatch(openUploadImagesDialog());
   },
 });
 

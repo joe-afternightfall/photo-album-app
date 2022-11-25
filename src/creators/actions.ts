@@ -11,6 +11,7 @@ import {
   ToggleDeleteAlbumDialog,
 } from './dialogs/album-info';
 import { ToggleDeleteImageDialogAction } from './dialogs/delete-image';
+import { ToggleUploadImagesDialogAction } from './dialogs/upload-images';
 import { FilterImagesByAccessTypeAction, LoadImagesAction } from './images';
 import { LoadNewUserRequestsAction } from './new-user-requests';
 import { ToggleFavoritesAction } from './selected-album/favorites';
@@ -44,6 +45,7 @@ export enum ActionTypes {
   TOGGLE_ALBUM_INFO_DIALOG = 'TOGGLE_ALBUM_INFO_DIALOG',
   TOGGLE_DELETE_IMAGE_DIALOG = 'TOGGLE_DELETE_IMAGE_DIALOG',
   TOGGLE_DELETE_ALBUM_DIALOG = 'TOGGLE_DELETE_ALBUM_DIALOG',
+  TOGGLE_UPLOAD_IMAGES_DIALOG = 'TOGGLE_UPLOAD_IMAGES_DIALOG',
 }
 
 export type ApplicationActions =
@@ -64,4 +66,5 @@ export type ApplicationActions =
   | UpdateMultiSelectIdsAction
   | ClearMultiSelectIdsAction
   | UpdateHoveringOverIconIdAction
-  | ToggleFavoritesAction;
+  | ToggleFavoritesAction
+  | ToggleUploadImagesDialogAction;
