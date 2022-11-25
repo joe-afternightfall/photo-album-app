@@ -59,9 +59,8 @@ const ListViewImageItem = (props: Props): JSX.Element => {
   const isMd = useMediaQuery(theme.breakpoints.up('md'));
   const {
     image,
-    index,
     isInMultiSelectMode,
-    displayFullImageHandler,
+    openLightboxHandler,
     imageIsInMultiSelectList,
     toggleHandler,
     onHoverHandler,
@@ -96,13 +95,7 @@ const ListViewImageItem = (props: Props): JSX.Element => {
         [classes.multiSelectModeImage]: isInMultiSelectMode,
       })}
       onClick={() => {
-        isInMultiSelectMode
-          ? updateAndClear()
-          : displayFullImageHandler({
-              open: true,
-              downloadURL: image.downloadURL,
-              index: index,
-            });
+        isInMultiSelectMode ? updateAndClear() : openLightboxHandler();
       }}
     >
       {/* todo: handle when in mobile/tablet */}
@@ -115,7 +108,6 @@ const ListViewImageItem = (props: Props): JSX.Element => {
       )}
 
       <img
-        id={`image-item-${index}`}
         onLoad={() => {
           setImageLoaded(true);
         }}
@@ -155,13 +147,8 @@ const ListViewImageItem = (props: Props): JSX.Element => {
 type Props = PassedInProps & StateProps & DispatchProps;
 
 interface PassedInProps {
-  index: number;
   image: ImageVO;
-  displayFullImageHandler: (props: {
-    open: boolean;
-    downloadURL: string;
-    index: number;
-  }) => void;
+  openLightboxHandler: () => void;
 }
 
 interface StateProps {

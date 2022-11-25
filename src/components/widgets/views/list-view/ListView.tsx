@@ -25,10 +25,15 @@ export default function ListView(props: Props): JSX.Element {
         {images.map((image, index) => {
           return (
             <ListViewImageItem
-              index={index}
               key={image.id}
               image={image}
-              displayFullImageHandler={setDisplayLightbox}
+              openLightboxHandler={() => {
+                setDisplayLightbox({
+                  open: true,
+                  downloadURL: image.downloadURL,
+                  index: index,
+                });
+              }}
             />
           );
         })}
