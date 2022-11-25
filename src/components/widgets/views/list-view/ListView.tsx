@@ -8,10 +8,7 @@ import { Dispatch } from 'redux';
 
 import { ImageVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
-import {
-  toggleMultiSelectMode,
-  updateMultiSelectIds,
-} from '../../../../creators/selected-album/multi-select-mode';
+import { updateMultiSelectIds } from '../../../../creators/selected-album/multi-select-mode';
 import ListViewLightbox from './lightbox/ListViewLightbox';
 import Image from './masonry-image/Image';
 
@@ -22,7 +19,6 @@ const ListView = (props: Props): JSX.Element => {
     selectedImageIdsForMultiEditing,
     isInMultiSelectMode,
     updateSelectedIdsHandler,
-    toggleIsInMultiSelectModeHandler,
   } = props;
   const isXs = useMediaQuery(theme.breakpoints.down(700));
 
@@ -48,9 +44,6 @@ const ListView = (props: Props): JSX.Element => {
               image={image}
               displayFullImageHandler={setDisplayFullImage}
               isInMultiSelectMode={isInMultiSelectMode}
-              setIsInMultiSelectModeClickHandler={() => {
-                toggleIsInMultiSelectModeHandler(true);
-              }}
               toggleImageFromMultiSelectHandler={toggleImageFromMultiSelect}
               imageIsInMultiSelectList={isIn}
             />
@@ -86,7 +79,6 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  toggleIsInMultiSelectModeHandler: (value: boolean) => void;
   updateSelectedIdsHandler: (imageId: string) => void;
 }
 
@@ -99,9 +91,6 @@ const mapStateToProps = (state: State): StateProps => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-  toggleIsInMultiSelectModeHandler: (value: boolean) => {
-    dispatch(toggleMultiSelectMode(value));
-  },
   updateSelectedIdsHandler: (imageId: string) => {
     dispatch(updateMultiSelectIds(imageId));
   },

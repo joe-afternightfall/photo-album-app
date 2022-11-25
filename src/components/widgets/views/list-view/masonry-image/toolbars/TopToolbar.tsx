@@ -8,6 +8,10 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { State } from '../../../../../../configs/redux/store';
+import {
+  toggleMultiSelectMode,
+  updateHoveringOverIconId,
+} from '../../../../../../creators/selected-album/multi-select-mode';
 
 const TopToolbar = (props: TopToolbarProps): JSX.Element => {
   const {
@@ -73,11 +77,8 @@ type TopToolbarProps = PassedInProps & StateProps & DispatchProps;
 interface PassedInProps {
   imageId: string;
   imageIsInMultiSelectList: boolean;
-  // hoveringOverUncheckedIcon: boolean; // todo: try this out as a boolean with isEmpty()
   hoveringOverUncheckedIconId: string;
   toggleHandler: (imageId: string) => void;
-  onHoverHandler: (imageId: string) => void;
-  setIsInMultiSelectModeClickHandler: () => void;
 }
 
 interface StateProps {
@@ -85,13 +86,21 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  DELETE_ME?: string;
+  onHoverHandler: (imageId: string) => void;
+  setIsInMultiSelectModeClickHandler: () => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
   return {};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({});
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+  onHoverHandler: (iconId: string) => {
+    dispatch(updateHoveringOverIconId(iconId));
+  },
+  setIsInMultiSelectModeClickHandler: () => {
+    dispatch(toggleMultiSelectMode(true));
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(TopToolbar);
