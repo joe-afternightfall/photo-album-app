@@ -4,6 +4,9 @@ import Typography from '@mui/material/Typography';
 import { makeStyles, createStyles } from '@mui/styles';
 import clsx from 'clsx';
 import React from 'react';
+import { connect } from 'react-redux';
+
+import { State } from '../../../../../configs/redux/store';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -25,26 +28,51 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export default function ProfileHeader(): JSX.Element {
+const ProfileHeader = (props: Props): JSX.Element => {
   const classes = useStyles();
+  const { email, username } = props;
 
   return (
     <Grid item xs={12} container alignItems={'center'} sx={{ p: 2 }}>
       <Grid item>
         <Avatar className={clsx(classes.avatar)} />
       </Grid>
-      <Grid item sx={{ ml: 1 }}>
+      <Grid item sx={{ ml: 1, maxWidth: '200px' }}>
         <Grid item xs={12}>
           <Typography className={classes.username} variant={'h6'}>
-            {'John Smith'}
+            {username}
           </Typography>
         </Grid>
         <Grid item xs={12}>
           <Typography className={classes.email} color={'textSecondary'}>
-            {'r70bsdrummer@example.com'}
+            {email}
           </Typography>
         </Grid>
       </Grid>
     </Grid>
   );
+};
+
+type Props = StateProps;
+
+interface StateProps {
+  email: string;
+  username: string;
 }
+
+const mapStateToProps = (state: State): StateProps => {
+  const signedInUser = state.applicationState.signedInUser;
+  let username = '';
+  let email = '';
+  if (signedInUser) {
+    username = signedInUser.username;
+    email = signedInUser.email;
+  }
+
+  return {
+    email,
+    username,
+  };
+};
+
+export default connect(mapStateToProps)(ProfileHeader);
