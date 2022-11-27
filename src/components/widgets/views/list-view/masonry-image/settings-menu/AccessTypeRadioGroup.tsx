@@ -1,10 +1,6 @@
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import Grid from '@mui/material/Grid';
-import MenuItem from '@mui/material/MenuItem';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -15,6 +11,7 @@ import { ACCESS_TYPE } from '../../../../../../configs/interfaces/image/ImageDAO
 import { State } from '../../../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../../../creators/actions';
 import { toggleImageAccessType } from '../../../../../../firebase/services/firebase-images-service';
+import RadioGroupMenuItem from './RadioGroupMenuItem';
 
 const AccessTypeRadioGroup = (props: Props): JSX.Element => {
   const { image, toggleAccessTypeHandler } = props;
@@ -29,44 +26,16 @@ const AccessTypeRadioGroup = (props: Props): JSX.Element => {
         {'Access Type'}
       </FormLabel>
       <Grid container>
-        <Grid item>
-          <MenuItem
-            onClick={() => {
-              handleMenuChange(ACCESS_TYPE.PUBLIC);
-            }}
-          >
-            <FormControlLabel
-              value={ACCESS_TYPE.PUBLIC}
-              control={
-                image.accessType === ACCESS_TYPE.PUBLIC ? (
-                  <RadioButtonCheckedIcon sx={{ mr: 1 }} />
-                ) : (
-                  <RadioButtonUncheckedIcon sx={{ mr: 1 }} />
-                )
-              }
-              label="Public"
-            />
-          </MenuItem>
-        </Grid>
-        <Grid item>
-          <MenuItem
-            onClick={() => {
-              handleMenuChange(ACCESS_TYPE.PRIVATE);
-            }}
-          >
-            <FormControlLabel
-              value={ACCESS_TYPE.PRIVATE}
-              control={
-                image.accessType === ACCESS_TYPE.PRIVATE ? (
-                  <RadioButtonCheckedIcon sx={{ mr: 1 }} />
-                ) : (
-                  <RadioButtonUncheckedIcon sx={{ mr: 1 }} />
-                )
-              }
-              label="Private"
-            />
-          </MenuItem>
-        </Grid>
+        <RadioGroupMenuItem
+          changeHandler={handleMenuChange}
+          accessType={ACCESS_TYPE.PUBLIC}
+          imageAccessType={image.accessType}
+        />
+        <RadioGroupMenuItem
+          changeHandler={handleMenuChange}
+          accessType={ACCESS_TYPE.PRIVATE}
+          imageAccessType={image.accessType}
+        />
       </Grid>
     </FormControl>
   );
