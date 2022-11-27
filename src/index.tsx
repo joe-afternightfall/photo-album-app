@@ -27,7 +27,6 @@ ReactDOM.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-// todo: dashboard screen - toolbar buttons need updating
 // todo: selected album screen - handle mobile multi select
 // todo: need to test - how does downloading work for mobile devices / tablets
 // todo: general - need to change saving image strategy / remove albumId from image and update album list of images
@@ -43,3 +42,6 @@ reportWebVitals();
 // todo: hide private images for public users
 // todo: bulk editing toolbar delete photos for admin users
 // todo: handle loading images on first load its rough, height is 0
+// todo: add back delete/edit of album
+// todo: handle ordered image albums
+// todo: add infinite scrolling / loading firebase images as needed while scrolling
