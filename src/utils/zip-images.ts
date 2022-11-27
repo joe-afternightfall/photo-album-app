@@ -17,12 +17,11 @@ export const zipAndSaveSelectedAlbumFavorites =
 
     const signedInUser = state.applicationState.signedInUser;
     const selectedAlbum = state.selectedAlbumState.currentAlbum;
-    const albumImages = state.selectedAlbumState.albumImages;
     const favoriteImages: ImageVO[] = [];
 
-    if (signedInUser && signedInUser.favoriteImageIds.length) {
+    if (selectedAlbum && signedInUser && signedInUser.favoriteImageIds.length) {
       signedInUser.favoriteImageIds.map((favId) => {
-        albumImages.find((image) => {
+        selectedAlbum.images.find((image) => {
           if (image.id === favId) {
             favoriteImages.push(image);
           }

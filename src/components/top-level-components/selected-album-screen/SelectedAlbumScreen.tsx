@@ -7,7 +7,7 @@ import { State } from '../../../configs/redux/store';
 import ListView from '../../widgets/views/list-view/ListView';
 
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
-  const { albumImages, selectedAlbum, displayFavorites, favoriteImages } =
+  const { albumImages, selectedAlbum, favoriteImages, displayFavorites } =
     props;
 
   useEffect(() => {
@@ -33,7 +33,7 @@ interface StateProps {
 const mapStateToProps = (state: State): StateProps => {
   const signedInUser = state.applicationState.signedInUser;
   const selectedAlbum = state.selectedAlbumState.currentAlbum;
-  const albumImages = state.selectedAlbumState.albumImages;
+  const albumImages = state.selectedAlbumState.imagesToDisplay;
   const favoriteImages: ImageVO[] = [];
 
   if (signedInUser && signedInUser.favoriteImageIds.length) {

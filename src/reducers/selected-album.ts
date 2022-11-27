@@ -15,9 +15,8 @@ export default {
     switch (action.type) {
       case ActionTypes.SELECT_ALBUM_TO_VIEW: {
         newState.currentAlbum = action.album;
-        newState.albumImages = filterImagesForAccessType(
+        newState.imagesToDisplay = filterImagesForAccessType(
           newState.currentAlbum,
-          action.images,
           ACCESS_TYPE.ALL
         );
         break;
@@ -25,9 +24,8 @@ export default {
       case ActionTypes.FILTER_IMAGES_BY_ACCESS_TYPE: {
         newState.filterImagesForAccessType = action.accessType;
         if (newState.currentAlbum) {
-          newState.albumImages = filterImagesForAccessType(
+          newState.imagesToDisplay = filterImagesForAccessType(
             newState.currentAlbum,
-            action.images,
             action.accessType
           );
         }
@@ -72,7 +70,7 @@ export default {
 
 export interface SelectedAlbumState {
   currentAlbum?: AlbumVO;
-  albumImages: ImageVO[];
+  imagesToDisplay: ImageVO[];
   filterImagesForAccessType: ACCESS_TYPE;
   isInMultiSelectMode: boolean;
   selectedImageIdsForMultiEditing: string[];

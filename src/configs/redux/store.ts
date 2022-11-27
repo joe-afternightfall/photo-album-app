@@ -69,7 +69,7 @@ export const createStore = (history: History): Store => {
       filterImagesForAccessType: ACCESS_TYPE.ALL,
       isInMultiSelectMode: false,
       selectedImageIdsForMultiEditing: [],
-      albumImages: [],
+      imagesToDisplay: [],
       hoveringOverUncheckedIconId: '',
       displayFavorites: false,
     } as SelectedAlbumState,
