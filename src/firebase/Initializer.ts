@@ -33,6 +33,8 @@ export class Initializer {
         ref: firebase.database().ref(FIREBASE_IMAGES_ROUTE),
         updateMethod: async () => {
           const images = await getAllImages();
+          const albums = await getAllAlbums();
+          this.store.dispatch(loadAlbums(albums));
           this.store.dispatch(loadImages(images));
         },
       },
