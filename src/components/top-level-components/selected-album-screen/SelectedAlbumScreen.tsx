@@ -46,6 +46,14 @@ const mapStateToProps = (state: State): StateProps => {
     });
   }
 
+  if (selectedAlbum && selectedAlbum.imagesShouldBeOrdered) {
+    albumImages.sort((a, b) => {
+      const aFileName = a.fileName.split('.');
+      const bFileName = b.fileName.split('.');
+      return Number(aFileName[0]) - Number(bFileName[0]);
+    });
+  }
+
   return {
     selectedAlbum,
     albumImages,
