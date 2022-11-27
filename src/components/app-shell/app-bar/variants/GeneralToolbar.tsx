@@ -1,27 +1,15 @@
-import MenuIcon from '@mui/icons-material/Menu';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import React from 'react';
 
+import AppSideDrawer from '../../app-side-drawer/AppSideDrawer';
 import UserProfile from '../components/user-profile/UserProfile';
 
 export default function GeneralToolbar(): JSX.Element {
   return (
     <Toolbar>
-      <IconButton
-        color="inherit"
-        edge="start"
-        sx={{
-          mr: 2,
-        }}
-        onClick={() => {
-          console.log('hamburger clicked');
-        }}
-      >
-        <MenuIcon />
-      </IconButton>
+      <AppSideDrawer />
       <Grid
         item
         xs={12}
