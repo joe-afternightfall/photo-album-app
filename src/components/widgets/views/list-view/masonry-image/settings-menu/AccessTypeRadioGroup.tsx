@@ -1,9 +1,10 @@
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
+import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -18,13 +19,6 @@ import { toggleImageAccessType } from '../../../../../../firebase/services/fireb
 const AccessTypeRadioGroup = (props: Props): JSX.Element => {
   const { image, toggleAccessTypeHandler } = props;
 
-  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.stopPropagation();
-    toggleAccessTypeHandler(
-      (event.target as HTMLInputElement).value as unknown as ACCESS_TYPE
-    );
-  };
-
   const handleMenuChange = (accessType: ACCESS_TYPE) => {
     toggleAccessTypeHandler(accessType);
   };
@@ -34,43 +28,46 @@ const AccessTypeRadioGroup = (props: Props): JSX.Element => {
       <FormLabel id="access-type-radio-buttons-group">
         {'Access Type'}
       </FormLabel>
-      <RadioGroup
-        row
-        aria-labelledby="access-type-radio-buttons-group"
-        name="image-access-type-radio-buttons-group"
-        value={image.accessType}
-        onChange={handleRadioChange}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <MenuItem
-          onClick={() => {
-            handleMenuChange(ACCESS_TYPE.PUBLIC);
-          }}
-        >
-          <FormControlLabel
-            value={ACCESS_TYPE.PUBLIC}
-            control={
-              <Radio checked={image.accessType === ACCESS_TYPE.PUBLIC} />
-            }
-            label="Public"
-          />
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            handleMenuChange(ACCESS_TYPE.PRIVATE);
-          }}
-        >
-          <FormControlLabel
-            value={ACCESS_TYPE.PRIVATE}
-            control={
-              <Radio checked={image.accessType === ACCESS_TYPE.PRIVATE} />
-            }
-            label="Private"
-          />
-        </MenuItem>
-      </RadioGroup>
+      <Grid container>
+        <Grid item>
+          <MenuItem
+            onClick={() => {
+              handleMenuChange(ACCESS_TYPE.PUBLIC);
+            }}
+          >
+            <FormControlLabel
+              value={ACCESS_TYPE.PUBLIC}
+              control={
+                image.accessType === ACCESS_TYPE.PUBLIC ? (
+                  <RadioButtonCheckedIcon sx={{ mr: 1 }} />
+                ) : (
+                  <RadioButtonUncheckedIcon sx={{ mr: 1 }} />
+                )
+              }
+              label="Public"
+            />
+          </MenuItem>
+        </Grid>
+        <Grid item>
+          <MenuItem
+            onClick={() => {
+              handleMenuChange(ACCESS_TYPE.PRIVATE);
+            }}
+          >
+            <FormControlLabel
+              value={ACCESS_TYPE.PRIVATE}
+              control={
+                image.accessType === ACCESS_TYPE.PRIVATE ? (
+                  <RadioButtonCheckedIcon sx={{ mr: 1 }} />
+                ) : (
+                  <RadioButtonUncheckedIcon sx={{ mr: 1 }} />
+                )
+              }
+              label="Private"
+            />
+          </MenuItem>
+        </Grid>
+      </Grid>
     </FormControl>
   );
 };
