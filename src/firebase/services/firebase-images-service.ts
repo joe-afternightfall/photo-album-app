@@ -13,6 +13,7 @@ import {
   displaySuccessSnackbar,
 } from '../../creators/app-snackbar';
 import { mapImageSnapToVO } from '../../utils/mapper';
+import { removeImageIdFromAlbum } from './firebase-albums-service';
 import { deleteImageFromStorage } from './firebase-storage-service';
 
 import 'firebase/compat/database';
@@ -51,10 +52,9 @@ export const deleteImage =
           (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
             deleteImageFromStorage(imageId)
           );
-          // todo: update album ids after delete
-          // (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
-          //   deleteImageFromStorage(imageId)
-          // );
+          (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+            removeImageIdFromAlbum()
+          );
         }
       });
   };

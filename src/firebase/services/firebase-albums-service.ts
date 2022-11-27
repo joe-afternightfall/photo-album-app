@@ -1,5 +1,4 @@
 import firebase from 'firebase/compat/app';
-import * as ramda from 'ramda';
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { v4 as uuidv4 } from 'uuid';
@@ -202,42 +201,25 @@ export const addImageIdsToAlbum =
     }
   };
 
-// todo: need to implement
-// export const removeImageIdFromAlbum =
-//   (imageId: string): ThunkAction<void, State, void, ApplicationActions> =>
-//   async (dispatch: Dispatch, getState: () => State): Promise<void> => {
-//     const currentAlbum = getState().selectedAlbumState.currentAlbum;
-//
-//     if (currentAlbum) {
-//       const firebaseId = currentAlbum.firebaseId;
-//       const currentAlbumImageIds: string[] = [];
-//
-//       if (currentAlbum.images.length) {
-//         const clonedImages = ramda.clone(currentAlbum.images);
-//         const foundImage = clonedImages.find((image) => image.id === imageId);
-//
-//         if (foundImage) {
-//           const foundIndex = clonedImages.indexOf(foundImage);
-//           if (foundIndex !== -1) {
-//             clonedImages.splice(foundIndex, 1);
-//           }
-//
-//           clonedImages.map((image) => {
-//             currentAlbumImageIds.push(image.firebaseId);
-//           });
-//         }
-//       }
-//
-//       return await firebase
-//         .database()
-//         .ref(FIREBASE_ALBUMS_ROUTE)
-//         .child(firebaseId)
-//         .update({
-//           imageIds: currentAlbumImageIds,
-//           updated: generateTimestamp(),
-//         });
-//     }
-//   };
+export const removeImageIdFromAlbum =
+  (): ThunkAction<void, State, void, ApplicationActions> =>
+  async (dispatch: Dispatch, getState: () => State): Promise<void> => {
+    const currentAlbum = getState().selectedAlbumState.currentAlbum;
+
+    if (currentAlbum) {
+      if (currentAlbum.images.length) {
+        const firebaseId = currentAlbum.firebaseId;
+        return await firebase
+          .database()
+          .ref(FIREBASE_ALBUMS_ROUTE)
+          .child(firebaseId)
+          .update({
+            imageIds: currentAlbum.images.map((image) => image.firebaseId),
+            updated: generateTimestamp(),
+          });
+      }
+    }
+  };
 
 export const deleteAlbum =
   (
