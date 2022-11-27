@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 
 import { AlbumVO, ImageVO } from '../../../configs/interfaces';
 import { State } from '../../../configs/redux/store';
+import {
+  filterImagesForAccessType,
+  filterImagesForFavorites,
+} from '../../../utils/filter-images';
 import ListView from '../../widgets/views/list-view/ListView';
 
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
@@ -33,21 +37,22 @@ interface StateProps {
 const mapStateToProps = (state: State): StateProps => {
   const signedInUser = state.applicationState.signedInUser;
   const selectedAlbum = state.selectedAlbumState.currentAlbum;
-  const albumImages = state.selectedAlbumState.imagesToDisplay;
-  const favoriteImages: ImageVO[] = [];
+  const accessType = state.selectedAlbumState.filterImagesForAccessType;
+  let favoriteImages: ImageVO[] = [];
 
-  if (signedInUser && signedInUser.favoriteImageIds.length) {
-    signedInUser.favoriteImageIds.map((favId) => {
-      albumImages.find((image) => {
-        if (image.id === favId) {
-          favoriteImages.push(image);
-        }
-      });
-    });
+  if (selectedAlbum) {
+    filterImagesForAccessType(selectedAlbum, accessType);
+  }
+
+  if (signedInUser && signedInUser.favoriteImageIds.length && selectedAlbum) {
+    favoriteImages = filterImagesForFavorites(
+      signedInUser.favoriteImageIds,
+      selectedAlbum.images
+    );
   }
 
   if (selectedAlbum && selectedAlbum.imagesShouldBeOrdered) {
-    albumImages.sort((a, b) => {
+    selectedAlbum.images.sort((a, b) => {
       const aFileName = a.fileName.split('.');
       const bFileName = b.fileName.split('.');
       return Number(aFileName[0]) - Number(bFileName[0]);
@@ -56,7 +61,7 @@ const mapStateToProps = (state: State): StateProps => {
 
   return {
     selectedAlbum,
-    albumImages,
+    albumImages: selectedAlbum ? selectedAlbum.images : [],
     favoriteImages,
     displayFavorites: state.selectedAlbumState.displayFavorites,
   };
