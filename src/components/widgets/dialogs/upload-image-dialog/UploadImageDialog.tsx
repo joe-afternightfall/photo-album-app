@@ -13,7 +13,7 @@ import { AlbumVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../creators/actions';
 import { closeUploadImagesDialog } from '../../../../creators/dialogs/upload-images';
-import { uploadImageFiles } from '../../../../firebase/services/firebase-images-service';
+import { uploadImages } from '../../../../firebase/services/firebase-storage-service';
 import PaperDropzone from '../../../shared/dropzone/DropZone';
 
 const UploadImageDialog = (props: Props): JSX.Element => {
@@ -71,7 +71,7 @@ const mapStateToProps = (state: State): StateProps => {
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   saveHandler: (albumId: string, images: File[], cb: () => void) => {
     (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
-      uploadImageFiles(albumId, images, cb)
+      uploadImages(albumId, images, cb)
     );
   },
   closeHandler: () => {
