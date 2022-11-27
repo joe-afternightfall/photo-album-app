@@ -38,10 +38,11 @@ const mapStateToProps = (state: State): StateProps => {
   const signedInUser = state.applicationState.signedInUser;
   const selectedAlbum = state.selectedAlbumState.currentAlbum;
   const accessType = state.selectedAlbumState.filterImagesForAccessType;
+  let albumImages: ImageVO[] = [];
   let favoriteImages: ImageVO[] = [];
 
   if (selectedAlbum) {
-    filterImagesForAccessType(selectedAlbum, accessType);
+    albumImages = filterImagesForAccessType(selectedAlbum, accessType);
   }
 
   if (signedInUser && signedInUser.favoriteImageIds.length && selectedAlbum) {
@@ -61,7 +62,7 @@ const mapStateToProps = (state: State): StateProps => {
 
   return {
     selectedAlbum,
-    albumImages: selectedAlbum ? selectedAlbum.images : [],
+    albumImages,
     favoriteImages,
     displayFavorites: state.selectedAlbumState.displayFavorites,
   };
