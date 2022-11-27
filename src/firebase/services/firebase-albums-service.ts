@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import 'firebase/compat/database';
 
 import { FIREBASE_ALBUMS_ROUTE } from '../../configs/firebase/firebase-routes';
-import { AlbumDAO, AlbumVO } from '../../configs/interfaces';
+import { AlbumDAO, AlbumVO, ImageVO } from '../../configs/interfaces';
 import { State } from '../../configs/redux/store';
 import { ApplicationActions } from '../../creators/actions';
 import { displayAppLoader, hideAppLoader } from '../../creators/app-loader';
@@ -14,23 +14,36 @@ import {
   displaySuccessSnackbar,
 } from '../../creators/app-snackbar';
 import { generateTimestamp } from '../../utils/timestamp-generator';
+import { getAllImages } from './firebase-images-service';
 
 export const getAllAlbums = async (): Promise<AlbumVO[]> => {
   return await firebase
     .database()
     .ref(FIREBASE_ALBUMS_ROUTE)
     .once('value')
-    .then((snapshot) => {
+    .then(async (snapshot) => {
       const snap = snapshot.val();
       if (snap) {
+        const allImages = await getAllImages();
         return Object.keys(snap).map((key: string): AlbumVO => {
+          const imageIds = snap[key].imageIds as unknown as string[];
+          const albumImages: ImageVO[] = [];
+          imageIds &&
+            imageIds.map((id) => {
+              allImages.map((image) => {
+                if (image.firebaseId === id) {
+                  albumImages.push(image);
+                }
+              });
+            });
+
           return {
             firebaseId: key,
             id: snap[key].id,
             title: snap[key].title,
             subtitle: snap[key].subtitle,
             coverImageDownloadURL: snap[key].coverImageDownloadURL,
-            imageIds: snap[key].imageIds,
+            images: albumImages,
             isPrivateAlbum: snap[key].isPrivateAlbum,
             imagesShouldBeOrdered: snap[key].imagesShouldBeOrdered,
             created: snap[key].created,
@@ -156,6 +169,47 @@ export const updateAlbumCoverImage =
           }
         }
       );
+  };
+
+export const updateAlbumImageIds =
+  (imageIds: string[]): ThunkAction<void, State, void, ApplicationActions> =>
+  async (dispatch: Dispatch, getState: () => State): Promise<void> => {
+    const currentAlbum = getState().selectedAlbumState.currentAlbum;
+
+    if (currentAlbum) {
+      const firebaseId = currentAlbum.firebaseId;
+      const currentAlbumImageIds: string[] = [];
+
+      if (currentAlbum.images.length) {
+        currentAlbum.images.map((image) => {
+          currentAlbumImageIds.push(image.firebaseId);
+        });
+      }
+
+      imageIds.map((id) => {
+        currentAlbumImageIds.push(id);
+      });
+
+      return await firebase
+        .database()
+        .ref(FIREBASE_ALBUMS_ROUTE)
+        .child(firebaseId)
+        .update(
+          {
+            imageIds: currentAlbumImageIds,
+            updated: generateTimestamp(),
+          },
+          (error: Error | null) => {
+            if (error) {
+              dispatch(displayErrorSnackbar('Failed to update album cover'));
+            } else {
+              dispatch(
+                displaySuccessSnackbar('Successfully updated album cover')
+              );
+            }
+          }
+        );
+    }
   };
 
 export const deleteAlbum =
