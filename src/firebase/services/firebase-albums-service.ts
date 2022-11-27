@@ -201,11 +201,9 @@ export const updateAlbumImageIds =
           },
           (error: Error | null) => {
             if (error) {
-              dispatch(displayErrorSnackbar('Failed to update album cover'));
+              dispatch(displayErrorSnackbar('Failed to add images to album'));
             } else {
-              dispatch(
-                displaySuccessSnackbar('Successfully updated album cover')
-              );
+              dispatch(displaySuccessSnackbar('Successfully added new images'));
             }
           }
         );

@@ -41,7 +41,7 @@ export const uploadImageFiles =
     files: File[],
     callback?: () => void
   ): ThunkAction<void, State, void, ApplicationActions> =>
-  async (dispatch: Dispatch, getState: () => State): Promise<void> => {
+  async (dispatch: Dispatch): Promise<void> => {
     dispatch(displayAppLoader());
     const errors: string[] = [];
     const totalFiles = files.length;
@@ -49,14 +49,9 @@ export const uploadImageFiles =
 
     await Promise.all(
       files.map(async (file) => {
-        // const storageRef = firebase.storage().ref(`images/${uuidv4()}/${index}`);
         const imageId = uuidv4();
         const storageRef = firebase.storage().ref(`images/${imageId}`);
-
         await storageRef.put(file);
-        // await storageRef.put(file).on('state_change', (snapshot) => {
-        //   console.log(snapshot.bytesTransferred);
-        // });
 
         const downloadURL = await storageRef.getDownloadURL();
         const timestamp = generateTimestamp();
