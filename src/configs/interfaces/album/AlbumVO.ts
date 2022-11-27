@@ -1,5 +1,7 @@
-import { AlbumDAO } from './AlbumDAO';
+import { ImageVO } from '../image';
+import { BaseAlbum } from './BaseAlbum';
 
-export interface AlbumVO extends AlbumDAO {
+export interface AlbumVO extends BaseAlbum {
   firebaseId: string;
+  images: ImageVO[];
 }
