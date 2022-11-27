@@ -5,16 +5,9 @@ import { ACCESS_TYPE } from '../configs/interfaces/image/ImageDAO';
 
 export const filterImagesForAccessType = (
   album: AlbumVO,
-  images: ImageVO[],
   accessType: ACCESS_TYPE
 ): ImageVO[] => {
-  let albumImages: ImageVO[] = [];
-
-  images.forEach((image) => {
-    if (image.albumId === album.id) {
-      albumImages.push(image);
-    }
-  });
+  let albumImages: ImageVO[] = ramda.clone(album.images);
 
   switch (accessType) {
     case ACCESS_TYPE.UNDEFINED: {
