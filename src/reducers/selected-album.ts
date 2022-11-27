@@ -13,6 +13,17 @@ export default {
     const newState = Object.assign({}, state);
 
     switch (action.type) {
+      case ActionTypes.LOAD_ALBUMS: {
+        if (newState.currentAlbum) {
+          const currentAlbumId = newState.currentAlbum.id;
+          action.albums.find((album) => {
+            if (album.id === currentAlbumId) {
+              newState.currentAlbum = album;
+            }
+          });
+        }
+        break;
+      }
       case ActionTypes.SELECT_ALBUM_TO_VIEW: {
         newState.currentAlbum = action.album;
         newState.imagesToDisplay = filterImagesForAccessType(
@@ -23,12 +34,6 @@ export default {
       }
       case ActionTypes.FILTER_IMAGES_BY_ACCESS_TYPE: {
         newState.filterImagesForAccessType = action.accessType;
-        if (newState.currentAlbum) {
-          newState.imagesToDisplay = filterImagesForAccessType(
-            newState.currentAlbum,
-            action.accessType
-          );
-        }
         break;
       }
       case ActionTypes.TOGGLE_MULTI_SELECT_MODE:
