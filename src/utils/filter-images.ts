@@ -37,3 +37,20 @@ export const filterImagesForAccessType = (
 
   return albumImages;
 };
+
+export const filterImagesForFavorites = (
+  favoriteImageIds: string[],
+  albumImages: ImageVO[]
+): ImageVO[] => {
+  const favoriteImages: ImageVO[] = [];
+
+  favoriteImageIds.map((favId) => {
+    albumImages.find((image) => {
+      if (image.id === favId) {
+        favoriteImages.push(image);
+      }
+    });
+  });
+
+  return favoriteImages;
+};
