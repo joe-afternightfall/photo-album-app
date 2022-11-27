@@ -1,6 +1,6 @@
 import firebase from 'firebase/compat/app';
 import { Dispatch } from 'redux';
-import { ThunkAction } from 'redux-thunk';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { v4 as uuidv4 } from 'uuid';
 
 import { FIREBASE_IMAGES_ROUTE } from '../../configs/firebase/firebase-routes';
@@ -13,7 +13,9 @@ import {
   displayErrorSnackbar,
   displaySuccessSnackbar,
 } from '../../creators/app-snackbar';
+import { mapImageSnapToVO } from '../../utils/mapper';
 import { generateTimestamp } from '../../utils/timestamp-generator';
+import { updateAlbumImageIds } from './firebase-albums-service';
 
 import 'firebase/compat/database';
 import 'firebase/compat/storage';
@@ -26,20 +28,7 @@ export const getAllImages = async (): Promise<ImageVO[]> => {
     .then((snapshot) => {
       const snap = snapshot.val();
       if (snap) {
-        return Object.keys(snap).map((key: string): ImageVO => {
-          return {
-            firebaseId: key,
-            id: snap[key].id,
-            nickname: snap[key].nickname,
-            fileName: snap[key].fileName,
-            tagIds: snap[key].tagIds,
-            downloadURL: snap[key].downloadURL,
-            albumId: snap[key].albumId,
-            accessType: snap[key].accessType,
-            created: snap[key].created,
-            updated: snap[key].updated,
-          };
-        });
+        return mapImageSnapToVO(snap);
       } else {
         return [];
       }
@@ -52,10 +41,11 @@ export const uploadImageFiles =
     files: File[],
     callback?: () => void
   ): ThunkAction<void, State, void, ApplicationActions> =>
-  async (dispatch: Dispatch): Promise<void> => {
+  async (dispatch: Dispatch, getState: () => State): Promise<void> => {
     dispatch(displayAppLoader());
     const errors: string[] = [];
     const totalFiles = files.length;
+    const firebaseImageIdsToAdd: string[] = [];
 
     await Promise.all(
       files.map(async (file) => {
@@ -75,9 +65,7 @@ export const uploadImageFiles =
           id: imageId,
           nickname: '',
           fileName: file.name,
-          tagIds: [],
           downloadURL: downloadURL,
-          albumId: albumId,
           accessType: ACCESS_TYPE.UNDEFINED,
           created: timestamp,
           updated: timestamp,
@@ -86,13 +74,19 @@ export const uploadImageFiles =
         const ref = firebase.database().ref(FIREBASE_IMAGES_ROUTE);
         const newRef = ref.push();
 
+        const firebaseKey = newRef.key;
         return await newRef.set(imageInfo, (e: Error | null) => {
+          firebaseKey && firebaseImageIdsToAdd.push(firebaseKey);
           if (e) {
             console.error('e: ' + JSON.stringify(e));
             errors.push(imageInfo.fileName);
           }
         });
       })
+    );
+
+    (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+      updateAlbumImageIds(firebaseImageIdsToAdd)
     );
 
     callback && callback();
