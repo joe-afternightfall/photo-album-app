@@ -50,6 +50,9 @@ const useStyles = makeStyles(() =>
       transform: 'translateZ(0px) scale3d(0.85, 0.88, 1)',
       transition: 'transform .2s .1s cubic-bezier(.4,0,1,1)',
     },
+    hide: {
+      display: 'none',
+    },
   })
 );
 
@@ -64,6 +67,8 @@ const ListViewImageItem = (props: Props): JSX.Element => {
     toggleHandler,
     onHoverHandler,
     imageIsInMultiSelectList,
+    displayFavorites,
+    imageIsInFavoritesList,
   } = props;
 
   const [hoveringOverImageId, setHoveringOverImageId] = useState('');
@@ -95,6 +100,7 @@ const ListViewImageItem = (props: Props): JSX.Element => {
       className={clsx(classes.root, {
         [classes.pointer]: displayImage,
         [classes.multiSelectModeImage]: isInMultiSelectMode,
+        [classes.hide]: displayFavorites && !imageIsInFavoritesList,
       })}
       onClick={() => {
         isInMultiSelectMode ? updateAndClear() : openLightboxHandler();
@@ -162,15 +168,22 @@ interface PassedInProps {
 interface StateProps {
   isInMultiSelectMode: boolean;
   imageIsInMultiSelectList: boolean;
+  displayFavorites: boolean;
+  imageIsInFavoritesList: boolean;
 }
 
 const mapStateToProps = (state: State, ownProps: PassedInProps): StateProps => {
   const selectedIds = state.selectedAlbumState.selectedImageIdsForMultiEditing;
   const isIn = selectedIds.indexOf(ownProps.image.id) !== -1;
+  const signedInUser = state.applicationState.signedInUser;
 
   return {
     imageIsInMultiSelectList: isIn,
     isInMultiSelectMode: state.selectedAlbumState.isInMultiSelectMode,
+    displayFavorites: state.selectedAlbumState.displayFavorites,
+    imageIsInFavoritesList: signedInUser
+      ? signedInUser.favoriteImageIds.indexOf(ownProps.image.id) !== -1
+      : false,
   };
 };
 

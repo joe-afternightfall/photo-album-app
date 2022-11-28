@@ -1,18 +1,16 @@
 import isEmpty from 'is-empty';
+import * as ramda from 'ramda';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import { AlbumVO, ImageVO } from '../../../configs/interfaces';
 import { State } from '../../../configs/redux/store';
-import {
-  filterImagesForAccessType,
-  filterImagesForFavorites,
-} from '../../../utils/filter-images';
+import { filterImagesForAccessType } from '../../../utils/filter-images';
+import { sortImagesByName } from '../../../utils/sorter';
 import ListView from '../../widgets/views/list-view/ListView';
 
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
-  const { albumImages, selectedAlbum, favoriteImages, displayFavorites } =
-    props;
+  const { albumImages, selectedAlbum } = props;
 
   useEffect(() => {
     if (isEmpty(selectedAlbum)) {
@@ -20,9 +18,7 @@ const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
     }
   }, [selectedAlbum]);
 
-  const imagesToDisplay = displayFavorites ? favoriteImages : albumImages;
-
-  return <ListView images={imagesToDisplay} />;
+  return <ListView images={albumImages} />;
 };
 
 type SelectedAlbumScreenProps = StateProps;
@@ -30,41 +26,26 @@ type SelectedAlbumScreenProps = StateProps;
 interface StateProps {
   selectedAlbum?: AlbumVO;
   albumImages: ImageVO[];
-  favoriteImages: ImageVO[];
-  displayFavorites: boolean;
 }
 
 const mapStateToProps = (state: State): StateProps => {
-  const signedInUser = state.applicationState.signedInUser;
   const selectedAlbum = state.selectedAlbumState.currentAlbum;
   const accessType = state.selectedAlbumState.filterImagesForAccessType;
   let albumImages: ImageVO[] = [];
-  let favoriteImages: ImageVO[] = [];
 
   if (selectedAlbum) {
-    albumImages = filterImagesForAccessType(selectedAlbum, accessType);
-  }
-
-  if (signedInUser && signedInUser.favoriteImageIds.length && selectedAlbum) {
-    favoriteImages = filterImagesForFavorites(
-      signedInUser.favoriteImageIds,
-      selectedAlbum.images
-    );
-  }
-
-  if (selectedAlbum && selectedAlbum.imagesShouldBeOrdered) {
-    selectedAlbum.images.sort((a, b) => {
-      const aFileName = a.fileName.split('.');
-      const bFileName = b.fileName.split('.');
-      return Number(aFileName[0]) - Number(bFileName[0]);
-    });
+    if (selectedAlbum.imagesShouldBeOrdered) {
+      const clonedAlbum = ramda.clone(selectedAlbum);
+      sortImagesByName(clonedAlbum.images);
+      albumImages = filterImagesForAccessType(clonedAlbum, accessType);
+    } else {
+      albumImages = filterImagesForAccessType(selectedAlbum, accessType);
+    }
   }
 
   return {
     selectedAlbum,
     albumImages,
-    favoriteImages,
-    displayFavorites: state.selectedAlbumState.displayFavorites,
   };
 };
 
