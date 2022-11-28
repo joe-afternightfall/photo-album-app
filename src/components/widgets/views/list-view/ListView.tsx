@@ -19,7 +19,7 @@ export default function ListView(props: Props): JSX.Element {
   return (
     <Box sx={{ pt: 3 }}>
       <ResponsiveMasonry>
-        <Masonry>
+        <Masonry gutter="12px">
           {images.map((image, index) => {
             return (
               <ListViewImageItem
