@@ -10,13 +10,9 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
-import { makeStyles, createStyles } from '@mui/styles';
 import React, { useState } from 'react';
 
-const useStyles = makeStyles(() => createStyles({}));
-
-export default function AppSideDrawer(props: AppSideDrawerProps): JSX.Element {
-  const classes = useStyles();
+export default function AppSideDrawer(): JSX.Element {
   const [open, setOpen] = useState(false);
 
   const openDrawer = () => {
@@ -79,8 +75,4 @@ export default function AppSideDrawer(props: AppSideDrawerProps): JSX.Element {
       </Drawer>
     </>
   );
-}
-
-interface AppSideDrawerProps {
-  DELETE_ME?: string;
 }
