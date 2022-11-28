@@ -67,6 +67,7 @@ const ActionMenu = (props: ActionMenuProps): JSX.Element => {
               handleClose();
             }}
           >
+            {/*todo: display number of favorites for user*/}
             <ListItemIcon>
               <StarIcon />
             </ListItemIcon>
@@ -81,6 +82,7 @@ const ActionMenu = (props: ActionMenuProps): JSX.Element => {
             <ListItemIcon>
               <DownloadIcon />
             </ListItemIcon>
+            {/*todo: disable download if no favorites for album*/}
             <ListItemText>{'Download Favorites'}</ListItemText>
           </MenuItem>
           <Divider />
