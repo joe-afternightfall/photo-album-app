@@ -2,6 +2,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
+import Typography from '@mui/material/Typography';
 import { createStyles, makeStyles } from '@mui/styles';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -43,7 +44,14 @@ const BottomFullToolbar = (props: Props): JSX.Element => {
       title={
         <Grid container justifyContent="space-between">
           <Grid item>
-            <FavButton isFav={isFav} imageId={image.id} />
+            <Grid container alignItems="center">
+              <Grid item>
+                <FavButton isFav={isFav} imageId={image.id} />
+              </Grid>
+              <Grid item>
+                <Typography>{image.fileName}</Typography>
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item>
             <Grid container>

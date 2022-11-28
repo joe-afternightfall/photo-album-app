@@ -61,6 +61,7 @@ const ListViewLightbox = (props: ListViewLightboxProps): JSX.Element => {
         view: () => checkForFavoriteImage(),
         entered: () => checkForFavoriteImage(),
       }}
+      carousel={{ finite: true }}
     />
   );
 };
