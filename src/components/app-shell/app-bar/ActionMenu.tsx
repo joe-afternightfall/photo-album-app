@@ -16,8 +16,13 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
+import { AlbumVO } from '../../../configs/interfaces';
 import { State } from '../../../configs/redux/store';
 import { ApplicationActions } from '../../../creators/actions';
+import {
+  openAlbumInfoDialog,
+  openDeleteAlbumDialog,
+} from '../../../creators/dialogs/album-info';
 import { openUploadImagesDialog } from '../../../creators/dialogs/upload-images';
 import { displayFavorites } from '../../../creators/selected-album/favorites';
 import { getNumberOfFavorites } from '../../../utils/string-formatter';
@@ -25,11 +30,16 @@ import { zipAndSaveSelectedAlbumFavorites } from '../../../utils/zip-images';
 
 const ActionMenu = (props: ActionMenuProps): JSX.Element => {
   const {
+    currentAlbum,
+    userIsAdmin,
     numberOfFavorites,
     openUploadDialogHandler,
     downloadFavoritesHandler,
     displayFavoritesHandler,
+    openEditAlbumDialogHandler,
+    openDeleteAlbumDialogHandler,
   } = props;
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -88,17 +98,43 @@ const ActionMenu = (props: ActionMenuProps): JSX.Element => {
             <ListItemText>{'Download Favorites'}</ListItemText>
           </MenuItem>
           <Divider />
-          <MenuItem
-            onClick={() => {
-              openUploadDialogHandler();
-              handleClose();
-            }}
-          >
-            <ListItemIcon>
-              <CloudUploadIcon />
-            </ListItemIcon>
-            <ListItemText>{'Upload Images'}</ListItemText>
-          </MenuItem>
+          {userIsAdmin && (
+            <>
+              <MenuItem
+                onClick={() => {
+                  openUploadDialogHandler();
+                  handleClose();
+                }}
+              >
+                <ListItemIcon>
+                  <CloudUploadIcon />
+                </ListItemIcon>
+                <ListItemText>{'Upload Images'}</ListItemText>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  currentAlbum && openEditAlbumDialogHandler(currentAlbum);
+                  handleClose();
+                }}
+              >
+                <ListItemIcon>
+                  <CloudUploadIcon />
+                </ListItemIcon>
+                <ListItemText>{'Edit Album'}</ListItemText>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  currentAlbum && openDeleteAlbumDialogHandler(currentAlbum);
+                  handleClose();
+                }}
+              >
+                <ListItemIcon>
+                  <CloudUploadIcon />
+                </ListItemIcon>
+                <ListItemText>{'Delete Album'}</ListItemText>
+              </MenuItem>
+            </>
+          )}
         </MenuList>
       </Menu>
     </React.Fragment>
@@ -107,14 +143,18 @@ const ActionMenu = (props: ActionMenuProps): JSX.Element => {
 
 type ActionMenuProps = StateProps & DispatchProps;
 
+interface StateProps {
+  numberOfFavorites: number;
+  userIsAdmin: boolean;
+  currentAlbum?: AlbumVO;
+}
+
 interface DispatchProps {
   displayFavoritesHandler: () => void;
   openUploadDialogHandler: () => void;
   downloadFavoritesHandler: () => void;
-}
-
-interface StateProps {
-  numberOfFavorites: number;
+  openEditAlbumDialogHandler: (currentAlbum: AlbumVO) => void;
+  openDeleteAlbumDialogHandler: (currentAlbum: AlbumVO) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -128,7 +168,9 @@ const mapStateToProps = (state: State): StateProps => {
   }
 
   return {
+    currentAlbum,
     numberOfFavorites,
+    userIsAdmin: state.applicationState.userIsAdmin,
   };
 };
 
@@ -143,6 +185,12 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
     (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
       zipAndSaveSelectedAlbumFavorites()
     );
+  },
+  openEditAlbumDialogHandler: (currentAlbum: AlbumVO) => {
+    dispatch(openAlbumInfoDialog(currentAlbum));
+  },
+  openDeleteAlbumDialogHandler: (currentAlbum: AlbumVO) => {
+    dispatch(openDeleteAlbumDialog(currentAlbum));
   },
 });
 
