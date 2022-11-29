@@ -38,8 +38,8 @@ const AlbumInfoDialog = (props: NewAlbumDialogProps): JSX.Element => {
     return {
       title: album ? album.title : '',
       subtitle: album ? album.subtitle : '',
-      isPrivateAlbum: true,
-      imagesShouldBeOrdered: false,
+      isPrivateAlbum: album ? album.isPrivateAlbum : true,
+      imagesShouldBeOrdered: album ? album.imagesShouldBeOrdered : false,
     };
   };
 
