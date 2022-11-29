@@ -13,13 +13,14 @@ import App from './App';
 import SignInScreen from './components/top-level-components/sign-in-screen/SignInScreen';
 import { appRoutes } from './configs/app-settings/app-routes';
 import { getTheme } from './configs/app-settings/theme';
+import { State } from './configs/redux/store';
 import { loggedInUser } from './creators/user';
 import { Initializer } from './firebase/Initializer';
 import { AuthContext } from './firebase/auth/AuthContext';
 import { getSignedInUserProfile } from './firebase/services/firebase-users-service';
 
 const AppRouter = (props: AppRouterProps): JSX.Element => {
-  const { store, updateLoggedInUserHandler } = props;
+  const { store, userIsAdmin, updateLoggedInUserHandler } = props;
   const user = useContext(AuthContext);
 
   useEffect(() => {
@@ -40,10 +41,10 @@ const AppRouter = (props: AppRouterProps): JSX.Element => {
               {Object.keys(appRoutes).map((name: string, index: number) => {
                 const route = appRoutes[name];
 
-                // if (route.adminOnly && !userHasAdminPrivileges) {
-                //   // if user isn't an admin, return without rendering
-                //   return;
-                // }
+                if (route.adminOnly && !userIsAdmin) {
+                  // if user isn't an admin, return without rendering
+                  return;
+                }
 
                 return (
                   <Route
@@ -64,15 +65,25 @@ const AppRouter = (props: AppRouterProps): JSX.Element => {
   );
 };
 
-type AppRouterProps = PassedInProps & DispatchProps;
+type AppRouterProps = PassedInProps & StateProps & DispatchProps;
 
 interface PassedInProps {
   store: Store;
 }
 
+interface StateProps {
+  userIsAdmin: boolean;
+}
+
 interface DispatchProps {
   updateLoggedInUserHandler: () => void;
 }
+
+const mapStateToProps = (state: State): StateProps => {
+  return {
+    userIsAdmin: state.applicationState.userIsAdmin,
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   updateLoggedInUserHandler: async () => {
@@ -81,4 +92,4 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
 });
 
-export default connect(null, mapDispatchToProps)(AppRouter);
+export default connect(mapStateToProps, mapDispatchToProps)(AppRouter);

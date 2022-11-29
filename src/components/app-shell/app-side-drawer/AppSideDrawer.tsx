@@ -1,6 +1,6 @@
-import MailIcon from '@mui/icons-material/Mail';
+import CollectionsIcon from '@mui/icons-material/Collections';
+import GroupIcon from '@mui/icons-material/Group';
 import MenuIcon from '@mui/icons-material/Menu';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
@@ -10,9 +10,16 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
+import { routerActions } from 'connected-react-router';
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
-export default function AppSideDrawer(): JSX.Element {
+import { AppPaths } from '../../../configs/app-settings/app-routes';
+import { State } from '../../../configs/redux/store';
+
+const AppSideDrawer = (props: AppSideDrawerProps): JSX.Element => {
+  const { userIsAdmin, routeToUsersHandler, routeToAllAlbumsHandler } = props;
   const [open, setOpen] = useState(false);
 
   const openDrawer = () => {
@@ -47,32 +54,65 @@ export default function AppSideDrawer(): JSX.Element {
           <Toolbar />
           <Divider />
           <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => {
+                  closeDrawer();
+                  routeToAllAlbumsHandler();
+                }}
+              >
+                <ListItemIcon>
+                  <CollectionsIcon />
+                </ListItemIcon>
+                <ListItemText primary="All Albums" />
+              </ListItemButton>
+            </ListItem>
+            {userIsAdmin && (
+              <ListItem disablePadding>
+                <ListItemButton
+                  onClick={() => {
+                    closeDrawer();
+                    routeToUsersHandler();
+                  }}
+                >
                   <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    <GroupIcon />
                   </ListItemIcon>
-                  <ListItemText primary={text} />
+                  <ListItemText primary="User Management" />
                 </ListItemButton>
               </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
+            )}
           </List>
         </div>
       </Drawer>
     </>
   );
+};
+
+type AppSideDrawerProps = StateProps & DispatchProps;
+
+interface StateProps {
+  userIsAdmin: boolean;
 }
+
+interface DispatchProps {
+  routeToAllAlbumsHandler: () => void;
+  routeToUsersHandler: () => void;
+}
+
+const mapStateToProps = (state: State): StateProps => {
+  return {
+    userIsAdmin: state.applicationState.userIsAdmin,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+  routeToAllAlbumsHandler: () => {
+    dispatch(routerActions.push(AppPaths.dashboard));
+  },
+  routeToUsersHandler: () => {
+    dispatch(routerActions.push(AppPaths.manageUsers));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppSideDrawer);

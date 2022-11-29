@@ -36,7 +36,6 @@ reportWebVitals();
 // todo: selected album screen - fix infinite scrolling on
 // todo: hide private albums for public users
 // todo: hide private images for public users
-// todo: add back delete/edit of album
 // todo: get multi-delete working for admins
 // todo: display images with no album
 
