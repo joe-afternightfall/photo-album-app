@@ -30,7 +30,7 @@ import { displayFavorites } from '../../../creators/selected-album/favorites';
 import { getNumberOfFavorites } from '../../../utils/string-formatter';
 import { zipAndSaveSelectedAlbumFavorites } from '../../../utils/zip-images';
 
-const ActionMenu = (props: ActionMenuProps): JSX.Element => {
+const AlbumActionMenu = (props: Props): JSX.Element => {
   const {
     currentAlbum,
     userIsAdmin,
@@ -143,7 +143,7 @@ const ActionMenu = (props: ActionMenuProps): JSX.Element => {
   );
 };
 
-type ActionMenuProps = StateProps & DispatchProps;
+type Props = StateProps & DispatchProps;
 
 interface StateProps {
   numberOfFavorites: number;
@@ -196,4 +196,4 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActionMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(AlbumActionMenu);

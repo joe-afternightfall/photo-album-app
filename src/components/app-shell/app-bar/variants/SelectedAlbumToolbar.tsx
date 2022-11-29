@@ -10,12 +10,10 @@ import { Dispatch } from 'redux';
 
 import { AppPaths } from '../../../../configs/app-settings/app-routes';
 import { State } from '../../../../configs/redux/store';
-import ActionMenu from '../ActionMenu';
+import AlbumActionMenu from '../AlbumActionMenu';
 import ImageAccessTypeSelectMenu from '../components/ImageAccessTypeSelectMenu';
 
-const SelectedAlbumToolbar = (
-  props: SelectedAlbumToolbarProps
-): JSX.Element => {
+const SelectedAlbumToolbar = (props: Props): JSX.Element => {
   const { title, goBackHandler, userIsAdmin } = props;
 
   return (
@@ -50,7 +48,7 @@ const SelectedAlbumToolbar = (
               </Grid>
             )}
             <Grid item>
-              <ActionMenu />
+              <AlbumActionMenu />
             </Grid>
           </Grid>
         </Grid>
@@ -59,7 +57,7 @@ const SelectedAlbumToolbar = (
   );
 };
 
-type SelectedAlbumToolbarProps = StateProps & DispatchProps;
+type Props = StateProps & DispatchProps;
 
 interface StateProps {
   userIsAdmin: boolean;
