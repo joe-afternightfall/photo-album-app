@@ -38,6 +38,7 @@ reportWebVitals();
 // todo: hide private images for public users
 // todo: add back delete/edit of album
 // todo: get multi-delete working for admins
+// todo: display images with no album
 
 // ******* LATER_TODOS *******
 // todo: need to test - how does downloading work for mobile devices / tablets
