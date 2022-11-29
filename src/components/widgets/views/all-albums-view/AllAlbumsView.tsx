@@ -18,18 +18,21 @@ import { selectAlbumToView } from '../../../../creators/albums';
 import { openAlbumInfoDialog } from '../../../../creators/dialogs/album-info';
 
 const AllAlbumsView = (props: AllAlbumsViewProps): JSX.Element => {
-  const { albums, images, selectAlbumHandler, openDialogHandler } = props;
+  const { albums, images, userIsAdmin, selectAlbumHandler, openDialogHandler } =
+    props;
 
   return (
     <Grid container spacing={2} alignItems="center" justifyContent="center">
       <Grid item xs={12} container justifyContent="flex-end" sx={{ mt: 2 }}>
-        <Button
-          onClick={openDialogHandler}
-          startIcon={<AddIcon />}
-          variant="outlined"
-        >
-          {'New Album'}
-        </Button>
+        {userIsAdmin && (
+          <Button
+            onClick={openDialogHandler}
+            startIcon={<AddIcon />}
+            variant="outlined"
+          >
+            {'New Album'}
+          </Button>
+        )}
       </Grid>
       {albums.map((album) => (
         <Grid key={album.id} item xs={10} sm={6} md={4} lg={3}>
@@ -66,6 +69,7 @@ type AllAlbumsViewProps = StateProps & DispatchProps;
 interface StateProps {
   albums: AlbumVO[];
   images: ImageVO[];
+  userIsAdmin: boolean;
 }
 
 interface DispatchProps {
@@ -77,6 +81,7 @@ const mapStateToProps = (state: State): StateProps => {
   return {
     albums: state.applicationState.albums,
     images: state.applicationState.images,
+    userIsAdmin: state.applicationState.userIsAdmin,
   };
 };
 
