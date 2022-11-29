@@ -1,7 +1,4 @@
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
-import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import StarIcon from '@mui/icons-material/StarRounded';
 import Box from '@mui/material/Box';
@@ -21,25 +18,18 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AlbumVO } from '../../../../../configs/interfaces';
 import { State } from '../../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../../creators/actions';
-import {
-  openAlbumInfoDialog,
-  openDeleteAlbumDialog,
-} from '../../../../../creators/dialogs/album-info';
-import { openUploadImagesDialog } from '../../../../../creators/dialogs/upload-images';
 import { displayFavorites } from '../../../../../creators/selected-album/favorites';
 import { getNumberOfFavorites } from '../../../../../utils/string-formatter';
 import { zipAndSaveSelectedAlbumFavorites } from '../../../../../utils/zip-images';
+import AdminMenuItems from './AdminMenuItems';
 
 const AlbumActionMenu = (props: Props): JSX.Element => {
   const {
     currentAlbum,
     userIsAdmin,
     numberOfFavorites,
-    openUploadDialogHandler,
     downloadFavoritesHandler,
     displayFavoritesHandler,
-    openEditAlbumDialogHandler,
-    openDeleteAlbumDialogHandler,
   } = props;
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -100,42 +90,11 @@ const AlbumActionMenu = (props: Props): JSX.Element => {
             <ListItemText>{'Download Favorites'}</ListItemText>
           </MenuItem>
           <Divider />
-          {userIsAdmin && (
-            <>
-              <MenuItem
-                onClick={() => {
-                  openUploadDialogHandler();
-                  handleClose();
-                }}
-              >
-                <ListItemIcon>
-                  <CloudUploadIcon />
-                </ListItemIcon>
-                <ListItemText>{'Upload Images'}</ListItemText>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  currentAlbum && openEditAlbumDialogHandler(currentAlbum);
-                  handleClose();
-                }}
-              >
-                <ListItemIcon>
-                  <EditIcon />
-                </ListItemIcon>
-                <ListItemText>{'Edit'}</ListItemText>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  currentAlbum && openDeleteAlbumDialogHandler(currentAlbum);
-                  handleClose();
-                }}
-              >
-                <ListItemIcon>
-                  <DeleteIcon />
-                </ListItemIcon>
-                <ListItemText>{'Delete'}</ListItemText>
-              </MenuItem>
-            </>
+          {userIsAdmin && currentAlbum && (
+            <AdminMenuItems
+              currentAlbum={currentAlbum}
+              closeHandler={handleClose}
+            />
           )}
         </MenuList>
       </Menu>
@@ -153,10 +112,7 @@ interface StateProps {
 
 interface DispatchProps {
   displayFavoritesHandler: () => void;
-  openUploadDialogHandler: () => void;
   downloadFavoritesHandler: () => void;
-  openEditAlbumDialogHandler: (currentAlbum: AlbumVO) => void;
-  openDeleteAlbumDialogHandler: (currentAlbum: AlbumVO) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -180,19 +136,10 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   displayFavoritesHandler: () => {
     dispatch(displayFavorites());
   },
-  openUploadDialogHandler: () => {
-    dispatch(openUploadImagesDialog());
-  },
   downloadFavoritesHandler: () => {
     (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
       zipAndSaveSelectedAlbumFavorites()
     );
-  },
-  openEditAlbumDialogHandler: (currentAlbum: AlbumVO) => {
-    dispatch(openAlbumInfoDialog(currentAlbum));
-  },
-  openDeleteAlbumDialogHandler: (currentAlbum: AlbumVO) => {
-    dispatch(openDeleteAlbumDialog(currentAlbum));
   },
 });
 
