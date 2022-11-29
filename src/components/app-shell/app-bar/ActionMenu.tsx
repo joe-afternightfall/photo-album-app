@@ -20,10 +20,12 @@ import { State } from '../../../configs/redux/store';
 import { ApplicationActions } from '../../../creators/actions';
 import { openUploadImagesDialog } from '../../../creators/dialogs/upload-images';
 import { displayFavorites } from '../../../creators/selected-album/favorites';
+import { getNumberOfFavorites } from '../../../utils/string-formatter';
 import { zipAndSaveSelectedAlbumFavorites } from '../../../utils/zip-images';
 
 const ActionMenu = (props: ActionMenuProps): JSX.Element => {
   const {
+    numberOfFavorites,
     openUploadDialogHandler,
     downloadFavoritesHandler,
     displayFavoritesHandler,
@@ -66,23 +68,23 @@ const ActionMenu = (props: ActionMenuProps): JSX.Element => {
               displayFavoritesHandler();
               handleClose();
             }}
+            disabled={numberOfFavorites === 0}
           >
-            {/*todo: display number of favorites for user*/}
             <ListItemIcon>
               <StarIcon />
             </ListItemIcon>
-            <ListItemText>{`Show Favorites`}</ListItemText>
+            <ListItemText>{`Show Favorites  (${numberOfFavorites})`}</ListItemText>
           </MenuItem>
           <MenuItem
             onClick={() => {
               downloadFavoritesHandler();
               handleClose();
             }}
+            disabled={numberOfFavorites === 0}
           >
             <ListItemIcon>
               <DownloadIcon />
             </ListItemIcon>
-            {/*todo: disable download if no favorites for album*/}
             <ListItemText>{'Download Favorites'}</ListItemText>
           </MenuItem>
           <Divider />
@@ -103,13 +105,32 @@ const ActionMenu = (props: ActionMenuProps): JSX.Element => {
   );
 };
 
-type ActionMenuProps = DispatchProps;
+type ActionMenuProps = StateProps & DispatchProps;
 
 interface DispatchProps {
   displayFavoritesHandler: () => void;
   openUploadDialogHandler: () => void;
   downloadFavoritesHandler: () => void;
 }
+
+interface StateProps {
+  numberOfFavorites: number;
+}
+
+const mapStateToProps = (state: State): StateProps => {
+  const signedInUser = state.applicationState.signedInUser;
+  const currentAlbum = state.selectedAlbumState.currentAlbum;
+  let numberOfFavorites = 0;
+
+  if (signedInUser && currentAlbum) {
+    const favoriteImageIds = signedInUser.favoriteImageIds;
+    numberOfFavorites = getNumberOfFavorites(currentAlbum, favoriteImageIds);
+  }
+
+  return {
+    numberOfFavorites,
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   displayFavoritesHandler: () => {
@@ -125,4 +146,4 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
 });
 
-export default connect(null, mapDispatchToProps)(ActionMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(ActionMenu);

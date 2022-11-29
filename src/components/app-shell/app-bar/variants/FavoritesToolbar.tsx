@@ -14,10 +14,12 @@ import { ThunkDispatch } from 'redux-thunk';
 import { State } from '../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../creators/actions';
 import { clearFavorites } from '../../../../creators/selected-album/favorites';
+import { getNumberOfFavorites } from '../../../../utils/string-formatter';
 import { zipAndSaveSelectedAlbumFavorites } from '../../../../utils/zip-images';
 
 const FavoritesToolbar = (props: FavoritesToolbarProps): JSX.Element => {
-  const { clearFavoritesHandler, downloadFavoritesHandler } = props;
+  const { numberOfFavorites, clearFavoritesHandler, downloadFavoritesHandler } =
+    props;
 
   return (
     <Toolbar>
@@ -46,7 +48,7 @@ const FavoritesToolbar = (props: FavoritesToolbarProps): JSX.Element => {
             component="div"
             data-testid="app-bar-title"
           >
-            {'Favorites'}
+            {`Favorites (${numberOfFavorites})`}
           </Typography>
         </Grid>
         <Grid item>
@@ -76,12 +78,31 @@ const FavoritesToolbar = (props: FavoritesToolbarProps): JSX.Element => {
   );
 };
 
-type FavoritesToolbarProps = DispatchProps;
+type FavoritesToolbarProps = StateProps & DispatchProps;
 
 interface DispatchProps {
   clearFavoritesHandler: () => void;
   downloadFavoritesHandler: () => void;
 }
+
+interface StateProps {
+  numberOfFavorites: number;
+}
+
+const mapStateToProps = (state: State): StateProps => {
+  const signedInUser = state.applicationState.signedInUser;
+  const currentAlbum = state.selectedAlbumState.currentAlbum;
+  let numberOfFavorites = 0;
+
+  if (signedInUser && currentAlbum) {
+    const favoriteImageIds = signedInUser.favoriteImageIds;
+    numberOfFavorites = getNumberOfFavorites(currentAlbum, favoriteImageIds);
+  }
+
+  return {
+    numberOfFavorites,
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   clearFavoritesHandler: () => {
@@ -94,4 +115,4 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
 });
 
-export default connect(null, mapDispatchToProps)(FavoritesToolbar);
+export default connect(mapStateToProps, mapDispatchToProps)(FavoritesToolbar);
