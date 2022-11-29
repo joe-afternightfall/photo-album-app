@@ -2,11 +2,13 @@ import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { routerActions } from 'connected-react-router';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
+import { AppPaths } from '../../../../configs/app-settings/app-routes';
 import { AlbumVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../creators/actions';
@@ -15,7 +17,8 @@ import { deleteAlbum } from '../../../../firebase/services/firebase-albums-servi
 import BaseDialog from '../../../shared/dialog/BaseDialog';
 
 const DeleteAlbumDialog = (props: DeleteAlbumDialogProps): JSX.Element => {
-  const { open, album, closeDialogHandler, deleteHandler } = props;
+  const { open, album, closeDialogHandler, routeToHandler, deleteHandler } =
+    props;
 
   return (
     <BaseDialog
@@ -41,7 +44,11 @@ const DeleteAlbumDialog = (props: DeleteAlbumDialogProps): JSX.Element => {
           <Button onClick={closeDialogHandler}>{'Cancel'}</Button>
           <Button
             onClick={() => {
-              album && deleteHandler(album.firebaseId, closeDialogHandler);
+              album &&
+                deleteHandler(album.firebaseId, () => {
+                  closeDialogHandler();
+                  routeToHandler();
+                });
             }}
           >
             {'Delete'}
@@ -61,6 +68,7 @@ interface StateProps {
 
 interface DispatchProps {
   closeDialogHandler: () => void;
+  routeToHandler: () => void;
   deleteHandler: (firebaseId: string, cb: () => void) => void;
 }
 
@@ -74,6 +82,9 @@ const mapStateToProps = (state: State): StateProps => {
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   closeDialogHandler: () => {
     dispatch(closeDeleteAlbumDialog());
+  },
+  routeToHandler: () => {
+    dispatch(routerActions.push(AppPaths.dashboard));
   },
   deleteHandler: (firebaseId: string, cb: () => void) => {
     (dispatch as ThunkDispatch<State, void, ApplicationActions>)(

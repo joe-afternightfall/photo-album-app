@@ -1,5 +1,7 @@
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
+import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import StarIcon from '@mui/icons-material/StarRounded';
 import Box from '@mui/material/Box';
@@ -118,9 +120,9 @@ const ActionMenu = (props: ActionMenuProps): JSX.Element => {
                 }}
               >
                 <ListItemIcon>
-                  <CloudUploadIcon />
+                  <EditIcon />
                 </ListItemIcon>
-                <ListItemText>{'Edit Album'}</ListItemText>
+                <ListItemText>{'Edit'}</ListItemText>
               </MenuItem>
               <MenuItem
                 onClick={() => {
@@ -129,9 +131,9 @@ const ActionMenu = (props: ActionMenuProps): JSX.Element => {
                 }}
               >
                 <ListItemIcon>
-                  <CloudUploadIcon />
+                  <DeleteIcon />
                 </ListItemIcon>
-                <ListItemText>{'Delete Album'}</ListItemText>
+                <ListItemText>{'Delete'}</ListItemText>
               </MenuItem>
             </>
           )}
