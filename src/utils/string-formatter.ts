@@ -1,3 +1,5 @@
+import { AlbumVO } from '../configs/interfaces';
+
 export const getUserInitials = (username: string): string => {
   const stringArray = username.split(' ');
 
@@ -9,4 +11,17 @@ export const getUserInitials = (username: string): string => {
     return firstLetter + secondLetter;
   }
   return '';
+};
+
+export const getNumberOfFavorites = (
+  album: AlbumVO,
+  favs: string[]
+): number => {
+  let numberOfFavorites = 0;
+  album.images.map((image) => {
+    if (favs.indexOf(image.id) !== -1) {
+      numberOfFavorites += 1;
+    }
+  });
+  return numberOfFavorites;
 };
