@@ -10,7 +10,7 @@ import { sortImagesByName } from '../../../utils/sorter';
 import ListView from '../../widgets/views/list-view/ListView';
 
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
-  const { albumImages, selectedAlbum } = props;
+  const { userIsAdmin, albumImages, selectedAlbum } = props;
 
   useEffect(() => {
     if (isEmpty(selectedAlbum)) {
@@ -18,7 +18,7 @@ const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
     }
   }, [selectedAlbum]);
 
-  return <ListView images={albumImages} />;
+  return <ListView images={albumImages} userIsAdmin={userIsAdmin} />;
 };
 
 type SelectedAlbumScreenProps = StateProps;
@@ -26,6 +26,7 @@ type SelectedAlbumScreenProps = StateProps;
 interface StateProps {
   selectedAlbum?: AlbumVO;
   albumImages: ImageVO[];
+  userIsAdmin: boolean;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -46,6 +47,7 @@ const mapStateToProps = (state: State): StateProps => {
   return {
     selectedAlbum,
     albumImages,
+    userIsAdmin: state.applicationState.userIsAdmin,
   };
 };
 

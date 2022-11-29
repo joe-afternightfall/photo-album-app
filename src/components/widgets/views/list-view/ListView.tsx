@@ -7,6 +7,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
 import { ImageVO } from '../../../../configs/interfaces';
+import { ACCESS_TYPE } from '../../../../configs/interfaces/image/ImageDAO';
 import ListViewLightbox from './lightbox/ListViewLightbox';
 import ListViewImageItem from './masonry-image/ListViewImageItem';
 
@@ -18,7 +19,7 @@ const getImages = (images: ImageVO[]): ImageVO[] => {
 };
 
 export default function ListView(props: Props): JSX.Element {
-  const { images } = props;
+  const { images, userIsAdmin } = props;
   const defaultDisplay = {
     open: false,
     downloadURL: '',
@@ -65,6 +66,9 @@ export default function ListView(props: Props): JSX.Element {
         <ResponsiveMasonry>
           <Masonry gutter="12px">
             {localImages.map((image, index) => {
+              if (image.accessType === ACCESS_TYPE.PRIVATE && !userIsAdmin) {
+                return null;
+              }
               return (
                 <ListViewImageItem
                   key={image.id}
@@ -97,4 +101,5 @@ export default function ListView(props: Props): JSX.Element {
 
 interface Props {
   images: ImageVO[];
+  userIsAdmin: boolean;
 }

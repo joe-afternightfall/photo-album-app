@@ -34,32 +34,37 @@ const AllAlbumsView = (props: AllAlbumsViewProps): JSX.Element => {
           </Button>
         )}
       </Grid>
-      {albums.map((album) => (
-        <Grid key={album.id} item xs={10} sm={6} md={4} lg={3}>
-          <Card sx={{ width: '100%' }}>
-            <CardActionArea
-              onClick={() => {
-                selectAlbumHandler(album, images);
-              }}
-            >
-              <CardMedia
-                component="img"
-                height="200"
-                image={album.coverImageDownloadURL}
-                alt={album.title}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {album.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {album.subtitle}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-      ))}
+      {albums.map((album) => {
+        if (album.isPrivateAlbum && !userIsAdmin) {
+          return null;
+        }
+        return (
+          <Grid key={album.id} item xs={10} sm={6} md={4} lg={3}>
+            <Card sx={{ width: '100%' }}>
+              <CardActionArea
+                onClick={() => {
+                  selectAlbumHandler(album, images);
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={album.coverImageDownloadURL}
+                  alt={album.title}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {album.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {album.subtitle}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
+        );
+      })}
     </Grid>
   );
 };
