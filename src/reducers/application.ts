@@ -51,7 +51,6 @@ export default {
 };
 
 export interface ApplicationState {
-  // todo: update loggedInUser on load, flag for admin
   // activePage: PageInfoProps | undefined;
   // loggedInUser: UserDto | undefined;
   newUserRequests: AccessRequestVO[];
