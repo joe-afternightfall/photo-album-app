@@ -6,10 +6,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import { ImageVO } from '../../../../configs/interfaces';
-import { ACCESS_TYPE } from '../../../../configs/interfaces/image/ImageDAO';
-import { State } from '../../../../configs/redux/store';
-import { filterImagesByAccessType } from '../../../../creators/images';
+import { ImageVO } from '../../../../../configs/interfaces';
+import { ACCESS_TYPE } from '../../../../../configs/interfaces/image/ImageDAO';
+import { State } from '../../../../../configs/redux/store';
+import { filterImagesByAccessType } from '../../../../../creators/images';
 
 const ImageAccessTypeSelectMenu = (props: Props): JSX.Element => {
   const { accessType, images, changeHandler } = props;

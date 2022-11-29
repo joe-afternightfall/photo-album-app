@@ -18,17 +18,17 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { AlbumVO } from '../../../configs/interfaces';
-import { State } from '../../../configs/redux/store';
-import { ApplicationActions } from '../../../creators/actions';
+import { AlbumVO } from '../../../../../configs/interfaces';
+import { State } from '../../../../../configs/redux/store';
+import { ApplicationActions } from '../../../../../creators/actions';
 import {
   openAlbumInfoDialog,
   openDeleteAlbumDialog,
-} from '../../../creators/dialogs/album-info';
-import { openUploadImagesDialog } from '../../../creators/dialogs/upload-images';
-import { displayFavorites } from '../../../creators/selected-album/favorites';
-import { getNumberOfFavorites } from '../../../utils/string-formatter';
-import { zipAndSaveSelectedAlbumFavorites } from '../../../utils/zip-images';
+} from '../../../../../creators/dialogs/album-info';
+import { openUploadImagesDialog } from '../../../../../creators/dialogs/upload-images';
+import { displayFavorites } from '../../../../../creators/selected-album/favorites';
+import { getNumberOfFavorites } from '../../../../../utils/string-formatter';
+import { zipAndSaveSelectedAlbumFavorites } from '../../../../../utils/zip-images';
 
 const AlbumActionMenu = (props: Props): JSX.Element => {
   const {

@@ -10,8 +10,8 @@ import { Dispatch } from 'redux';
 
 import { AppPaths } from '../../../../configs/app-settings/app-routes';
 import { State } from '../../../../configs/redux/store';
-import AlbumActionMenu from '../AlbumActionMenu';
-import ImageAccessTypeSelectMenu from '../components/ImageAccessTypeSelectMenu';
+import AlbumActionMenu from '../components/album-action-menu/AlbumActionMenu';
+import ImageAccessTypeSelectMenu from '../components/imagae-access-type-menu/ImageAccessTypeSelectMenu';
 
 const SelectedAlbumToolbar = (props: Props): JSX.Element => {
   const { title, goBackHandler, userIsAdmin } = props;
