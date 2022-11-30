@@ -28,21 +28,16 @@ ReactDOM.render(
 reportWebVitals();
 
 // ******* PRIORITY *******
-// todo: side drawer - implement logout
 // todo: selected album screen - handle mobile multi select
-// todo: admin - hide buttons and select menus unless user is admin
-// todo: admin - app side drawer navigation to new users form
 // todo: on delete, ask if should delete from album or permanent delete
 // todo: selected album screen - fix infinite scrolling on
-// todo: hide private albums for public users
-// todo: hide private images for public users
 // todo: get multi-delete working for admins
 // todo: display images with no album
+// todo: allow admin to create new users / delete users
 
 // ******* LATER_TODOS *******
 // todo: need to test - how does downloading work for mobile devices / tablets
 // todo: general - implement grouping photos in albums
-// todo: firebase setup dont allow general users to save or write anything
+// todo: firebase database config setup dont allow general users to save or write anything
 // todo: firebase only allow general users to download or view public images
-// todo: bulk editing toolbar delete photos for admin users
 // todo: handle loading images on first load its rough, height is 0
