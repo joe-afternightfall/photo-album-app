@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 
 import { AlbumVO, ImageVO } from '../../../../../../configs/interfaces';
 import { State } from '../../../../../../configs/redux/store';
-import { downloadImage } from '../../../../../../utils/save-images';
+import { downloadImage } from '../../../../../../utils/zip-images';
 import FavButton from '../fav-button/FavButton';
 import SettingsMenu from '../settings-menu/SettingsMenu';
 

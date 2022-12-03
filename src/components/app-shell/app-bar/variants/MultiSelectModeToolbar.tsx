@@ -23,7 +23,7 @@ import {
   removeSelectedImageIdsFromUsersFavoriteList,
   tagSelectedImagesAsFavorites,
 } from '../../../../firebase/services/firebase-users-service';
-import { zipImages } from '../../../../utils/save-images';
+import { zipImages } from '../../../../utils/zip-images';
 import AppTooltip from '../../../shared/app-tooltip/AppTooltip';
 
 const MultiSelectModeToolbar = (props: Props): JSX.Element => {
