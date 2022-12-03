@@ -1,3 +1,6 @@
+import { saveAs } from 'file-saver';
+import { getBlob, getStorage, ref } from 'firebase/storage';
+import JSZip from 'jszip';
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
@@ -8,7 +11,6 @@ import {
   displayErrorSnackbar,
   displaySuccessSnackbar,
 } from '../creators/app-snackbar';
-import { zipImages } from './save-images';
 
 export const zipAndSaveSelectedAlbumFavorites =
   (): ThunkAction<void, State, void, ApplicationActions> =>
@@ -40,3 +42,40 @@ export const zipAndSaveSelectedAlbumFavorites =
         });
     }
   };
+
+export const zipImages = async (
+  folderName: string,
+  images: ImageVO[]
+): Promise<void> => {
+  if (images.length) {
+    const zip = new JSZip();
+    const storage = getStorage();
+    const folder = zip.folder(folderName);
+
+    try {
+      await Promise.all(
+        images.map(async (image) => {
+          const blob = await getBlob(ref(storage, image.downloadURL));
+          const imgData = new File([blob], image.fileName);
+
+          folder && folder.file(image.fileName, imgData, { base64: true });
+        })
+      );
+
+      zip.generateAsync({ type: 'blob' }).then((blob) => {
+        saveAs(blob, `${folderName}.zip`);
+      });
+      return Promise.resolve();
+    } catch (e) {
+      console.log('e: ' + JSON.stringify(e));
+      return Promise.reject();
+    }
+  }
+};
+
+export const downloadImage = async (image: ImageVO) => {
+  const storage = getStorage();
+
+  const blob = await getBlob(ref(storage, image.downloadURL));
+  saveAs(blob, image.fileName);
+};
