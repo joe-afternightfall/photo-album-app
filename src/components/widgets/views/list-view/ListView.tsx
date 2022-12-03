@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import * as ramda from 'ramda';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
@@ -43,6 +43,10 @@ export default function ListView(props: Props): JSX.Element {
     setHasMore(!(clonedLocalImages.length === images.length));
     setLocalImages(clonedLocalImages);
   };
+
+  useEffect(() => {
+    setLocalImages(images);
+  }, [images]);
 
   return (
     <Box sx={{ pt: 3 }}>
