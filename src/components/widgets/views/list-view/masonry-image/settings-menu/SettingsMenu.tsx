@@ -141,7 +141,7 @@ const mapDispatchToProps = (
     (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
       updateAlbumCoverImage(
         ownProps.albumFirebaseId,
-        ownProps.image.downloadURL
+        ownProps.image.compressedDownloadURL
       )
     );
   },
