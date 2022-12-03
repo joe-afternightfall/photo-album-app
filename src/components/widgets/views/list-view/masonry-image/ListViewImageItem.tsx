@@ -119,7 +119,7 @@ const ListViewImageItem = (props: Props): JSX.Element => {
         onLoad={() => {
           setImageLoaded(true);
         }}
-        src={image.downloadURL}
+        src={image.compressedDownloadURL}
         alt={image.fileName}
         loading="lazy"
         style={{

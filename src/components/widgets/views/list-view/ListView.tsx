@@ -80,7 +80,7 @@ export default function ListView(props: Props): JSX.Element {
                   openLightboxHandler={() => {
                     setDisplayLightbox({
                       open: true,
-                      downloadURL: image.downloadURL,
+                      downloadURL: image.compressedDownloadURL,
                       index: index,
                     });
                   }}
