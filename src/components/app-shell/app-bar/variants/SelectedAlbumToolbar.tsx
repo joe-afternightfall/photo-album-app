@@ -14,7 +14,7 @@ import AlbumActionMenu from '../components/album-action-menu/AlbumActionMenu';
 import ImageAccessTypeSelectMenu from '../components/imagae-access-type-menu/ImageAccessTypeSelectMenu';
 
 const SelectedAlbumToolbar = (props: Props): JSX.Element => {
-  const { title, goBackHandler, userIsAdmin } = props;
+  const { title, goBackHandler, numberOfPics, userIsAdmin } = props;
 
   return (
     <Toolbar>
@@ -37,7 +37,7 @@ const SelectedAlbumToolbar = (props: Props): JSX.Element => {
       >
         <Grid item>
           <Typography variant="h6" noWrap component="div">
-            {title}
+            {`${title}: ${numberOfPics} total pics`}
           </Typography>
         </Grid>
         <Grid item>
@@ -62,6 +62,7 @@ type Props = StateProps & DispatchProps;
 interface StateProps {
   userIsAdmin: boolean;
   title: string;
+  numberOfPics: number;
 }
 
 interface DispatchProps {
@@ -78,6 +79,7 @@ const mapStateToProps = (state: State): StateProps => {
   return {
     title,
     userIsAdmin: Boolean(state.applicationState.signedInUser?.isAdmin),
+    numberOfPics: currentAlbum ? currentAlbum.images.length : 0,
   };
 };
 
