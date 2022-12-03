@@ -55,7 +55,7 @@ export const zipImages = async (
     try {
       await Promise.all(
         images.map(async (image) => {
-          const blob = await getBlob(ref(storage, image.downloadURL));
+          const blob = await getBlob(ref(storage, image.originalDownloadURL));
           const imgData = new File([blob], image.fileName);
 
           folder && folder.file(image.fileName, imgData, { base64: true });
@@ -76,6 +76,6 @@ export const zipImages = async (
 export const downloadImage = async (image: ImageVO) => {
   const storage = getStorage();
 
-  const blob = await getBlob(ref(storage, image.downloadURL));
+  const blob = await getBlob(ref(storage, image.originalDownloadURL));
   saveAs(blob, image.fileName);
 };
