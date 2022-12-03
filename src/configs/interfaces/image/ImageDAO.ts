@@ -9,7 +9,8 @@ export interface ImageDAO {
   id: string;
   nickname: string;
   fileName: string;
-  downloadURL: string;
+  originalDownloadURL: string;
+  compressedDownloadURL: string;
   accessType: ACCESS_TYPE;
   created: string;
   updated: string;
