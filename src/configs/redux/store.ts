@@ -54,8 +54,7 @@ export const createStore = (history: History): Store => {
       },
       deleteImageDialog: {
         display: false,
-        imageId: '',
-        imageFirebaseId: '',
+        images: [],
       },
       deleteAlbumDialog: {
         display: false,
