@@ -3,7 +3,11 @@ import { Dispatch } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { v4 as uuidv4 } from 'uuid';
 
-import { FIREBASE_IMAGES_ROUTE } from '../../configs/firebase/firebase-routes';
+import {
+  FIREBASE_IMAGES_ROUTE,
+  FIREBASE_STORAGE_COMPRESSED_IMAGE_ROUTE,
+  FIREBASE_STORAGE_ORIGINAL_IMAGE_ROUTE,
+} from '../../configs/firebase/firebase-routes';
 import { ImageDAO } from '../../configs/interfaces';
 import { ACCESS_TYPE } from '../../configs/interfaces/image/ImageDAO';
 import { State } from '../../configs/redux/store';
@@ -19,7 +23,10 @@ import { addImageIdsToAlbum } from './firebase-albums-service';
 export const uploadImages =
   (
     albumId: string,
-    files: File[],
+    files: {
+      originalImage: File;
+      compressedImage: File | Blob;
+    }[],
     callback?: () => void
   ): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch): Promise<void> => {
@@ -29,19 +36,27 @@ export const uploadImages =
     const firebaseImageIdsToAdd: string[] = [];
 
     await Promise.all(
-      files.map(async (file) => {
+      files.map(async ({ originalImage, compressedImage }) => {
         const imageId = uuidv4();
-        const storageRef = firebase.storage().ref(`images/${imageId}`);
-        await storageRef.put(file);
+        const ORIGINAL_ROUTE = `${FIREBASE_STORAGE_ORIGINAL_IMAGE_ROUTE}/${imageId}`;
+        const COMPRESSED_ROUTE = `${FIREBASE_STORAGE_COMPRESSED_IMAGE_ROUTE}/${imageId}`;
 
-        const downloadURL = await storageRef.getDownloadURL();
+        const originalStorageRef = firebase.storage().ref(ORIGINAL_ROUTE);
+        await originalStorageRef.put(originalImage);
+        const originalDownloadURL = await originalStorageRef.getDownloadURL();
+
+        const compressedStorageRef = firebase.storage().ref(COMPRESSED_ROUTE);
+        await compressedStorageRef.put(compressedImage);
+        const compressedDownloadURL =
+          await compressedStorageRef.getDownloadURL();
         const timestamp = generateTimestamp();
 
         const imageInfo: ImageDAO = {
           id: imageId,
           nickname: '',
-          fileName: file.name,
-          downloadURL: downloadURL,
+          fileName: originalImage.name,
+          originalDownloadURL,
+          compressedDownloadURL,
           accessType: ACCESS_TYPE.UNDEFINED,
           created: timestamp,
           updated: timestamp,
@@ -49,7 +64,6 @@ export const uploadImages =
 
         const ref = firebase.database().ref(FIREBASE_IMAGES_ROUTE);
         const newRef = ref.push();
-
         const firebaseKey = newRef.key;
         return await newRef.set(imageInfo, (e: Error | null) => {
           firebaseKey && firebaseImageIdsToAdd.push(firebaseKey);
@@ -83,18 +97,50 @@ export const uploadImages =
 export const deleteImageFromStorage =
   (imageId: string): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch): Promise<void> => {
-    return await firebase
-      .storage()
-      .ref(`images`)
-      .child(imageId)
-      .delete()
+    deleteOriginalImage(imageId)
       .then(() => {
-        dispatch(displaySuccessSnackbar('Deleted image.'));
-        dispatch(hideAppLoader());
+        deleteCompressedImage(imageId)
+          .then(() => {
+            dispatch(displaySuccessSnackbar('Deleted image.'));
+            dispatch(hideAppLoader());
+          })
+          .catch(() => {
+            dispatch(displayErrorSnackbar('Error deleting image.'));
+            dispatch(hideAppLoader());
+          });
       })
-      .catch((e) => {
-        console.error('delete image error: ' + JSON.stringify(e));
+      .catch(() => {
         dispatch(displayErrorSnackbar('Error deleting image.'));
         dispatch(hideAppLoader());
       });
   };
+
+const deleteCompressedImage = async (imageId: string): Promise<void> => {
+  return await firebase
+    .storage()
+    .ref(FIREBASE_STORAGE_COMPRESSED_IMAGE_ROUTE)
+    .child(imageId)
+    .delete()
+    .then(() => {
+      return Promise.resolve();
+    })
+    .catch((e) => {
+      console.error('error deleting compressed image: ' + JSON.stringify(e));
+      return Promise.reject();
+    });
+};
+
+const deleteOriginalImage = async (imageId: string): Promise<void> => {
+  return await firebase
+    .storage()
+    .ref(FIREBASE_STORAGE_ORIGINAL_IMAGE_ROUTE)
+    .child(imageId)
+    .delete()
+    .then(() => {
+      return Promise.resolve();
+    })
+    .catch((e) => {
+      console.error('error deleting original image: ' + JSON.stringify(e));
+      return Promise.reject();
+    });
+};
