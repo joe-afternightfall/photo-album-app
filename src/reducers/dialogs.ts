@@ -1,5 +1,6 @@
 import { AlbumVO } from '../configs/interfaces';
 import { ActionTypes, ApplicationActions } from '../creators/actions';
+import { DeleteImageInfo } from '../creators/dialogs/delete-image';
 
 export default {
   reducer: (
@@ -24,8 +25,8 @@ export default {
       case ActionTypes.TOGGLE_DELETE_IMAGE_DIALOG:
         newState.deleteImageDialog = {
           display: action.open,
-          imageId: action.imageId,
-          imageFirebaseId: action.imageFirebaseId,
+          images: action.info,
+          cb: action.cb,
         };
         break;
       case ActionTypes.TOGGLE_UPLOAD_IMAGES_DIALOG:
@@ -48,8 +49,8 @@ export interface AppDialogState {
   };
   deleteImageDialog: {
     display: boolean;
-    imageId: string;
-    imageFirebaseId: string;
+    images: DeleteImageInfo[];
+    cb?: () => void;
   };
   uploadImageDialog: {
     display: boolean;
