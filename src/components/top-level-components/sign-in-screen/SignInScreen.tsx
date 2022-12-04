@@ -73,14 +73,13 @@ export default function SignInScreen(): JSX.Element {
                 </Tabs>
               </AppBar>
               <SwipeableViews
-                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={currentTab}
                 onChangeIndex={handleChangeIndex}
               >
-                <TabPanel value={currentTab} index={0} dir={theme.direction}>
+                <TabPanel value={currentTab} index={0}>
                   <SignInForm />
                 </TabPanel>
-                <TabPanel value={currentTab} index={1} dir={theme.direction}>
+                <TabPanel value={currentTab} index={1}>
                   <RequestAccessForm />
                 </TabPanel>
               </SwipeableViews>
