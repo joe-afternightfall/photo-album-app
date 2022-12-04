@@ -29,13 +29,11 @@ reportWebVitals();
 
 // ******* PRIORITY *******
 // todo: need to create "images without album" album
-// todo: selected album screen - handle mobile multi select
-// todo: on delete, ask if should delete from album or permanent delete
-// todo: selected album screen - fix infinite scrolling on
 // todo: display images with no album
+// todo: selected album screen - handle mobile multi select
+// todo: selected album screen - fix infinite scrolling on
 // todo: allow admin to create new users / delete users
-// todo: get multi-delete working for admins
-// todo: favorites toolbar, allow admin to update multiple access types
+// todo: ADMIN TOOL-BAR, allow admin to update multiple access types
 // todo: favorites toolbar, on download pop menu asking for confirmation and then show spinner while waiting for zipping of images
 
 // ******* LATER_TODOS *******
