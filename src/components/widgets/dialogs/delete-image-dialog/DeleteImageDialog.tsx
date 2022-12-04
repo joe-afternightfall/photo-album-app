@@ -1,20 +1,54 @@
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
+import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import SwipeableViews from 'react-swipeable-views';
 import { Dispatch } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
 import { State } from '../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../creators/actions';
-import { closeDeleteImageDialog } from '../../../../creators/dialogs/delete-image';
-import { deleteImage } from '../../../../firebase/services/firebase-images-service';
+import {
+  closeDeleteImageDialog,
+  DeleteImageInfo,
+} from '../../../../creators/dialogs/delete-image';
+import { removeImagesFromAlbum } from '../../../../firebase/services/firebase-albums-service';
+import { permanentlyDeleteImages } from '../../../../firebase/services/firebase-images-service';
 import BaseDialog from '../../../shared/dialog/BaseDialog';
+import TabPanel from '../../../top-level-components/sign-in-screen/components/TabPanel';
 
 const DeleteImageDialog = (props: DeleteImageDialogProps): JSX.Element => {
-  const { open, imageId, imageFirebaseId, deleteHandler, closeDialogHandler } =
-    props;
+  const { open, callback, images, deleteHandler, closeDialogHandler } = props;
+
+  const [currentTab, setCurrentTab] = useState(0);
+  const [permDelete, setPermDelete] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      setTimeout(() => {
+        setCurrentTab(0);
+        setPermDelete(false);
+      }, 350);
+    }
+  }, [open]);
+
+  const handleChangeIndex = (index: number) => {
+    setCurrentTab(index);
+  };
+
+  const buildWarning = (): string => {
+    if (images.length === 1) {
+      return permDelete
+        ? `you are about to permanently delete 1 image`
+        : `don't worry your only removing 1 image from the album`;
+    } else {
+      return permDelete
+        ? `you are about to permanently delete ${images.length} images.`
+        : `don't worry your only removing ${images.length} images from the album`;
+    }
+  };
 
   return (
     <BaseDialog
@@ -22,54 +56,93 @@ const DeleteImageDialog = (props: DeleteImageDialogProps): JSX.Element => {
       maxWidth="xs"
       data-testid="delete-image-dialog"
       title="Delete Image"
-      dialogContent={<Typography>{'Delete Image?'}</Typography>}
+      dialogContent={
+        <SwipeableViews index={currentTab} onChangeIndex={handleChangeIndex}>
+          <TabPanel value={currentTab} index={0}>
+            <Grid container>
+              <Grid item>
+                <Button
+                  onClick={() => {
+                    setPermDelete(true);
+                    handleChangeIndex(1);
+                  }}
+                >
+                  {'Permanently delete'}
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  onClick={() => {
+                    setPermDelete(false);
+                    handleChangeIndex(1);
+                  }}
+                >
+                  {'Remove from album'}
+                </Button>
+              </Grid>
+            </Grid>
+          </TabPanel>
+          <TabPanel value={currentTab} index={1}>
+            <Grid container>
+              <Grid item xs={12}>
+                <Typography>{'Are you sure?'}</Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography>{buildWarning()}</Typography>
+              </Grid>
+            </Grid>
+          </TabPanel>
+        </SwipeableViews>
+      }
       closeDialogHandler={closeDialogHandler}
       dialogActions={
-        <DialogActions>
-          <Button onClick={closeDialogHandler}>{'Cancel'}</Button>
-          <Button
-            onClick={() => {
-              deleteHandler(imageFirebaseId, imageId);
-              closeDialogHandler();
-            }}
-          >
-            {'Delete'}
-          </Button>
-        </DialogActions>
+        currentTab === 1 ? (
+          <DialogActions>
+            <Button onClick={closeDialogHandler}>{'Cancel'}</Button>
+            <Button
+              onClick={() => {
+                deleteHandler(images, permDelete);
+                closeDialogHandler();
+                callback && callback();
+              }}
+            >
+              {'Delete'}
+            </Button>
+          </DialogActions>
+        ) : undefined
       }
     />
   );
 };
 
-type DeleteImageDialogProps = PassedInProps & StateProps & DispatchProps;
-
-interface PassedInProps {
-  DELETE_ME?: string;
-}
+type DeleteImageDialogProps = StateProps & DispatchProps;
 
 interface StateProps {
   open: boolean;
-  imageId: string;
-  imageFirebaseId: string;
+  callback?: () => void;
+  images: DeleteImageInfo[];
 }
 
 interface DispatchProps {
   closeDialogHandler: () => void;
-  deleteHandler: (imageFirebaseId: string, imageId: string) => void;
+  deleteHandler: (images: DeleteImageInfo[], permDelete: boolean) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
+  const dialogState = state.appDialogState.deleteImageDialog;
   return {
-    open: state.appDialogState.deleteImageDialog.display,
-    imageId: state.appDialogState.deleteImageDialog.imageId,
-    imageFirebaseId: state.appDialogState.deleteImageDialog.imageFirebaseId,
+    open: dialogState.display,
+    images: dialogState.images,
+    callback: dialogState.cb,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-  deleteHandler: (imageFirebaseId: string, imageId: string) => {
+  deleteHandler: (images: DeleteImageInfo[], permDelete: boolean) => {
     (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
-      deleteImage(imageFirebaseId, imageId)
+      permDelete
+        ? permanentlyDeleteImages(images)
+        : removeImagesFromAlbum(images)
     );
   },
   closeDialogHandler: () => {
