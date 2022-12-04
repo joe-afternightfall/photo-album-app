@@ -1,4 +1,6 @@
 import firebase from 'firebase/compat/app';
+import isEmpty from 'is-empty';
+import * as ramda from 'ramda';
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { v4 as uuidv4 } from 'uuid';
@@ -218,6 +220,37 @@ export const removeImageIdFromAlbum =
             updated: generateTimestamp(),
           });
       }
+    }
+  };
+
+export const removeImagesFromAlbum =
+  (
+    images: { imageId: string; imageFirebaseId: string }[]
+  ): ThunkAction<void, State, void, ApplicationActions> =>
+  async (dispatch: Dispatch, getState: () => State): Promise<void> => {
+    const currentAlbum = getState().selectedAlbumState.currentAlbum;
+
+    if (currentAlbum) {
+      const firebaseId = currentAlbum.firebaseId;
+      const clonedImages = ramda.clone(currentAlbum.images);
+      const filteredImages = clonedImages.filter((clonedImage) => {
+        const foundImage = images.find(
+          (imageToDelete) =>
+            imageToDelete.imageFirebaseId === clonedImage.firebaseId
+        );
+        if (isEmpty(foundImage)) {
+          return clonedImage;
+        }
+      });
+
+      return await firebase
+        .database()
+        .ref(FIREBASE_ALBUMS_ROUTE)
+        .child(firebaseId)
+        .update({
+          imageIds: filteredImages.map((image) => image.firebaseId),
+          updated: generateTimestamp(),
+        });
     }
   };
 
