@@ -57,7 +57,7 @@ const AllAlbumsView = (props: AllAlbumsViewProps): JSX.Element => {
                     {album.title}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {album.subtitle}
+                    {`${album.subtitle}: ${album.images.length} pictures`}
                   </Typography>
                 </CardContent>
               </CardActionArea>
