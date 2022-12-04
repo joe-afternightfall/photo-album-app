@@ -22,6 +22,7 @@ import TabPanel from '../../../top-level-components/sign-in-screen/components/Ta
 const DeleteImageDialog = (props: DeleteImageDialogProps): JSX.Element => {
   const { open, callback, images, deleteHandler, closeDialogHandler } = props;
 
+  const [dialogTitle, setDialogTitle] = useState('');
   const [currentTab, setCurrentTab] = useState(0);
   const [permDelete, setPermDelete] = useState(false);
 
@@ -30,7 +31,10 @@ const DeleteImageDialog = (props: DeleteImageDialogProps): JSX.Element => {
       setTimeout(() => {
         setCurrentTab(0);
         setPermDelete(false);
+        setDialogTitle('setDialogTitle');
       }, 350);
+    } else {
+      setDialogTitle(images.length === 1 ? 'Delete Image' : `Delete Image's`);
     }
   }, [open]);
 
@@ -41,12 +45,12 @@ const DeleteImageDialog = (props: DeleteImageDialogProps): JSX.Element => {
   const buildWarning = (): string => {
     if (images.length === 1) {
       return permDelete
-        ? `you are about to permanently delete 1 image`
-        : `don't worry your only removing 1 image from the album`;
+        ? `you are about to permanently delete 1 image.`
+        : `don't worry your only removing 1 image from this album.`;
     } else {
       return permDelete
         ? `you are about to permanently delete ${images.length} images.`
-        : `don't worry your only removing ${images.length} images from the album`;
+        : `don't worry your only removing ${images.length} images from this album.`;
     }
   };
 
@@ -55,13 +59,17 @@ const DeleteImageDialog = (props: DeleteImageDialogProps): JSX.Element => {
       open={open}
       maxWidth="xs"
       data-testid="delete-image-dialog"
-      title="Delete Image"
+      title={currentTab === 0 ? dialogTitle : 'Are you sure?'}
       dialogContent={
         <SwipeableViews index={currentTab} onChangeIndex={handleChangeIndex}>
           <TabPanel value={currentTab} index={0}>
-            <Grid container>
-              <Grid item>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
                 <Button
+                  sx={{
+                    bgcolor: 'background.paper',
+                    p: 3,
+                  }}
                   onClick={() => {
                     setPermDelete(true);
                     handleChangeIndex(1);
@@ -70,8 +78,12 @@ const DeleteImageDialog = (props: DeleteImageDialogProps): JSX.Element => {
                   {'Permanently delete'}
                 </Button>
               </Grid>
-              <Grid item>
+              <Grid item xs={6}>
                 <Button
+                  sx={{
+                    bgcolor: 'background.paper',
+                    p: 3,
+                  }}
                   onClick={() => {
                     setPermDelete(false);
                     handleChangeIndex(1);
@@ -85,10 +97,7 @@ const DeleteImageDialog = (props: DeleteImageDialogProps): JSX.Element => {
           <TabPanel value={currentTab} index={1}>
             <Grid container>
               <Grid item xs={12}>
-                <Typography>{'Are you sure?'}</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography>{buildWarning()}</Typography>
+                <Typography variant="subtitle1">{buildWarning()}</Typography>
               </Grid>
             </Grid>
           </TabPanel>
