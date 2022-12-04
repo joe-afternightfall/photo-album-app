@@ -34,29 +34,32 @@ export const getAllImages = async (): Promise<ImageVO[]> => {
     });
 };
 
-export const deleteImage =
+export const permanentlyDeleteImages =
   (
-    imageFirebaseId: string,
-    imageId: string
+    images: { imageId: string; imageFirebaseId: string }[]
   ): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch): Promise<void> => {
     dispatch(displayAppLoader());
-    return await firebase
-      .database()
-      .ref(FIREBASE_IMAGES_ROUTE)
-      .child(imageFirebaseId)
-      .remove(async (error: Error | null) => {
-        if (error) {
-          dispatch(displayErrorSnackbar('Error deleting image'));
-        } else {
-          (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
-            deleteImageFromStorage(imageId)
-          );
-          (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
-            removeImageIdFromAlbum()
-          );
-        }
-      });
+    await Promise.all(
+      images.map(async (imageToDelete) => {
+        return await firebase
+          .database()
+          .ref(FIREBASE_IMAGES_ROUTE)
+          .child(imageToDelete.imageFirebaseId)
+          .remove(async (error: Error | null) => {
+            if (error) {
+              dispatch(displayErrorSnackbar('Error deleting image'));
+            } else {
+              (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+                deleteImageFromStorage(imageToDelete.imageId)
+              );
+              (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+                removeImageIdFromAlbum()
+              );
+            }
+          });
+      })
+    );
   };
 
 export const toggleImageAccessType =
