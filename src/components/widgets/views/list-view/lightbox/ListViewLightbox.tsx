@@ -52,7 +52,7 @@ const ListViewLightbox = (props: ListViewLightboxProps): JSX.Element => {
       index={selectedIndex}
       slides={images.map((image) => {
         return {
-          src: image.originalDownloadURL,
+          src: image.compressedDownloadURL,
           alt: image.id,
         };
       })}
