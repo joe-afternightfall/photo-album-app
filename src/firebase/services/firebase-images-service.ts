@@ -12,6 +12,7 @@ import {
   displayErrorSnackbar,
   displaySuccessSnackbar,
 } from '../../creators/app-snackbar';
+import { DeleteImageInfo } from '../../creators/dialogs/delete-image';
 import { mapImageSnapToVO } from '../../utils/mapper';
 import { removeImageIdFromAlbum } from './firebase-albums-service';
 import { deleteImageFromStorage } from './firebase-storage-service';
@@ -36,7 +37,7 @@ export const getAllImages = async (): Promise<ImageVO[]> => {
 
 export const permanentlyDeleteImages =
   (
-    images: { imageId: string; imageFirebaseId: string }[]
+    images: DeleteImageInfo[]
   ): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch): Promise<void> => {
     dispatch(displayAppLoader());
