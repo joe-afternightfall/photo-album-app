@@ -147,7 +147,12 @@ const mapDispatchToProps = (
   },
   openDeleteDialogHandler: () => {
     dispatch(
-      openDeleteImageDialog(ownProps.image.firebaseId, ownProps.image.id)
+      openDeleteImageDialog([
+        {
+          imageId: ownProps.image.id,
+          imageFirebaseId: ownProps.image.firebaseId,
+        },
+      ])
     );
   },
 });
