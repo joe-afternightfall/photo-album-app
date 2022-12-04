@@ -41,3 +41,7 @@ reportWebVitals();
 // todo: firebase database config setup dont allow general users to save or write anything
 // todo: firebase only allow general users to download or view public images
 // todo: handle loading images on first load its rough, height is 0
+// todo: add search bar to search by image name
+
+// ******* ERRORS_OR_BUGS *******
+// todo: error with deleting image, it works but i am popping error snackbar, something in the chain is failing
