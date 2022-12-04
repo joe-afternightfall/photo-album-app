@@ -16,6 +16,10 @@ import { ImageVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../creators/actions';
 import {
+  DeleteImageInfo,
+  openDeleteImageDialog,
+} from '../../../../creators/dialogs/delete-image';
+import {
   clearMultiSelectIds,
   toggleMultiSelectMode,
 } from '../../../../creators/selected-album/multi-select-mode';
@@ -28,11 +32,13 @@ import AppTooltip from '../../../shared/app-tooltip/AppTooltip';
 
 const MultiSelectModeToolbar = (props: Props): JSX.Element => {
   const {
+    userIsAdmin,
     selectedImages,
     allImagesAreFavorites,
     downloadHandler,
     updateFavoritesHandler,
     exitMultiSelectModeHandler,
+    openDeleteDialogHandler,
   } = props;
 
   return (
@@ -76,14 +82,6 @@ const MultiSelectModeToolbar = (props: Props): JSX.Element => {
             </IconButton>
           </AppTooltip>
         </Grid>
-        {/*<Grid item>*/}
-        {/*  <AppTooltip title="Add to" placement="bottom" arrow>*/}
-        {/*    <IconButton>*/}
-        {/*      /!*todo: get the add to functionality working, pop menu asking add to new album or existing*!/*/}
-        {/*      <AddIcon />*/}
-        {/*    </IconButton>*/}
-        {/*  </AppTooltip>*/}
-        {/*</Grid>*/}
         <Grid item>
           <AppTooltip title="Download" placement="bottom" arrow>
             <IconButton
@@ -95,26 +93,33 @@ const MultiSelectModeToolbar = (props: Props): JSX.Element => {
             </IconButton>
           </AppTooltip>
         </Grid>
-        <Grid item>
-          <AppTooltip title="Delete" placement="bottom" arrow>
-            <IconButton>
-              {/*todo: delete selected images*/}
-              <DeleteIcon />
-            </IconButton>
-          </AppTooltip>
-        </Grid>
+        {userIsAdmin && (
+          <Grid item>
+            <AppTooltip title="Delete" placement="bottom" arrow>
+              <IconButton
+                onClick={() => {
+                  openDeleteDialogHandler(
+                    selectedImages.map((image) => ({
+                      imageId: image.id,
+                      imageFirebaseId: image.firebaseId,
+                    }))
+                  );
+                }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </AppTooltip>
+          </Grid>
+        )}
       </Grid>
     </Toolbar>
   );
 };
 
-type Props = PassedInProps & StateProps & DispatchProps;
-
-interface PassedInProps {
-  DELETE_ME?: string;
-}
+type Props = StateProps & DispatchProps;
 
 interface StateProps {
+  userIsAdmin: boolean;
   selectedImages: ImageVO[];
   allImagesAreFavorites: boolean;
 }
@@ -123,6 +128,7 @@ interface DispatchProps {
   exitMultiSelectModeHandler: () => void;
   downloadHandler: (images: ImageVO[]) => void;
   updateFavoritesHandler: (allImagesAreFavorites: boolean) => void;
+  openDeleteDialogHandler: (info: DeleteImageInfo[]) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -148,6 +154,7 @@ const mapStateToProps = (state: State): StateProps => {
   });
 
   return {
+    userIsAdmin: state.applicationState.userIsAdmin,
     selectedImages,
     allImagesAreFavorites:
       favoriteSelectedImages.length === selectedImages.length,
@@ -178,6 +185,14 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
       dispatch(toggleMultiSelectMode(false));
       dispatch(clearMultiSelectIds());
     }
+  },
+  openDeleteDialogHandler: (info: DeleteImageInfo[]) => {
+    dispatch(
+      openDeleteImageDialog(info, () => {
+        dispatch(toggleMultiSelectMode(false));
+        dispatch(clearMultiSelectIds());
+      })
+    );
   },
 });
 
