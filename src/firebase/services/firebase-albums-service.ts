@@ -15,6 +15,7 @@ import {
   displayErrorSnackbar,
   displaySuccessSnackbar,
 } from '../../creators/app-snackbar';
+import { DeleteImageInfo } from '../../creators/dialogs/delete-image';
 import { generateTimestamp } from '../../utils/timestamp-generator';
 import { getAllImages } from './firebase-images-service';
 
@@ -225,7 +226,7 @@ export const removeImageIdFromAlbum =
 
 export const removeImagesFromAlbum =
   (
-    images: { imageId: string; imageFirebaseId: string }[]
+    images: DeleteImageInfo[]
   ): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch, getState: () => State): Promise<void> => {
     const currentAlbum = getState().selectedAlbumState.currentAlbum;
