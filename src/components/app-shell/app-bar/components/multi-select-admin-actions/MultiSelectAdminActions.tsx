@@ -4,13 +4,15 @@ import SecurityIcon from '@mui/icons-material/Security';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import { makeStyles, createStyles } from '@mui/styles';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 
 import { ImageVO } from '../../../../../configs/interfaces';
+import { ACCESS_TYPE } from '../../../../../configs/interfaces/image/ImageDAO';
 import { State } from '../../../../../configs/redux/store';
+import { ApplicationActions } from '../../../../../creators/actions';
 import {
   DeleteImageInfo,
   openDeleteImageDialog,
@@ -19,27 +21,49 @@ import {
   clearMultiSelectIds,
   toggleMultiSelectMode,
 } from '../../../../../creators/selected-album/multi-select-mode';
+import {
+  ToggleImageInfo,
+  toggleImagesAccessTypes,
+} from '../../../../../firebase/services/firebase-images-service';
 import AppTooltip from '../../../../shared/app-tooltip/AppTooltip';
 
-const useStyles = makeStyles(() => createStyles({}));
-
 const MultiSelectAdminActions = (props: Props): JSX.Element => {
-  const classes = useStyles();
-  const { selectedImages, openDeleteDialogHandler } = props;
+  const { selectedImages, toggleImagesHandler, openDeleteDialogHandler } =
+    props;
 
   return (
     <>
       <Divider orientation="vertical" flexItem />
       <Grid item>
         <AppTooltip title="Set as public" placement="bottom" arrow>
-          <IconButton sx={{ mx: 1 }}>
+          <IconButton
+            sx={{ mx: 1 }}
+            onClick={() => {
+              toggleImagesHandler(
+                selectedImages.map((image) => ({
+                  imageFirebaseId: image.firebaseId,
+                  accessType: ACCESS_TYPE.PUBLIC,
+                }))
+              );
+            }}
+          >
             <PublicIcon />
           </IconButton>
         </AppTooltip>
       </Grid>
       <Grid item>
         <AppTooltip title="Set as private" placement="bottom" arrow>
-          <IconButton sx={{ mr: 1 }}>
+          <IconButton
+            sx={{ mr: 1 }}
+            onClick={() => {
+              toggleImagesHandler(
+                selectedImages.map((image) => ({
+                  imageFirebaseId: image.firebaseId,
+                  accessType: ACCESS_TYPE.PRIVATE,
+                }))
+              );
+            }}
+          >
             <SecurityIcon />
           </IconButton>
         </AppTooltip>
@@ -76,6 +100,7 @@ interface StateProps {
 
 interface DispatchProps {
   openDeleteDialogHandler: (info: DeleteImageInfo[]) => void;
+  toggleImagesHandler: (images: ToggleImageInfo[]) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -89,6 +114,11 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
         dispatch(toggleMultiSelectMode(false));
         dispatch(clearMultiSelectIds());
       })
+    );
+  },
+  toggleImagesHandler: (images: ToggleImageInfo[]) => {
+    (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+      toggleImagesAccessTypes(images)
     );
   },
 });
