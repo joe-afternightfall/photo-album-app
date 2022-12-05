@@ -46,7 +46,7 @@ const AdminMenuItems = (props: AdminMenuItemsProps): JSX.Element => {
         <ListItemIcon>
           <EditIcon />
         </ListItemIcon>
-        <ListItemText>{'Edit'}</ListItemText>
+        <ListItemText>{'Edit Album'}</ListItemText>
       </MenuItem>
       <MenuItem
         onClick={() => {
@@ -57,7 +57,7 @@ const AdminMenuItems = (props: AdminMenuItemsProps): JSX.Element => {
         <ListItemIcon>
           <DeleteIcon />
         </ListItemIcon>
-        <ListItemText>{'Delete'}</ListItemText>
+        <ListItemText>{'Delete Album'}</ListItemText>
       </MenuItem>
     </>
   );
