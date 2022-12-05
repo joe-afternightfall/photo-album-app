@@ -1,9 +1,12 @@
+import SaveIcon from '@mui/icons-material/Save';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Grid from '@mui/material/Grid';
+import Compressor from 'compressorjs';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -16,12 +19,42 @@ import { closeUploadImagesDialog } from '../../../../creators/dialogs/upload-ima
 import { uploadImages } from '../../../../firebase/services/firebase-storage-service';
 import PaperDropzone from '../../../shared/dropzone/DropZone';
 
+type LocalState = {
+  originalImage: File;
+  compressedImage: File | Blob;
+};
+
 const UploadImageDialog = (props: Props): JSX.Element => {
   const { open, closeHandler, selectedAlbum, saveHandler } = props;
-  const [images, setImages] = useState<File[]>([]);
+  const [images, setImages] = useState<LocalState[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleDropzone = (files: File[]) => {
-    setImages(files);
+  const handleDropzone = async (files: File[]) => {
+    const imagesToUpdate: LocalState[] = [];
+
+    files.map((originalImage) => {
+      new Compressor(originalImage, {
+        quality: 0.6,
+
+        // The compression process is asynchronous,
+        // which means you have to access the `result` in the `success` hook function.
+        async success(compressedImage) {
+          imagesToUpdate.push({
+            originalImage,
+            compressedImage,
+          });
+
+          if (imagesToUpdate.length === files.length) {
+            setImages(imagesToUpdate);
+            setLoading(false);
+          }
+        },
+
+        error(err) {
+          console.error('!!!! error compressing image: ' + err.message);
+        },
+      });
+    });
   };
 
   return (
@@ -30,20 +63,30 @@ const UploadImageDialog = (props: Props): JSX.Element => {
       <DialogContent>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <PaperDropzone dropzoneHandler={handleDropzone} filesLimit={100} />
+            <PaperDropzone
+              dropzoneHandler={handleDropzone}
+              filesLimit={100}
+              onDropHandler={() => {
+                setLoading(true);
+              }}
+            />
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={closeHandler}>{'Cancel'}</Button>
-        <Button
+        <LoadingButton
+          loading={loading}
+          loadingPosition="start"
+          startIcon={<SaveIcon />}
           onClick={() => {
             selectedAlbum &&
               saveHandler(selectedAlbum.id, images, closeHandler);
           }}
+          disabled={images.length === 0}
         >
           {'Save'}
-        </Button>
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );
@@ -58,7 +101,7 @@ interface StateProps {
 
 interface DispatchProps {
   closeHandler: () => void;
-  saveHandler: (albumId: string, images: File[], cb: () => void) => void;
+  saveHandler: (albumId: string, images: LocalState[], cb: () => void) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -69,7 +112,7 @@ const mapStateToProps = (state: State): StateProps => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-  saveHandler: (albumId: string, images: File[], cb: () => void) => {
+  saveHandler: (albumId: string, images: LocalState[], cb: () => void) => {
     (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
       uploadImages(albumId, images, cb)
     );
