@@ -88,24 +88,16 @@ const MultiSelectAdminActions = (props: Props): JSX.Element => {
   );
 };
 
-type Props = PassedInProps & StateProps & DispatchProps;
+type Props = PassedInProps & DispatchProps;
 
 interface PassedInProps {
   selectedImages: ImageVO[];
-}
-
-interface StateProps {
-  DELETE_ME?: string;
 }
 
 interface DispatchProps {
   openDeleteDialogHandler: (info: DeleteImageInfo[]) => void;
   toggleImagesHandler: (images: ToggleImageInfo[]) => void;
 }
-
-const mapStateToProps = (state: State): StateProps => {
-  return {};
-};
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   openDeleteDialogHandler: (info: DeleteImageInfo[]) => {
@@ -123,7 +115,4 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MultiSelectAdminActions);
+export default connect(null, mapDispatchToProps)(MultiSelectAdminActions);

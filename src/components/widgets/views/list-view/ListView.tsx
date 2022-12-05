@@ -18,7 +18,7 @@ export default function ListView(props: Props): JSX.Element {
     index: -1,
   };
 
-  const [hasMore, setHasMore] = useState(true);
+  // const [hasMore, setHasMore] = useState(true);
   const [displayLightbox, setDisplayLightbox] = useState(defaultDisplay);
   const [localImages, setLocalImages] = useState<ImageVO[]>([]);
 
@@ -57,7 +57,7 @@ export default function ListView(props: Props): JSX.Element {
       <InfiniteScroll
         dataLength={localImages.length}
         next={fetchMoreData}
-        hasMore={hasMore}
+        hasMore={true}
         loader={
           <Grid container justifyContent="center">
             <Grid item>{/*<Typography>{'Loading...'}</Typography>*/}</Grid>

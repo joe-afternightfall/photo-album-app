@@ -129,7 +129,7 @@ interface DispatchProps {
   openDeleteDialogHandler: () => void;
 }
 
-const mapStateToProps = (state: State, ownProps: PassedInProps): StateProps => {
+const mapStateToProps = (state: State): StateProps => {
   return {
     userIsAdmin: state.applicationState.userIsAdmin,
   };

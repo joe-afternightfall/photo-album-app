@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { AlbumVO } from '../../../../../configs/interfaces';
-import { State } from '../../../../../configs/redux/store';
 import {
   openAlbumInfoDialog,
   openDeleteAlbumDialog,
@@ -63,15 +62,11 @@ const AdminMenuItems = (props: AdminMenuItemsProps): JSX.Element => {
   );
 };
 
-type AdminMenuItemsProps = PassedInProps & StateProps & DispatchProps;
+type AdminMenuItemsProps = PassedInProps & DispatchProps;
 
 interface PassedInProps {
   closeHandler: () => void;
   currentAlbum: AlbumVO;
-}
-
-interface StateProps {
-  currentAlbumzzzz?: AlbumVO;
 }
 
 interface DispatchProps {
@@ -79,10 +74,6 @@ interface DispatchProps {
   openEditAlbumDialogHandler: () => void;
   openDeleteAlbumDialogHandler: () => void;
 }
-
-const mapStateToProps = (state: State): StateProps => {
-  return {};
-};
 
 const mapDispatchToProps = (
   dispatch: Dispatch,
@@ -99,4 +90,4 @@ const mapDispatchToProps = (
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminMenuItems);
+export default connect(null, mapDispatchToProps)(AdminMenuItems);
