@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import * as ramda from 'ramda';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -10,13 +9,6 @@ import { ImageVO } from '../../../../configs/interfaces';
 import { ACCESS_TYPE } from '../../../../configs/interfaces/image/ImageDAO';
 import ListViewLightbox from './lightbox/ListViewLightbox';
 import ListViewImageItem from './masonry-image/ListViewImageItem';
-
-const getImages = (images: ImageVO[]): ImageVO[] => {
-  if (images.length >= 10) {
-    return images.slice(0, 10);
-  }
-  return images;
-};
 
 export default function ListView(props: Props): JSX.Element {
   const { images, userIsAdmin } = props;
@@ -28,50 +20,30 @@ export default function ListView(props: Props): JSX.Element {
 
   const [hasMore, setHasMore] = useState(true);
   const [displayLightbox, setDisplayLightbox] = useState(defaultDisplay);
-  // const [localImages, setLocalImages] = useState<ImageVO[]>(images);
-
-  // const checkForHasMore = () => {
-  //   setHasMore(!(localImages.length === images.length));
-  // };
-
-  // const updateImages = () => {
-  //   if (images.length >= 10) {
-  //     const newIndex = photoIndex + 10;
-  //     const clonedImages = ramda.clone(localImages);
-  //     const slicedImages = images.slice(photoIndex, newIndex);
-  //     slicedImages.map((sliced) => clonedImages.push(sliced));
-  //     setLocalImages(clonedImages);
-  //     setPhotoIndex(newIndex);
-  //   } else {
-  //     setLocalImages(images);
-  //   }
-  // };
+  const [localImages, setLocalImages] = useState<ImageVO[]>([]);
 
   const fetchMoreData = () => {
-    // const clonedImages = ramda.clone(images);
-    // const clonedLocalImages = ramda.clone(localImages);
-    // const startIndex = localImages.length;
-    //
-    // for (let i = startIndex; i < startIndex + 5; ++i) {
-    //   const imageVO = clonedImages[i];
-    //   imageVO && clonedLocalImages.push(imageVO);
-    // }
-    //
-    // setLocalImages(clonedLocalImages);
-    // updateImages();
-    // checkForHasMore();
-    console.log('******** FETCH_MORE_DATA_CALLED *******');
+    loadMoreImages();
   };
 
-  // useEffect(() => {
-  //   updateImages();
-  //   checkForHasMore();
-  // }, [images]);
+  const loadMoreImages = () => {
+    const clonedImages = ramda.clone(images);
+    const clonedLocalImages = ramda.clone(localImages);
+    const slicedImages = clonedImages.slice(
+      clonedLocalImages.length,
+      clonedLocalImages.length + 10
+    );
+    setLocalImages([...clonedLocalImages, ...slicedImages]);
+  };
+
+  useEffect(() => {
+    loadMoreImages();
+  }, [images]);
 
   return (
-    <Box sx={{ pt: 3 }}>
+    <Box sx={{ pt: 3, pb: 5 }}>
       <InfiniteScroll
-        dataLength={images.length}
+        dataLength={localImages.length}
         next={fetchMoreData}
         hasMore={hasMore}
         loader={
@@ -84,10 +56,11 @@ export default function ListView(props: Props): JSX.Element {
             <b>Yay! You have seen it all</b>
           </p>
         }
+        scrollThreshold={1}
       >
         <ResponsiveMasonry>
           <Masonry gutter="12px">
-            {images.map((image, index) => {
+            {localImages.map((image, index) => {
               if (image.accessType === ACCESS_TYPE.PRIVATE && !userIsAdmin) {
                 return null;
               }
