@@ -37,7 +37,19 @@ export default function ListView(props: Props): JSX.Element {
   };
 
   useEffect(() => {
-    loadMoreImages();
+    if (localImages.length > images.length) {
+      const clonedImages = ramda.clone(images);
+      const localImageLength = ramda.clone(localImages.length);
+      const slicedImages = clonedImages.slice(
+        0,
+        localImageLength - (localImageLength - images.length)
+      );
+      setLocalImages(slicedImages);
+    } else if (images.length > 10) {
+      loadMoreImages();
+    } else {
+      setLocalImages(images);
+    }
   }, [images]);
 
   return (
