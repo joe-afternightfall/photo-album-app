@@ -28,37 +28,55 @@ export default function ListView(props: Props): JSX.Element {
 
   const [hasMore, setHasMore] = useState(true);
   const [displayLightbox, setDisplayLightbox] = useState(defaultDisplay);
-  const [localImages, setLocalImages] = useState<ImageVO[]>(getImages(images));
+  // const [localImages, setLocalImages] = useState<ImageVO[]>(images);
+
+  // const checkForHasMore = () => {
+  //   setHasMore(!(localImages.length === images.length));
+  // };
+
+  // const updateImages = () => {
+  //   if (images.length >= 10) {
+  //     const newIndex = photoIndex + 10;
+  //     const clonedImages = ramda.clone(localImages);
+  //     const slicedImages = images.slice(photoIndex, newIndex);
+  //     slicedImages.map((sliced) => clonedImages.push(sliced));
+  //     setLocalImages(clonedImages);
+  //     setPhotoIndex(newIndex);
+  //   } else {
+  //     setLocalImages(images);
+  //   }
+  // };
 
   const fetchMoreData = () => {
-    const clonedImages = ramda.clone(images);
-    const clonedLocalImages = ramda.clone(localImages);
-    const startIndex = localImages.length;
-
-    for (let i = startIndex; i < startIndex + 5; ++i) {
-      const imageVO = clonedImages[i];
-      imageVO && clonedLocalImages.push(imageVO);
-    }
-
-    setHasMore(!(clonedLocalImages.length === images.length));
-    setLocalImages(clonedLocalImages);
+    // const clonedImages = ramda.clone(images);
+    // const clonedLocalImages = ramda.clone(localImages);
+    // const startIndex = localImages.length;
+    //
+    // for (let i = startIndex; i < startIndex + 5; ++i) {
+    //   const imageVO = clonedImages[i];
+    //   imageVO && clonedLocalImages.push(imageVO);
+    // }
+    //
+    // setLocalImages(clonedLocalImages);
+    // updateImages();
+    // checkForHasMore();
+    console.log('******** FETCH_MORE_DATA_CALLED *******');
   };
 
-  useEffect(() => {
-    setLocalImages(images);
-  }, [images]);
+  // useEffect(() => {
+  //   updateImages();
+  //   checkForHasMore();
+  // }, [images]);
 
   return (
     <Box sx={{ pt: 3 }}>
       <InfiniteScroll
-        dataLength={localImages.length}
+        dataLength={images.length}
         next={fetchMoreData}
         hasMore={hasMore}
         loader={
           <Grid container justifyContent="center">
-            <Grid item>
-              <Typography>{'Loading...'}</Typography>
-            </Grid>
+            <Grid item>{/*<Typography>{'Loading...'}</Typography>*/}</Grid>
           </Grid>
         }
         endMessage={
@@ -69,7 +87,7 @@ export default function ListView(props: Props): JSX.Element {
       >
         <ResponsiveMasonry>
           <Masonry gutter="12px">
-            {localImages.map((image, index) => {
+            {images.map((image, index) => {
               if (image.accessType === ACCESS_TYPE.PRIVATE && !userIsAdmin) {
                 return null;
               }
