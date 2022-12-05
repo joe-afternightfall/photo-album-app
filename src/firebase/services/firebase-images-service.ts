@@ -32,6 +32,12 @@ export const getAllImages = async (): Promise<ImageVO[]> => {
       } else {
         return [];
       }
+    })
+    .catch((e) => {
+      console.error(
+        '******* error fetching image records: ' + JSON.stringify(e)
+      );
+      return Promise.reject(JSON.stringify(e));
     });
 };
 
