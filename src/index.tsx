@@ -35,6 +35,7 @@ reportWebVitals();
 // todo: allow admin to create new users / delete users
 // todo: ADMIN TOOL-BAR, allow admin to update multiple access types
 // todo: favorites toolbar, on download pop menu asking for confirmation and then show spinner while waiting for zipping of images
+// todo: need to update users favorite id's when deleting an image
 
 // ******* LATER_TODOS *******
 // todo: need to test - how does downloading work for mobile devices / tablets
