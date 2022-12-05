@@ -1,7 +1,5 @@
 import CollectionsIcon from '@mui/icons-material/Collections';
-import CopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
-import DownloadIcon from '@mui/icons-material/Download';
 import SettingsIcon from '@mui/icons-material/SettingsOutlined';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -21,13 +19,15 @@ import { State } from '../../../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../../../creators/actions';
 import { openDeleteImageDialog } from '../../../../../../creators/dialogs/delete-image';
 import { updateAlbumCoverImage } from '../../../../../../firebase/services/firebase-albums-service';
+import AppTooltip from '../../../../../shared/app-tooltip/AppTooltip';
 import AccessTypeRadioGroup from './AccessTypeRadioGroup';
 
 const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
   const {
     image,
-    updateCoverImageHandler,
+    userIsAdmin,
     clearOnHoverHandler,
+    updateCoverImageHandler,
     openDeleteDialogHandler,
   } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -43,70 +43,76 @@ const SettingsMenu = (props: SettingsMenuProps): JSX.Element => {
 
   return (
     <div>
-      <IconButton
-        onClick={handleClick}
-        sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-      >
-        <SettingsIcon />
-      </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-        transformOrigin={{ horizontal: 'left', vertical: 'center' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'center' }}
-      >
-        <MenuList>
-          <MenuItem
+      {userIsAdmin && (
+        <>
+          <AppTooltip title="Settings Menu" placement="bottom" arrow>
+            <IconButton
+              onClick={handleClick}
+              sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+            >
+              <SettingsIcon />
+            </IconButton>
+          </AppTooltip>
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
             onClick={(e) => {
               e.stopPropagation();
-              updateCoverImageHandler();
-              handleClose();
             }}
+            transformOrigin={{ horizontal: 'left', vertical: 'center' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'center' }}
           >
-            <ListItemIcon>
-              <CollectionsIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>{'Make Album Cover'}</ListItemText>
-          </MenuItem>
-          <MenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              openDeleteDialogHandler();
-              handleClose();
-            }}
-          >
-            <ListItemIcon>
-              <DeleteIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>{'Delete photo'}</ListItemText>
-          </MenuItem>
-          <MenuItem disabled>
-            <ListItemIcon>
-              <DownloadIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>{'Download photo'}</ListItemText>
-          </MenuItem>
-          <MenuItem disabled>
-            <ListItemIcon>
-              <CopyIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>{'Copy Photo'}</ListItemText>
-          </MenuItem>
-          <Divider sx={{ my: 0.5 }} />
-          <ListItem sx={{ width: '100%' }}>
-            <AccessTypeRadioGroup image={image} />
-          </ListItem>
-        </MenuList>
-      </Menu>
+            <MenuList>
+              <MenuItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  updateCoverImageHandler();
+                  handleClose();
+                }}
+              >
+                <ListItemIcon>
+                  <CollectionsIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>{'Make Album Cover'}</ListItemText>
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openDeleteDialogHandler();
+                  handleClose();
+                }}
+              >
+                <ListItemIcon>
+                  <DeleteIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>{'Delete photo'}</ListItemText>
+              </MenuItem>
+              {/*<MenuItem disabled>*/}
+              {/*  <ListItemIcon>*/}
+              {/*    <DownloadIcon fontSize="small" />*/}
+              {/*  </ListItemIcon>*/}
+              {/*  <ListItemText>{'Download photo'}</ListItemText>*/}
+              {/*</MenuItem>*/}
+              {/*<MenuItem disabled>*/}
+              {/*  <ListItemIcon>*/}
+              {/*    <CopyIcon fontSize="small" />*/}
+              {/*  </ListItemIcon>*/}
+              {/*  <ListItemText>{'Copy Photo'}</ListItemText>*/}
+              {/*</MenuItem>*/}
+              <Divider sx={{ my: 0.5 }} />
+              <ListItem sx={{ width: '100%' }}>
+                <AccessTypeRadioGroup image={image} />
+              </ListItem>
+            </MenuList>
+          </Menu>
+        </>
+      )}
     </div>
   );
 };
 
-type SettingsMenuProps = PassedInProps & DispatchProps;
+type SettingsMenuProps = PassedInProps & StateProps & DispatchProps;
 
 interface PassedInProps {
   albumFirebaseId: string;
@@ -115,7 +121,7 @@ interface PassedInProps {
 }
 
 interface StateProps {
-  imageFirebaseId: string;
+  userIsAdmin: boolean;
 }
 
 interface DispatchProps {
@@ -124,12 +130,8 @@ interface DispatchProps {
 }
 
 const mapStateToProps = (state: State, ownProps: PassedInProps): StateProps => {
-  const foundImage = state.applicationState.images.find(
-    (image) => image.id === ownProps.image.id
-  );
-
   return {
-    imageFirebaseId: foundImage ? foundImage.firebaseId : '',
+    userIsAdmin: state.applicationState.userIsAdmin,
   };
 };
 
