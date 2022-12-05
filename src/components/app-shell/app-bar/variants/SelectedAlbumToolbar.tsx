@@ -9,7 +9,9 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { AppPaths } from '../../../../configs/app-settings/app-routes';
+import { ACCESS_TYPE } from '../../../../configs/interfaces/image/ImageDAO';
 import { State } from '../../../../configs/redux/store';
+import { filterImagesByAccessType } from '../../../../creators/images';
 import AlbumActionMenu from '../components/album-action-menu/AlbumActionMenu';
 import ImageAccessTypePopover from '../components/image-access-type-popover/ImageAccessTypePopover';
 
@@ -86,6 +88,7 @@ const mapStateToProps = (state: State): StateProps => {
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   goBackHandler: () => {
     dispatch(routerActions.push(AppPaths.dashboard));
+    dispatch(filterImagesByAccessType(ACCESS_TYPE.ALL, []));
   },
 });
 
