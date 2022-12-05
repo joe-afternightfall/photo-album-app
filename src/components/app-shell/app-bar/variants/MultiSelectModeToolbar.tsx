@@ -1,5 +1,4 @@
 import CloseIcon from '@mui/icons-material/Close';
-import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
 import StarBorderIcon from '@mui/icons-material/StarBorderRounded';
 import StarIcon from '@mui/icons-material/StarRounded';
@@ -16,10 +15,6 @@ import { ImageVO } from '../../../../configs/interfaces';
 import { State } from '../../../../configs/redux/store';
 import { ApplicationActions } from '../../../../creators/actions';
 import {
-  DeleteImageInfo,
-  openDeleteImageDialog,
-} from '../../../../creators/dialogs/delete-image';
-import {
   clearMultiSelectIds,
   toggleMultiSelectMode,
 } from '../../../../creators/selected-album/multi-select-mode';
@@ -29,6 +24,7 @@ import {
 } from '../../../../firebase/services/firebase-users-service';
 import { zipImages } from '../../../../utils/zip-images';
 import AppTooltip from '../../../shared/app-tooltip/AppTooltip';
+import MultiSelectAdminActions from '../components/multi-select-admin-actions/MultiSelectAdminActions';
 
 const MultiSelectModeToolbar = (props: Props): JSX.Element => {
   const {
@@ -38,7 +34,6 @@ const MultiSelectModeToolbar = (props: Props): JSX.Element => {
     downloadHandler,
     updateFavoritesHandler,
     exitMultiSelectModeHandler,
-    openDeleteDialogHandler,
   } = props;
 
   return (
@@ -61,7 +56,7 @@ const MultiSelectModeToolbar = (props: Props): JSX.Element => {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Grid item sx={{ flex: 1 }}>
+        <Grid item>
           <Typography
             variant="h6"
             noWrap
@@ -72,45 +67,36 @@ const MultiSelectModeToolbar = (props: Props): JSX.Element => {
           </Typography>
         </Grid>
         <Grid item>
-          <AppTooltip title="Favorite" placement="bottom" arrow>
-            <IconButton
-              onClick={() => {
-                updateFavoritesHandler(allImagesAreFavorites);
-              }}
-            >
-              {allImagesAreFavorites ? <StarIcon /> : <StarBorderIcon />}
-            </IconButton>
-          </AppTooltip>
-        </Grid>
-        <Grid item>
-          <AppTooltip title="Download" placement="bottom" arrow>
-            <IconButton
-              onClick={() => {
-                downloadHandler(selectedImages);
-              }}
-            >
-              <DownloadIcon />
-            </IconButton>
-          </AppTooltip>
-        </Grid>
-        {userIsAdmin && (
-          <Grid item>
-            <AppTooltip title="Delete" placement="bottom" arrow>
-              <IconButton
-                onClick={() => {
-                  openDeleteDialogHandler(
-                    selectedImages.map((image) => ({
-                      imageId: image.id,
-                      imageFirebaseId: image.firebaseId,
-                    }))
-                  );
-                }}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </AppTooltip>
+          <Grid container>
+            <Grid item>
+              <AppTooltip title="Favorite" placement="bottom" arrow>
+                <IconButton
+                  sx={{ mr: 1 }}
+                  onClick={() => {
+                    updateFavoritesHandler(allImagesAreFavorites);
+                  }}
+                >
+                  {allImagesAreFavorites ? <StarIcon /> : <StarBorderIcon />}
+                </IconButton>
+              </AppTooltip>
+            </Grid>
+            <Grid item>
+              <AppTooltip title="Download" placement="bottom" arrow>
+                <IconButton
+                  sx={{ mr: 1 }}
+                  onClick={() => {
+                    downloadHandler(selectedImages);
+                  }}
+                >
+                  <DownloadIcon />
+                </IconButton>
+              </AppTooltip>
+            </Grid>
+            {userIsAdmin && (
+              <MultiSelectAdminActions selectedImages={selectedImages} />
+            )}
           </Grid>
-        )}
+        </Grid>
       </Grid>
     </Toolbar>
   );
@@ -128,7 +114,6 @@ interface DispatchProps {
   exitMultiSelectModeHandler: () => void;
   downloadHandler: (images: ImageVO[]) => void;
   updateFavoritesHandler: (allImagesAreFavorites: boolean) => void;
-  openDeleteDialogHandler: (info: DeleteImageInfo[]) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -185,14 +170,6 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
       dispatch(toggleMultiSelectMode(false));
       dispatch(clearMultiSelectIds());
     }
-  },
-  openDeleteDialogHandler: (info: DeleteImageInfo[]) => {
-    dispatch(
-      openDeleteImageDialog(info, () => {
-        dispatch(toggleMultiSelectMode(false));
-        dispatch(clearMultiSelectIds());
-      })
-    );
   },
 });
 
