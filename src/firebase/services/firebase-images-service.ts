@@ -63,6 +63,30 @@ export const permanentlyDeleteImages =
     );
   };
 
+export type ToggleImageInfo = {
+  imageFirebaseId: string;
+  accessType: ACCESS_TYPE;
+};
+
+export const toggleImagesAccessTypes =
+  (
+    images: ToggleImageInfo[]
+  ): ThunkAction<void, State, void, ApplicationActions> =>
+  async (dispatch: Dispatch): Promise<void> => {
+    await Promise.all(
+      images.map(async (image) => {
+        return await firebase
+          .database()
+          .ref(FIREBASE_IMAGES_ROUTE)
+          .child(image.imageFirebaseId)
+          .update({
+            accessType: image.accessType,
+          });
+      })
+    );
+    dispatch(displaySuccessSnackbar('Updated image access types'));
+  };
+
 export const toggleImageAccessType =
   (
     imageFirebaseId: string,
