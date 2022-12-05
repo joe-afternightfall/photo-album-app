@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { AlbumVO, ImageVO } from '../../../../../../configs/interfaces';
 import { State } from '../../../../../../configs/redux/store';
 import { downloadImage } from '../../../../../../utils/zip-images';
+import AppTooltip from '../../../../../shared/app-tooltip/AppTooltip';
 import FavButton from '../fav-button/FavButton';
 import SettingsMenu from '../settings-menu/SettingsMenu';
 
@@ -56,15 +57,17 @@ const BottomFullToolbar = (props: Props): JSX.Element => {
           <Grid item>
             <Grid container>
               <Grid item>
-                <IconButton
-                  className={classes.iconButton}
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    await downloadImage(image);
-                  }}
-                >
-                  <DownloadIcon />
-                </IconButton>
+                <AppTooltip title="Download Image" placement="bottom" arrow>
+                  <IconButton
+                    className={classes.iconButton}
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      await downloadImage(image);
+                    }}
+                  >
+                    <DownloadIcon />
+                  </IconButton>
+                </AppTooltip>
               </Grid>
               <Grid item>
                 {selectedAlbum && (
