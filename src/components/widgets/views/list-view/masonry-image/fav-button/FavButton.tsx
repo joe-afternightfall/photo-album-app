@@ -13,6 +13,7 @@ import {
   removeImageFromUsersFavoriteList,
   tagImageAsFavorite,
 } from '../../../../../../firebase/services/firebase-users-service';
+import AppTooltip from '../../../../../shared/app-tooltip/AppTooltip';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -30,18 +31,24 @@ const FavButton = (props: Props): JSX.Element => {
   const { isFav, toggleFavHandler } = props;
 
   return (
-    <IconButton
-      onClick={(e) => {
-        e.stopPropagation();
-        toggleFavHandler(isFav);
-      }}
+    <AppTooltip
+      arrow
+      placement="bottom"
+      title={isFav ? 'Remove Favorite' : 'Favorite'}
     >
-      {isFav ? (
-        <StarIcon className={classes.whiteStar} />
-      ) : (
-        <StarBorderIcon className={classes.greyStar} />
-      )}
-    </IconButton>
+      <IconButton
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleFavHandler(isFav);
+        }}
+      >
+        {isFav ? (
+          <StarIcon className={classes.whiteStar} />
+        ) : (
+          <StarBorderIcon className={classes.greyStar} />
+        )}
+      </IconButton>
+    </AppTooltip>
   );
 };
 
