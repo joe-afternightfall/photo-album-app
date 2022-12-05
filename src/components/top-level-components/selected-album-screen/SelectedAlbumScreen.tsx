@@ -4,19 +4,20 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import { AlbumVO, ImageVO } from '../../../configs/interfaces';
+import { ACCESS_TYPE } from '../../../configs/interfaces/image/ImageDAO';
 import { State } from '../../../configs/redux/store';
 import { filterImagesForAccessType } from '../../../utils/filter-images';
 import { sortImagesByName } from '../../../utils/sorter';
 import ListView from '../../widgets/views/list-view/ListView';
 
 const SelectedAlbumScreen = (props: SelectedAlbumScreenProps): JSX.Element => {
-  const { userIsAdmin, albumImages, selectedAlbum } = props;
+  const { userIsAdmin, accessType, albumImages, selectedAlbum } = props;
 
   useEffect(() => {
     if (isEmpty(selectedAlbum)) {
       window.location.replace('/');
     }
-  }, [selectedAlbum]);
+  }, [selectedAlbum, accessType]);
 
   return <ListView images={albumImages} userIsAdmin={userIsAdmin} />;
 };
@@ -27,6 +28,7 @@ interface StateProps {
   selectedAlbum?: AlbumVO;
   albumImages: ImageVO[];
   userIsAdmin: boolean;
+  accessType: ACCESS_TYPE;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -47,6 +49,7 @@ const mapStateToProps = (state: State): StateProps => {
   return {
     selectedAlbum,
     albumImages,
+    accessType,
     userIsAdmin: state.applicationState.userIsAdmin,
   };
 };

@@ -17,10 +17,9 @@ import { filterImagesByAccessType } from '../../../../../creators/images';
 import AppTooltip from '../../../../shared/app-tooltip/AppTooltip';
 
 const ImageAccessTypePopover = (props: Props): JSX.Element => {
-  const { accessType, images, changeHandler } = props;
+  const { accessType, labels, images, changeHandler } = props;
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // setRadioValue((event.target as HTMLInputElement).value);
     changeHandler(event.target.value as unknown as ACCESS_TYPE, images);
   };
 
@@ -74,22 +73,22 @@ const ImageAccessTypePopover = (props: Props): JSX.Element => {
             <FormControlLabel
               value={ACCESS_TYPE.ALL}
               control={<Radio />}
-              label="All"
+              label={labels.all}
             />
             <FormControlLabel
               value={ACCESS_TYPE.UNDEFINED}
               control={<Radio />}
-              label="Undefined"
+              label={labels.undefined}
             />
             <FormControlLabel
               value={ACCESS_TYPE.PUBLIC}
               control={<Radio />}
-              label="Public"
+              label={labels.public}
             />
             <FormControlLabel
               value={ACCESS_TYPE.PRIVATE}
               control={<Radio />}
-              label="Private"
+              label={labels.private}
             />
           </RadioGroup>
         </FormControl>
@@ -100,9 +99,17 @@ const ImageAccessTypePopover = (props: Props): JSX.Element => {
 
 type Props = StateProps & DispatchProps;
 
+type Labels = {
+  all: string;
+  undefined: string;
+  public: string;
+  private: string;
+};
+
 interface StateProps {
   accessType: ACCESS_TYPE;
   images: ImageVO[];
+  labels: Labels;
 }
 
 interface DispatchProps {
@@ -110,9 +117,41 @@ interface DispatchProps {
 }
 
 const mapStateToProps = (state: State): StateProps => {
+  const images = state.applicationState.images;
+  const currentAlbum = state.selectedAlbumState.currentAlbum;
+  let labels: Labels = {
+    all: '',
+    undefined: '',
+    public: '',
+    private: '',
+  };
+
+  if (currentAlbum) {
+    let publicImages = 0;
+    let privateImages = 0;
+    let undefinedImages = 0;
+
+    currentAlbum.images.map((image) => {
+      if (image.accessType === ACCESS_TYPE.PUBLIC) {
+        publicImages++;
+      } else if (image.accessType === ACCESS_TYPE.PRIVATE) {
+        privateImages++;
+      } else if (image.accessType === ACCESS_TYPE.UNDEFINED) {
+        undefinedImages++;
+      }
+    });
+
+    labels = {
+      all: `All (${currentAlbum.images.length})`,
+      undefined: `Undefined (${undefinedImages})`,
+      public: `Public (${publicImages})`,
+      private: `Private (${privateImages})`,
+    };
+  }
   return {
     accessType: state.selectedAlbumState.filterImagesForAccessType,
-    images: state.applicationState.images,
+    images,
+    labels,
   };
 };
 

@@ -112,6 +112,8 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
     (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
       toggleImagesAccessTypes(images)
     );
+    dispatch(toggleMultiSelectMode(false));
+    dispatch(clearMultiSelectIds());
   },
 });
 
