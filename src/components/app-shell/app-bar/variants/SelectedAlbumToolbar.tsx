@@ -11,7 +11,7 @@ import { Dispatch } from 'redux';
 import { AppPaths } from '../../../../configs/app-settings/app-routes';
 import { State } from '../../../../configs/redux/store';
 import AlbumActionMenu from '../components/album-action-menu/AlbumActionMenu';
-import ImageAccessTypeSelectMenu from '../components/image-access-type-menu/ImageAccessTypeSelectMenu';
+import ImageAccessTypePopover from '../components/image-access-type-popover/ImageAccessTypePopover';
 
 const SelectedAlbumToolbar = (props: Props): JSX.Element => {
   const { title, goBackHandler, numberOfPics, userIsAdmin } = props;
@@ -44,7 +44,7 @@ const SelectedAlbumToolbar = (props: Props): JSX.Element => {
           <Grid container alignItems="center">
             {userIsAdmin && (
               <Grid item>
-                <ImageAccessTypeSelectMenu />
+                <ImageAccessTypePopover />
               </Grid>
             )}
             <Grid item>
