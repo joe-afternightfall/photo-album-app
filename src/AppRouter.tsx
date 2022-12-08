@@ -6,7 +6,6 @@ import {
 import React, { useContext, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Route } from 'react-router';
-import { Store } from 'redux';
 import { Dispatch } from 'redux';
 
 import App from './App';
@@ -18,7 +17,6 @@ import { loadAlbums } from './creators/albums';
 import { loadImages } from './creators/images';
 import { loadNewUserRequests } from './creators/new-user-requests';
 import { loggedInUser } from './creators/user';
-import { Initializer } from './firebase/Initializer';
 import { AuthContext } from './firebase/auth/AuthContext';
 import { getAllAlbums } from './firebase/services/firebase-albums-service';
 import { getAllImages } from './firebase/services/firebase-images-service';
@@ -26,13 +24,11 @@ import { getSignedInUserProfile } from './firebase/services/firebase-users-servi
 import { getAllNewUserRequests } from './firebase/services/request-access';
 
 const AppRouter = (props: AppRouterProps): JSX.Element => {
-  const { store, userIsAdmin, initHandler, updateLoggedInUserHandler } = props;
+  const { userIsAdmin, initHandler, updateLoggedInUserHandler } = props;
   const user = useContext(AuthContext);
 
   useEffect(() => {
     if (user) {
-      const initializer = new Initializer(store);
-      initializer.initializeFirebase();
       initHandler();
       user.email && updateLoggedInUserHandler();
     }
@@ -72,11 +68,7 @@ const AppRouter = (props: AppRouterProps): JSX.Element => {
   );
 };
 
-type AppRouterProps = PassedInProps & StateProps & DispatchProps;
-
-interface PassedInProps {
-  store: Store;
-}
+type AppRouterProps = StateProps & DispatchProps;
 
 interface StateProps {
   userIsAdmin: boolean;
