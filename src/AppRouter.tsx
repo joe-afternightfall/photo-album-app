@@ -14,19 +14,26 @@ import SignInScreen from './components/top-level-components/sign-in-screen/SignI
 import { appRoutes } from './configs/app-settings/app-routes';
 import { getTheme } from './configs/app-settings/theme';
 import { State } from './configs/redux/store';
+import { loadAlbums } from './creators/albums';
+import { loadImages } from './creators/images';
+import { loadNewUserRequests } from './creators/new-user-requests';
 import { loggedInUser } from './creators/user';
 import { Initializer } from './firebase/Initializer';
 import { AuthContext } from './firebase/auth/AuthContext';
+import { getAllAlbums } from './firebase/services/firebase-albums-service';
+import { getAllImages } from './firebase/services/firebase-images-service';
 import { getSignedInUserProfile } from './firebase/services/firebase-users-service';
+import { getAllNewUserRequests } from './firebase/services/request-access';
 
 const AppRouter = (props: AppRouterProps): JSX.Element => {
-  const { store, userIsAdmin, updateLoggedInUserHandler } = props;
+  const { store, userIsAdmin, initHandler, updateLoggedInUserHandler } = props;
   const user = useContext(AuthContext);
 
   useEffect(() => {
     if (user) {
       const initializer = new Initializer(store);
       initializer.initializeFirebase();
+      initHandler();
       user.email && updateLoggedInUserHandler();
     }
   }, [user]);
@@ -77,6 +84,7 @@ interface StateProps {
 
 interface DispatchProps {
   updateLoggedInUserHandler: () => void;
+  initHandler: () => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -89,6 +97,15 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   updateLoggedInUserHandler: async () => {
     const userProfile = await getSignedInUserProfile();
     dispatch(loggedInUser(userProfile));
+  },
+  initHandler: async () => {
+    const albums = await getAllAlbums();
+    const images = await getAllImages();
+    const requests = await getAllNewUserRequests();
+
+    dispatch(loadAlbums(albums));
+    dispatch(loadImages(images));
+    dispatch(loadNewUserRequests(requests));
   },
 });
 

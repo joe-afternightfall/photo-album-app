@@ -10,6 +10,7 @@ import { FIREBASE_ALBUMS_ROUTE } from '../../configs/firebase/firebase-routes';
 import { AlbumDAO, AlbumVO, ImageVO } from '../../configs/interfaces';
 import { State } from '../../configs/redux/store';
 import { ApplicationActions } from '../../creators/actions';
+import { loadAlbums } from '../../creators/albums';
 import { displayAppLoader, hideAppLoader } from '../../creators/app-loader';
 import {
   displayErrorSnackbar,
@@ -18,6 +19,14 @@ import {
 import { DeleteImageInfo } from '../../creators/dialogs/delete-image';
 import { generateTimestamp } from '../../utils/timestamp-generator';
 import { getAllImages } from './firebase-images-service';
+
+const reloadAndClearLoader = async (dispatch: Dispatch) => {
+  const albums = await getAllAlbums();
+  dispatch(loadAlbums(albums));
+  setTimeout(() => {
+    dispatch(hideAppLoader());
+  }, 1500);
+};
 
 export const getAllAlbums = async (): Promise<AlbumVO[]> => {
   return await firebase
@@ -91,17 +100,23 @@ export const saveNewAlbum =
       updated: timestamp,
     };
 
-    return await newRef.set(newAlbum, (error: Error | null) => {
+    return await newRef.set(newAlbum, async (error: Error | null) => {
       if (error) {
+        setTimeout(() => {
+          dispatch(hideAppLoader());
+        }, 1500);
         dispatch(displayErrorSnackbar(`Error creating album ${info.title}.`));
       } else {
         dispatch(
           displaySuccessSnackbar(`Successfully created album ${info.title}.`)
         );
+        // const albums = await getAllAlbums();
+        // dispatch(loadAlbums(albums));
         successCallback && successCallback();
-        setTimeout(() => {
-          dispatch(hideAppLoader());
-        }, 1500);
+        await reloadAndClearLoader(dispatch);
+        // setTimeout(() => {
+        //   dispatch(hideAppLoader());
+        // }, 1500);
       }
     });
   };
@@ -133,15 +148,12 @@ export const updateAlbumInfo =
           imagesShouldBeOrdered: updateInfo.imagesShouldBeOrdered,
           updated: generateTimestamp(),
         },
-        (error: Error | null) => {
+        async (error: Error | null) => {
           if (error) {
             dispatch(displayErrorSnackbar('Error updating album info'));
           } else {
-            dispatch(displaySuccessSnackbar('Updated album info'));
             successCallback && successCallback();
-            setTimeout(() => {
-              dispatch(hideAppLoader());
-            }, 1000);
+            await reloadAndClearLoader(dispatch);
           }
         }
       );
@@ -162,13 +174,15 @@ export const updateAlbumCoverImage =
           coverImageDownloadURL,
           updated: generateTimestamp(),
         },
-        (error: Error | null) => {
+        async (error: Error | null) => {
           if (error) {
             dispatch(displayErrorSnackbar('Failed to update album cover'));
           } else {
             dispatch(
               displaySuccessSnackbar('Successfully updated album cover')
             );
+            const albums = await getAllAlbums();
+            dispatch(loadAlbums(albums));
           }
         }
       );
@@ -261,16 +275,19 @@ export const deleteAlbum =
     callback?: () => void
   ): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch): Promise<void> => {
+    dispatch(displayAppLoader());
+
     return await firebase
       .database()
       .ref(FIREBASE_ALBUMS_ROUTE)
       .child(firebaseId)
-      .remove((error: Error | null) => {
+      .remove(async (error: Error | null) => {
         if (error) {
           dispatch(displayErrorSnackbar('Error while deleting album'));
         } else {
           dispatch(displaySuccessSnackbar('Successfully deleted album'));
           callback && callback();
+          await reloadAndClearLoader(dispatch);
         }
       });
   };
