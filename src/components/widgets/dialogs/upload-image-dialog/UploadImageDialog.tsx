@@ -34,7 +34,7 @@ const UploadImageDialog = (props: Props): JSX.Element => {
 
     files.map((originalImage) => {
       new Compressor(originalImage, {
-        quality: 0.6,
+        quality: 0.3,
 
         // The compression process is asynchronous,
         // which means you have to access the `result` in the `success` hook function.
