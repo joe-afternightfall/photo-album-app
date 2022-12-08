@@ -12,13 +12,27 @@ import { ImageDAO } from '../../configs/interfaces';
 import { ACCESS_TYPE } from '../../configs/interfaces/image/ImageDAO';
 import { State } from '../../configs/redux/store';
 import { ApplicationActions } from '../../creators/actions';
+import { loadAlbums } from '../../creators/albums';
 import { displayAppLoader, hideAppLoader } from '../../creators/app-loader';
 import {
   displayErrorSnackbar,
   displaySuccessSnackbar,
 } from '../../creators/app-snackbar';
+import { loadImages } from '../../creators/images';
 import { generateTimestamp } from '../../utils/timestamp-generator';
-import { addImageIdsToAlbum } from './firebase-albums-service';
+import { addImageIdsToAlbum, getAllAlbums } from './firebase-albums-service';
+import { getAllImages } from './firebase-images-service';
+
+const reloadAndClearLoader = async (dispatch: Dispatch) => {
+  const albums = await getAllAlbums();
+  const images = await getAllImages();
+  dispatch(loadAlbums(albums));
+  dispatch(loadImages(images));
+
+  setTimeout(() => {
+    dispatch(hideAppLoader());
+  }, 1500);
+};
 
 export const uploadImages =
   (
@@ -80,16 +94,18 @@ export const uploadImages =
     );
 
     callback && callback();
-    dispatch(hideAppLoader());
     if (errors.length === 0) {
+      await reloadAndClearLoader(dispatch);
       dispatch(
         displaySuccessSnackbar(
           `Successfully saved ${totalFiles > 1 ? 'images.' : 'image.'}`
         )
       );
     } else if (errors.length === 1) {
+      dispatch(hideAppLoader());
       dispatch(displayErrorSnackbar(`Error saving ${errors[0]}`));
     } else if (errors.length > 1) {
+      dispatch(hideAppLoader());
       dispatch(displayErrorSnackbar('Error saving images.'));
     }
   };
@@ -100,9 +116,9 @@ export const deleteImageFromStorage =
     deleteOriginalImage(imageId)
       .then(() => {
         deleteCompressedImage(imageId)
-          .then(() => {
+          .then(async () => {
+            await reloadAndClearLoader(dispatch);
             dispatch(displaySuccessSnackbar('Deleted image.'));
-            dispatch(hideAppLoader());
           })
           .catch(() => {
             dispatch(displayErrorSnackbar('Error deleting image.'));

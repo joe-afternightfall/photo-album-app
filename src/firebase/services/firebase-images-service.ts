@@ -7,18 +7,34 @@ import { ImageVO } from '../../configs/interfaces';
 import { ACCESS_TYPE } from '../../configs/interfaces/image/ImageDAO';
 import { State } from '../../configs/redux/store';
 import { ApplicationActions } from '../../creators/actions';
-import { displayAppLoader } from '../../creators/app-loader';
+import { loadAlbums } from '../../creators/albums';
+import { displayAppLoader, hideAppLoader } from '../../creators/app-loader';
 import {
   displayErrorSnackbar,
   displaySuccessSnackbar,
 } from '../../creators/app-snackbar';
 import { DeleteImageInfo } from '../../creators/dialogs/delete-image';
+import { loadImages } from '../../creators/images';
 import { mapImageSnapToVO } from '../../utils/mapper';
-import { removeImageIdFromAlbum } from './firebase-albums-service';
+import {
+  getAllAlbums,
+  removeImageIdFromAlbum,
+} from './firebase-albums-service';
 import { deleteImageFromStorage } from './firebase-storage-service';
 
 import 'firebase/compat/database';
 import 'firebase/compat/storage';
+
+const reloadAndClearLoader = async (dispatch: Dispatch) => {
+  const albums = await getAllAlbums();
+  const images = await getAllImages();
+  dispatch(loadAlbums(albums));
+  dispatch(loadImages(images));
+
+  setTimeout(() => {
+    dispatch(hideAppLoader());
+  }, 1500);
+};
 
 export const getAllImages = async (): Promise<ImageVO[]> => {
   return await firebase
@@ -67,6 +83,7 @@ export const permanentlyDeleteImages =
           });
       })
     );
+    await reloadAndClearLoader(dispatch);
   };
 
 export type ToggleImageInfo = {
@@ -79,6 +96,7 @@ export const toggleImagesAccessTypes =
     images: ToggleImageInfo[]
   ): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch): Promise<void> => {
+    dispatch(displayAppLoader());
     await Promise.all(
       images.map(async (image) => {
         return await firebase
@@ -90,6 +108,7 @@ export const toggleImagesAccessTypes =
           });
       })
     );
+    await reloadAndClearLoader(dispatch);
     dispatch(displaySuccessSnackbar('Updated image access types'));
   };
 
@@ -99,6 +118,7 @@ export const toggleImageAccessType =
     accessType: ACCESS_TYPE
   ): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch): Promise<void> => {
+    dispatch(displayAppLoader());
     return await firebase
       .database()
       .ref(FIREBASE_IMAGES_ROUTE)
@@ -107,10 +127,12 @@ export const toggleImageAccessType =
         {
           accessType,
         },
-        (error: Error | null) => {
+        async (error: Error | null) => {
           if (error) {
+            dispatch(hideAppLoader());
             dispatch(displayErrorSnackbar('Failed to update access type'));
           } else {
+            await reloadAndClearLoader(dispatch);
             dispatch(displaySuccessSnackbar('Updated access type'));
           }
         }

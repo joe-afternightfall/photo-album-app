@@ -28,22 +28,21 @@ ReactDOM.render(
 reportWebVitals();
 
 // ******* PRIORITY *******
-// todo: need to create "images without album" album
-// todo: display images with no album
+// todo: if user is admin, display total photos, if not display total public photos
 // todo: selected album screen - handle mobile multi select
-// todo: selected album screen - fix infinite scrolling on
 // todo: allow admin to create new users / delete users
-// todo: ADMIN TOOL-BAR, allow admin to update multiple access types
 // todo: favorites toolbar, on download pop menu asking for confirmation and then show spinner while waiting for zipping of images
-// todo: need to update users favorite id's when deleting an image
-
-// ******* LATER_TODOS *******
-// todo: need to test - how does downloading work for mobile devices / tablets
-// todo: general - implement grouping photos in albums
 // todo: firebase database config setup dont allow general users to save or write anything
 // todo: firebase only allow general users to download or view public images
+
+// ******* LATER_TODOS *******
+// todo: need to update users favorite id's when deleting an image
+// todo: need to test - how does downloading work for mobile devices / tablets
+// todo: general - implement grouping photos in albums
 // todo: handle loading images on first load its rough, height is 0
 // todo: add search bar to search by image name
+// todo: need to create "images without album" album
+// todo: display images with no album
 
 // ******* ERRORS_OR_BUGS *******
 // todo: error with deleting image, it works but i am popping error snackbar, something in the chain is failing
