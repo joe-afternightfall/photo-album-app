@@ -12,18 +12,25 @@ import * as emailValidator from 'email-validator';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 
 import { UserVO } from '../../../../configs/interfaces/user/UserVO';
 import { State } from '../../../../configs/redux/store';
+import { ApplicationActions } from '../../../../creators/actions';
 import { closeUserInfoDialog } from '../../../../creators/dialogs/user-info';
+import {
+  createNewUser,
+  NewUserFormInfo,
+} from '../../../../firebase/services/firebase-users-service';
 import BaseDialog from '../../../shared/dialog/BaseDialog';
 
 const UserInfoDialog = (props: UserInfoDialogProps): JSX.Element => {
-  const { open, user, closeHandler } = props;
+  const { open, user, closeHandler, createUserHandler } = props;
 
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [userIsAdmin, setUserIsAdmin] = useState(false);
   const [dialogTitle, setDialogTitle] = useState('');
   const [primaryActionTitle, setPrimaryActionTitle] = useState('');
@@ -96,6 +103,19 @@ const UserInfoDialog = (props: UserInfoDialogProps): JSX.Element => {
               onChange={changeHandler}
             />
           </Grid>
+          {user === undefined && (
+            <Grid item xs={12}>
+              <TextField
+                name="password"
+                label="Password"
+                fullWidth
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+            </Grid>
+          )}
           <Grid
             item
             xs={12}
@@ -141,7 +161,17 @@ const UserInfoDialog = (props: UserInfoDialogProps): JSX.Element => {
       dialogActions={
         <DialogActions>
           <Button onClick={closeHandler}>{'Cancel'}</Button>
-          <Button disabled={!isValidEmail || username === ''}>
+          <Button
+            disabled={!isValidEmail || username === ''}
+            onClick={() => {
+              createUserHandler({
+                email,
+                username,
+                password,
+                isAdmin: userIsAdmin,
+              });
+            }}
+          >
             {primaryActionTitle}
           </Button>
         </DialogActions>
@@ -159,6 +189,7 @@ interface StateProps {
 
 interface DispatchProps {
   closeHandler: () => void;
+  createUserHandler: (info: NewUserFormInfo) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -173,6 +204,11 @@ const mapStateToProps = (state: State): StateProps => {
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   closeHandler: () => {
     dispatch(closeUserInfoDialog());
+  },
+  createUserHandler: (info: NewUserFormInfo) => {
+    (dispatch as ThunkDispatch<State, void, ApplicationActions>)(
+      createNewUser(info)
+    );
   },
 });
 
