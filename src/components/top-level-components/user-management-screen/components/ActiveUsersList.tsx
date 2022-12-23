@@ -11,7 +11,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { makeStyles, createStyles } from '@mui/styles';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -20,10 +19,7 @@ import { UserVO } from '../../../../configs/interfaces/user/UserVO';
 import { State } from '../../../../configs/redux/store';
 import { openUserInfoDialog } from '../../../../creators/dialogs/user-info';
 
-const useStyles = makeStyles(() => createStyles({}));
-
 const ActiveUsersList = (props: ActiveUsersListProps): JSX.Element => {
-  const classes = useStyles();
   const { users, openUserDialogHandler, openEditUserDialogHandler } = props;
 
   return (
