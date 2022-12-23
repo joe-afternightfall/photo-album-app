@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => createStyles({}));
 
 const ActiveUsersList = (props: ActiveUsersListProps): JSX.Element => {
   const classes = useStyles();
-  const { users, openUserDialogHandler } = props;
+  const { users, openUserDialogHandler, openEditUserDialogHandler } = props;
 
   return (
     <>
@@ -42,7 +42,11 @@ const ActiveUsersList = (props: ActiveUsersListProps): JSX.Element => {
           <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
             {users.map((user) => (
               <ListItem key={user.id}>
-                <ListItemButton>
+                <ListItemButton
+                  onClick={() => {
+                    openEditUserDialogHandler(user);
+                  }}
+                >
                   <ListItemAvatar>
                     <Avatar>
                       <PersonIcon />
@@ -74,6 +78,7 @@ interface StateProps {
 
 interface DispatchProps {
   openUserDialogHandler: () => void;
+  openEditUserDialogHandler: (user: UserVO) => void;
 }
 
 const mapStateToProps = (state: State): StateProps => {
@@ -85,6 +90,9 @@ const mapStateToProps = (state: State): StateProps => {
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   openUserDialogHandler: () => {
     dispatch(openUserInfoDialog());
+  },
+  openEditUserDialogHandler: (user: UserVO) => {
+    dispatch(openUserInfoDialog(user));
   },
 });
 
