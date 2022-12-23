@@ -47,6 +47,36 @@ export const getSignedInUserProfile = async (): Promise<UserVO | undefined> => {
   }
 };
 
+export const getAllUsers = async (): Promise<UserVO[]> => {
+  return await firebase
+    .database()
+    .ref(FIREBASE_USERS_ROUTE)
+    .once('value')
+    .then((snapshot) => {
+      const snap = snapshot.val();
+      if (snap) {
+        const userList: UserVO[] = [];
+        Object.keys(snap).map((key: string) => {
+          Object.keys(snap[key]).map((innerKey) => {
+            userList.push({
+              firebaseId: key,
+              id: snap[key][innerKey].id,
+              isAdmin: snap[key][innerKey].isAdmin,
+              username: snap[key][innerKey].username,
+              email: snap[key][innerKey].email,
+              favoriteImageIds: snap[key][innerKey].favoriteImageIds,
+              created: snap[key][innerKey].created,
+              updated: snap[key][innerKey].updated,
+            });
+          });
+        });
+        return userList;
+      } else {
+        return [];
+      }
+    });
+};
+
 export const saveNewUser = async (): Promise<UserVO> => {
   const ref = firebase
     .database()

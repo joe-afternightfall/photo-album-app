@@ -38,6 +38,7 @@ export const createStore = (history: History): Store => {
       albums: [],
       displayAppLoader: false,
       images: [],
+      users: [],
       snackbarProps: {
         message: '',
         severity: 'success',
@@ -61,6 +62,10 @@ export const createStore = (history: History): Store => {
       },
       uploadImageDialog: {
         display: false,
+      },
+      userInfoDialog: {
+        display: false,
+        selectedUser: undefined,
       },
     } as AppDialogState,
     selectedAlbumState: {

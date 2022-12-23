@@ -12,3 +12,15 @@ export const loggedInUser = (user?: UserVO): LoggedInUserAction => {
     user,
   };
 };
+
+export interface LoadUsersAction {
+  type: ActionTypes.LOAD_USERS;
+  users: UserVO[];
+}
+
+export const loadUsers = (users: UserVO[]): LoadUsersAction => {
+  return {
+    type: ActionTypes.LOAD_USERS,
+    users,
+  };
+};
