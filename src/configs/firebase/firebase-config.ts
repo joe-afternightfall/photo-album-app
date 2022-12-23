@@ -16,6 +16,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
+export const createUserInstance = firebase.initializeApp(
+  firebaseConfig,
+  'sign-up-instance'
+);
 initializeAppCheck(app, {
   provider: new ReCaptchaV3Provider('6LdThxEjAAAAAJtE96MzgyI3hHgN17Aq01_W8l0Q'),
 
