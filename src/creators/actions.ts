@@ -12,6 +12,7 @@ import {
 } from './dialogs/album-info';
 import { ToggleDeleteImageDialogAction } from './dialogs/delete-image';
 import { ToggleUploadImagesDialogAction } from './dialogs/upload-images';
+import { ToggleUserInfoDialogAction } from './dialogs/user-info';
 import { FilterImagesByAccessTypeAction, LoadImagesAction } from './images';
 import { LoadNewUserRequestsAction } from './new-user-requests';
 import { ToggleFavoritesAction } from './selected-album/favorites';
@@ -21,7 +22,7 @@ import {
   UpdateHoveringOverIconIdAction,
   UpdateMultiSelectIdsAction,
 } from './selected-album/multi-select-mode';
-import { LoggedInUserAction } from './user';
+import { LoadUsersAction, LoggedInUserAction } from './user';
 
 export enum ActionTypes {
   LOGGED_IN_USER = 'LOGGED_IN_USER',
@@ -33,6 +34,7 @@ export enum ActionTypes {
   HIDE_APP_SNACKBAR = 'HIDE_APP_SNACKBAR',
   TOGGLE_APP_LOADER = 'TOGGLE_APP_LOADER',
   LOAD_IMAGES = 'LOAD_IMAGES',
+  LOAD_USERS = 'LOAD_USERS',
   FILTER_IMAGES_BY_ACCESS_TYPE = 'FILTER_IMAGES_BY_ACCESS_TYPE',
   LOAD_NEW_USER_REQUESTS = 'LOAD_NEW_USER_REQUESTS',
   TOGGLE_MULTI_SELECT_MODE = 'TOGGLE_MULTI_SELECT_MODE',
@@ -46,6 +48,7 @@ export enum ActionTypes {
   TOGGLE_DELETE_IMAGE_DIALOG = 'TOGGLE_DELETE_IMAGE_DIALOG',
   TOGGLE_DELETE_ALBUM_DIALOG = 'TOGGLE_DELETE_ALBUM_DIALOG',
   TOGGLE_UPLOAD_IMAGES_DIALOG = 'TOGGLE_UPLOAD_IMAGES_DIALOG',
+  TOGGLE_USER_INFO_DIALOG = 'TOGGLE_USER_INFO_DIALOG',
 }
 
 export type ApplicationActions =
@@ -67,4 +70,6 @@ export type ApplicationActions =
   | ClearMultiSelectIdsAction
   | UpdateHoveringOverIconIdAction
   | ToggleFavoritesAction
-  | ToggleUploadImagesDialogAction;
+  | ToggleUploadImagesDialogAction
+  | ToggleUserInfoDialogAction
+  | LoadUsersAction;

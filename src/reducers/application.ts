@@ -41,6 +41,9 @@ export default {
       case ActionTypes.LOAD_IMAGES:
         newState.images = action.images;
         break;
+      case ActionTypes.LOAD_USERS:
+        newState.users = action.users;
+        break;
       case ActionTypes.LOAD_NEW_USER_REQUESTS:
         newState.newUserRequests = action.requests;
         break;
@@ -61,5 +64,6 @@ export interface ApplicationState {
   displayAppLoader: boolean;
   snackbarProps: AppSnackbarProps;
   images: ImageVO[];
+  users: UserVO[];
   signedInUser?: UserVO;
 }

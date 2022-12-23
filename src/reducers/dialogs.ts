@@ -1,4 +1,5 @@
 import { AlbumVO } from '../configs/interfaces';
+import { UserVO } from '../configs/interfaces/user/UserVO';
 import { ActionTypes, ApplicationActions } from '../creators/actions';
 import { DeleteImageInfo } from '../creators/dialogs/delete-image';
 
@@ -32,6 +33,10 @@ export default {
       case ActionTypes.TOGGLE_UPLOAD_IMAGES_DIALOG:
         newState.uploadImageDialog.display = action.open;
         break;
+      case ActionTypes.TOGGLE_USER_INFO_DIALOG:
+        newState.userInfoDialog.display = action.open;
+        newState.userInfoDialog.selectedUser = action.user;
+        break;
     }
 
     return newState;
@@ -54,5 +59,9 @@ export interface AppDialogState {
   };
   uploadImageDialog: {
     display: boolean;
+  };
+  userInfoDialog: {
+    display: boolean;
+    selectedUser?: UserVO;
   };
 }

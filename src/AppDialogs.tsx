@@ -4,6 +4,7 @@ import AlbumInfoDialog from './components/widgets/dialogs/album-info-dialog/Albu
 import DeleteAlbumDialog from './components/widgets/dialogs/delete-album-dialog/DeleteAlbumDialog';
 import DeleteImageDialog from './components/widgets/dialogs/delete-image-dialog/DeleteImageDialog';
 import UploadImageDialog from './components/widgets/dialogs/upload-image-dialog/UploadImageDialog';
+import UserInfoDialog from './components/widgets/dialogs/user-info-dialog/UserInfoDialog';
 
 export default function AppDialogs(): JSX.Element {
   return (
@@ -12,6 +13,7 @@ export default function AppDialogs(): JSX.Element {
       <DeleteAlbumDialog />
       <DeleteImageDialog />
       <UploadImageDialog />
+      <UserInfoDialog />
     </>
   );
 }

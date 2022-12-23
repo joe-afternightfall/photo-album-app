@@ -16,11 +16,14 @@ import { State } from './configs/redux/store';
 import { loadAlbums } from './creators/albums';
 import { loadImages } from './creators/images';
 import { loadNewUserRequests } from './creators/new-user-requests';
-import { loggedInUser } from './creators/user';
+import { loadUsers, loggedInUser } from './creators/user';
 import { AuthContext } from './firebase/auth/AuthContext';
 import { getAllAlbums } from './firebase/services/firebase-albums-service';
 import { getAllImages } from './firebase/services/firebase-images-service';
-import { getSignedInUserProfile } from './firebase/services/firebase-users-service';
+import {
+  getAllUsers,
+  getSignedInUserProfile,
+} from './firebase/services/firebase-users-service';
 import { getAllNewUserRequests } from './firebase/services/request-access';
 
 const AppRouter = (props: AppRouterProps): JSX.Element => {
@@ -94,10 +97,12 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
     const albums = await getAllAlbums();
     const images = await getAllImages();
     const requests = await getAllNewUserRequests();
+    const users = await getAllUsers();
 
     dispatch(loadAlbums(albums));
     dispatch(loadImages(images));
     dispatch(loadNewUserRequests(requests));
+    dispatch(loadUsers(users));
   },
 });
 
