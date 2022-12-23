@@ -11,7 +11,10 @@ import { UserDAO } from '../../configs/interfaces/user/UserDAO';
 import { UserVO } from '../../configs/interfaces/user/UserVO';
 import { State } from '../../configs/redux/store';
 import { ApplicationActions } from '../../creators/actions';
-import { displaySuccessSnackbar } from '../../creators/app-snackbar';
+import {
+  displayErrorSnackbar,
+  displaySuccessSnackbar,
+} from '../../creators/app-snackbar';
 import { loggedInUser } from '../../creators/user';
 import { generateTimestamp } from '../../utils/timestamp-generator';
 
@@ -102,6 +105,57 @@ export const saveNewUser = async (): Promise<UserVO> => {
     }
   });
 };
+
+export interface EditUserFormInfo {
+  email: string;
+  username: string;
+  isAdmin: boolean;
+}
+
+export interface NewUserFormInfo extends EditUserFormInfo {
+  password: string;
+}
+
+export const createNewUser =
+  (info: NewUserFormInfo): ThunkAction<void, State, void, ApplicationActions> =>
+  async (dispatch: Dispatch): Promise<void> => {
+    await auth
+      .createUserWithEmailAndPassword(info.email, info.password)
+      .then(async (e) => {
+        if (e.user?.email) {
+          const timestamp = generateTimestamp();
+          const userInfo: UserDAO = {
+            id: uuidv4(),
+            isAdmin: info.isAdmin,
+            username: info.username,
+            email: info.email,
+            favoriteImageIds: [],
+            created: timestamp,
+            updated: timestamp,
+          };
+          await firebase
+            .database()
+            .ref(FIREBASE_USERS_ROUTE + '/' + e.user?.uid)
+            .push(userInfo, (error) => {
+              if (error) {
+                console.log(
+                  'error creating new user: ' + JSON.stringify(error)
+                );
+                dispatch(displayErrorSnackbar('Error creating new user.'));
+              } else {
+                dispatch(displaySuccessSnackbar('Created new user.'));
+                console.log(
+                  '******* created user: ' + JSON.stringify(e.user?.email)
+                );
+              }
+            });
+        }
+      })
+      .catch((e) => {
+        console.log('error creating new user: ' + JSON.stringify(e));
+        dispatch(displayErrorSnackbar('Error creating new user.'));
+      });
+  };
 
 export const removeImageFromUsersFavoriteList =
   (imageId: string): ThunkAction<void, State, void, ApplicationActions> =>
