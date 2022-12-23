@@ -31,7 +31,7 @@ export default function ListView(props: Props): JSX.Element {
     const clonedLocalImages = ramda.clone(localImages);
     const slicedImages = clonedImages.slice(
       clonedLocalImages.length,
-      clonedLocalImages.length + 10
+      clonedLocalImages.length + 25
     );
     setLocalImages([...clonedLocalImages, ...slicedImages]);
   };
@@ -68,7 +68,7 @@ export default function ListView(props: Props): JSX.Element {
             <b>Yay! You have seen it all</b>
           </p>
         }
-        scrollThreshold={1}
+        scrollThreshold={0.6}
       >
         <ResponsiveMasonry>
           <Masonry gutter="12px">
