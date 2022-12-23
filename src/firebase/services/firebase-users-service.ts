@@ -5,17 +5,22 @@ import { Dispatch } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { v4 as uuidv4 } from 'uuid';
 
-import { auth } from '../../configs/firebase/firebase-config';
+import {
+  auth,
+  createUserInstance,
+} from '../../configs/firebase/firebase-config';
 import { FIREBASE_USERS_ROUTE } from '../../configs/firebase/firebase-routes';
 import { UserDAO } from '../../configs/interfaces/user/UserDAO';
 import { UserVO } from '../../configs/interfaces/user/UserVO';
 import { State } from '../../configs/redux/store';
 import { ApplicationActions } from '../../creators/actions';
+import { displayAppLoader, hideAppLoader } from '../../creators/app-loader';
 import {
   displayErrorSnackbar,
   displaySuccessSnackbar,
 } from '../../creators/app-snackbar';
-import { loggedInUser } from '../../creators/user';
+import { closeUserInfoDialog } from '../../creators/dialogs/user-info';
+import { loadUsers, loggedInUser } from '../../creators/user';
 import { generateTimestamp } from '../../utils/timestamp-generator';
 
 export const getSignedInUserProfile = async (): Promise<UserVO | undefined> => {
@@ -119,7 +124,8 @@ export interface NewUserFormInfo extends EditUserFormInfo {
 export const createNewUser =
   (info: NewUserFormInfo): ThunkAction<void, State, void, ApplicationActions> =>
   async (dispatch: Dispatch): Promise<void> => {
-    await auth
+    await createUserInstance
+      .auth()
       .createUserWithEmailAndPassword(info.email, info.password)
       .then(async (e) => {
         if (e.user?.email) {
@@ -136,17 +142,21 @@ export const createNewUser =
           await firebase
             .database()
             .ref(FIREBASE_USERS_ROUTE + '/' + e.user?.uid)
-            .push(userInfo, (error) => {
+            .push(userInfo, async (error) => {
               if (error) {
                 console.log(
                   'error creating new user: ' + JSON.stringify(error)
                 );
                 dispatch(displayErrorSnackbar('Error creating new user.'));
               } else {
+                dispatch(displayAppLoader());
+                dispatch(closeUserInfoDialog());
                 dispatch(displaySuccessSnackbar('Created new user.'));
-                console.log(
-                  '******* created user: ' + JSON.stringify(e.user?.email)
-                );
+                const users = await getAllUsers();
+                dispatch(loadUsers(users));
+                setTimeout(() => {
+                  dispatch(hideAppLoader());
+                }, 350);
               }
             });
         }

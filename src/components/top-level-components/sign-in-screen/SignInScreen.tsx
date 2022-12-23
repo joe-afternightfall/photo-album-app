@@ -9,7 +9,6 @@ import { useTheme } from '@mui/material/styles';
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 
-import RequestAccessForm from './components/RequestAccessForm';
 import SignInForm from './components/SignInForm';
 import TabPanel from './components/TabPanel';
 
@@ -25,19 +24,6 @@ export default function SignInScreen(): JSX.Element {
   const handleChangeIndex = (index: number) => {
     setCurrentTab(index);
   };
-
-  // const createAccount = async () => {
-  //   try {
-  //     if (emailRef.current && passwordRef.current) {
-  //       await auth.createUserWithEmailAndPassword(
-  //         emailRef.current.value,
-  //         passwordRef.current.value
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   return (
     <Grid container alignItems="center" justifyContent="center">
@@ -69,7 +55,6 @@ export default function SignInScreen(): JSX.Element {
                   variant="fullWidth"
                 >
                   <Tab label="Sign In" />
-                  <Tab label="Request Access" />
                 </Tabs>
               </AppBar>
               <SwipeableViews
@@ -78,9 +63,6 @@ export default function SignInScreen(): JSX.Element {
               >
                 <TabPanel value={currentTab} index={0}>
                   <SignInForm />
-                </TabPanel>
-                <TabPanel value={currentTab} index={1}>
-                  <RequestAccessForm />
                 </TabPanel>
               </SwipeableViews>
             </CardContent>
